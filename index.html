@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Аренда биотуалетов в Новосибирске — цены, доставка | ЭКО СЕРВИС</title>
+  <meta name="description" content="Аренда биотуалетов и туалетных кабин в Новосибирске и области: для дачи, стройки, мероприятий. Доставка, обслуживание, документы. Рассчитайте цену онлайн.">
+  <meta name="theme-color" content="#5B2EFF">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://example.ru/"><!-- ЗАГЛУШКА: заменить реальным адресом -->
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="ЭКО СЕРВИС НОВОСИБИРСК">
+  <meta property="og:title" content="Аренда биотуалетов в Новосибирске — цены, доставка | ЭКО СЕРВИС">
+  <meta property="og:description" content="Привезём, установим, обслужим и заберём. Для дачи, стройки, свадьбы и фестиваля. Рассчитайте цену онлайн.">
+  <meta property="og:url" content="https://example.ru/">
+  <meta property="og:image" content="https://example.ru/assets/og.png"><!-- ЗАГЛУШКА: добавить картинку 1200×630 -->
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "ЭКО СЕРВИС НОВОСИБИРСК",
+    "description": "Аренда и продажа биотуалетов и туалетных кабин в Новосибирске и области.",
+    "url": "https://example.ru/",
+    "telephone": "+7-383-000-00-00",
+    "email": "info@example.ru",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ул. Примерная, 1",
+      "addressLocality": "Новосибирск",
+      "addressCountry": "RU"
+    },
+    "areaServed": "Новосибирск и Новосибирская область",
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "priceRange": "₽₽"
+  }
+  </script>
+</head>
+<body class="has-sticky">
+
+<!-- ===== SVG-спрайт: кабины, иконки, мелкие иллюстрации ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <!-- Базовая кабина -->
+  <symbol id="cabin" viewBox="0 0 200 260">
+    <ellipse cx="100" cy="248" rx="74" ry="8" fill="#1D0F3A" opacity=".15"/>
+    <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="40" y="40" width="120" height="200" rx="10" fill="var(--cab,#5B2EFF)"/>
+      <rect x="32" y="24" width="136" height="26" rx="10" fill="var(--cab-d,#4318D9)"/>
+      <rect x="58" y="70" width="84" height="162" rx="8" fill="var(--cab-l,#E8E0FF)"/>
+      <path d="M74 88h52M74 98h52M74 108h52" fill="none"/>
+      <circle cx="100" cy="134" r="8" fill="#FFD82B"/>
+      <path d="M96 134q4 3 8 0" fill="none" stroke-width="2.5"/>
+      <circle cx="128" cy="170" r="5" fill="#1D0F3A"/>
+    </g>
+  </symbol>
+  <!-- С рукомойником -->
+  <symbol id="cabin-sink" viewBox="0 0 260 260">
+    <use href="#cabin" x="60" y="0" width="200" height="260"/>
+    <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="28" y="196" width="44" height="44" rx="6" fill="var(--cab-d,#E27AA0)"/>
+      <rect x="12" y="178" width="76" height="22" rx="9" fill="#fff"/>
+      <path d="M50 178v-18q0-8 8-8h10" fill="none"/>
+      <circle cx="30" cy="148" r="8" fill="#fff" stroke-width="2.5"/>
+      <circle cx="46" cy="130" r="5" fill="#fff" stroke-width="2.5"/>
+      <circle cx="24" cy="126" r="4" fill="#fff" stroke-width="2.5"/>
+    </g>
+  </symbol>
+  <!-- Без барьеров -->
+  <symbol id="cabin-access" viewBox="0 0 340 260">
+    <ellipse cx="150" cy="248" rx="124" ry="8" fill="#1D0F3A" opacity=".15"/>
+    <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="40" y="40" width="210" height="200" rx="10" fill="var(--cab,#FFD82B)"/>
+      <rect x="32" y="24" width="226" height="26" rx="10" fill="var(--cab-d,#D9B400)"/>
+      <rect x="60" y="70" width="170" height="162" rx="8" fill="var(--cab-l,#FFF6E6)"/>
+      <path d="M250 196l76 44h-76z" fill="var(--cab-d,#D9B400)"/>
+      <path d="M258 176l60 34" fill="none"/>
+      <circle cx="145" cy="104" r="22" fill="#5B2EFF"/>
+      <circle cx="145" cy="94" r="3.5" fill="#fff" stroke-width="2"/>
+      <path d="M145 101v10h9l5 11M139 118a9 9 0 1 0 14 8" fill="none" stroke="#fff" stroke-width="3"/>
+      <circle cx="205" cy="176" r="5" fill="#1D0F3A"/>
+      <path d="M90 150v50M90 160h20" fill="none"/>
+    </g>
+  </symbol>
+  <!-- Зимняя -->
+  <symbol id="cabin-winter" viewBox="0 0 200 260">
+    <use href="#cabin" width="200" height="260"/>
+    <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M32 26q8-16 22-8t22-8 22 8 22-8 22 8 18-6q8 4 8 14z" fill="#fff"/>
+      <rect x="58" y="196" width="84" height="14" rx="6" fill="#FF5A1F"/>
+      <rect x="120" y="206" width="14" height="30" rx="5" fill="#FF5A1F"/>
+      <path d="M16 76h16M24 68v16M172 118h16M180 110v16" fill="none" stroke-width="3"/>
+    </g>
+  </symbol>
+  <!-- Торфяной туалет -->
+  <symbol id="cabin-peat" viewBox="0 0 200 260">
+    <ellipse cx="100" cy="248" rx="80" ry="8" fill="#1D0F3A" opacity=".15"/>
+    <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="54" y="134" width="96" height="106" rx="12" fill="var(--cab,#FF5A1F)"/>
+      <rect x="46" y="112" width="112" height="28" rx="10" fill="var(--cab-d,#C93A00)"/>
+      <ellipse cx="102" cy="104" rx="36" ry="12" fill="var(--cab-l,#FFD9C7)"/>
+      <rect x="22" y="188" width="38" height="52" rx="8" fill="#4B3F6B"/>
+      <path d="M32 204h18M32 214h18" fill="none" stroke="#E8E0FF" stroke-width="3"/>
+      <path d="M170 236V150" fill="none"/>
+      <path d="M160 150h20l-4 22h-12z" fill="#FFD82B"/>
+      <circle cx="102" cy="176" r="9" fill="#FFD82B"/>
+      <path d="M98 176q4 3 8 0" fill="none" stroke-width="2.5"/>
+    </g>
+  </symbol>
+  <!-- Спецмашина -->
+  <symbol id="truck" viewBox="0 0 120 70">
+    <g stroke="#1D0F3A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="4" y="14" width="68" height="36" rx="10" fill="#5B2EFF"/>
+      <path d="M72 22h26q8 0 12 8l6 10v10H72z" fill="#FFD82B"/>
+      <path d="M82 28h14l6 10H82z" fill="#fff"/>
+      <path d="M16 22v20M28 22v20M40 22v20" fill="none" stroke="#E8E0FF"/>
+      <circle cx="30" cy="54" r="10" fill="#1D0F3A"/><circle cx="30" cy="54" r="3.5" fill="#E8E0FF" stroke="none"/>
+      <circle cx="90" cy="54" r="10" fill="#1D0F3A"/><circle cx="90" cy="54" r="3.5" fill="#E8E0FF" stroke="none"/>
+    </g>
+  </symbol>
+  <!-- Иконки (контурные, 24×24) -->
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6 3h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-tg" viewBox="0 0 24 24"><path d="M21 4 3 11l6.5 2.5L12 20l3-4.5L19.5 19z"/><path d="M9.5 13.5 21 4"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="m3 7 9 7 9-7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.500 7 12 7 12z"/><circle cx="12" cy="9" r="2.500"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 6h12v11H2zM14 9h4l3 3v5h-7"/><circle cx="7" cy="18" r="1.800"/><circle cx="17" cy="18" r="1.800"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M3.300 7l17.400 10M20.700 7 3.300 17M9 4l3 2 3-2M9 20l3-2 3 2"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="8" cy="9" r="1.500"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+  <symbol id="i-burger" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="m14 5-7 7 7 7"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="m10 5 7 7-7 7"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.500 2.900 6.100 6.600.8-4.900 4.600 1.300 6.600-5.900-3.300-5.900 3.300 1.300-6.600L2.500 9.400l6.600-.8z"/></symbol>
+</svg>
+
+<a class="skip-link" href="#main">К содержимому</a>
+
+<!-- ===== Шапка ===== -->
+<header class="header" id="top">
+  <div class="container header__row">
+    <a class="logo" href="#top" aria-label="ЭКО СЕРВИС НОВОСИБИРСК — на главную">
+      <svg class="logo__mark" viewBox="0 0 32 38" aria-hidden="true">
+        <rect x="2" y="2" width="28" height="34" rx="7" fill="#5B2EFF" stroke="#1D0F3A" stroke-width="3"/>
+        <path d="M2 30a7 7 0 0 0 7 6h14a7 7 0 0 0 7-6" fill="none"/>
+        <rect x="8" y="9" width="16" height="22" rx="3" fill="#E8E0FF" stroke="#1D0F3A" stroke-width="2.5"/>
+        <circle cx="20" cy="21" r="2" fill="#1D0F3A"/>
+      </svg>
+      <span class="logo__text"><b>ЭКО СЕРВИС</b><span>НОВОСИБИРСК</span></span>
+    </a>
+    <nav class="nav" aria-label="Основная навигация" id="main-nav">
+      <a href="#catalog">Каталог</a>
+      <a href="#calc">Калькулятор</a>
+      <a href="#how">Как работаем</a>
+      <a href="#zones">Доставка</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#faq">Вопросы</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="header__actions">
+      <a class="header__phone" data-bind="phone" data-bind-href="phoneHref" href="tel:+73830000000">+7 (383) 000-00-00</a>
+      <a class="btn btn--primary header__calc" href="#calc">Рассчитать</a>
+      <a class="icon-btn header__call" data-bind-href="phoneHref" href="tel:+73830000000" aria-label="Позвонить"><svg class="icon" width="24" height="24" aria-hidden="true"><use href="#i-phone"/></svg></a>
+      <button class="burger" type="button" id="burger" aria-expanded="false" aria-controls="menu" aria-label="Открыть меню"><svg class="icon" width="24" height="24" aria-hidden="true"><use href="#i-burger"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="menu on-dark" id="menu" hidden>
+  <nav class="menu__nav" aria-label="Мобильное меню" id="menu-nav"></nav>
+  <div class="menu__foot">
+    <a class="btn btn--contact btn--lg" data-bind-href="phoneHref" href="tel:+73830000000"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span data-bind="phone">+7 (383) 000-00-00</span></a>
+    <a class="btn btn--accent btn--lg" href="#calc" data-menu-close>Рассчитать</a>
+  </div>
+</div>
+
+<main id="main">
+
+<!-- ===== 1. Первый экран ===== -->
+<section class="section hero section--violet on-dark" aria-labelledby="h1">
+  <div class="container">
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <h1 id="h1">Аренда <mark class="hl">биотуалетов</mark> и туалетных кабин в Новосибирске и области</h1>
+        <p class="lead hero__lead">Привезём, установим, обслужим и заберём. Для дачи, стройки, свадьбы и фестиваля.</p>
+
+        <div class="form-card" id="hero-form-card">
+          <p class="form-card__title">Оставьте заявку — перезвоним за 15 минут</p>
+          <form class="form" data-form="hero" novalidate>
+            <div class="field">
+              <label class="field__label" for="h-name">Имя</label>
+              <input class="input" id="h-name" name="name" data-v="name" type="text" autocomplete="name" placeholder="Как к вам обращаться" required aria-required="true" aria-describedby="h-name-msg">
+              <p class="field__msg" id="h-name-msg" role="alert"></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="h-phone">Телефон</label>
+              <input class="input" id="h-phone" name="phone" data-v="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-required="true" aria-describedby="h-phone-msg">
+              <p class="field__msg" id="h-phone-msg" role="alert"></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="h-need">Что нужно?</label>
+              <select class="select" id="h-need" name="need" data-v="select" data-needs required aria-required="true" aria-describedby="h-need-msg">
+                <option value="" disabled selected>Выберите</option>
+              </select>
+              <p class="field__msg" id="h-need-msg" role="alert"></p>
+            </div>
+            <div class="field">
+              <label class="check">
+                <input type="checkbox" name="agree" data-v="consent" required aria-required="true" aria-describedby="h-agree-msg">
+                <span class="check__box" aria-hidden="true"></span>
+                <span class="check__text">Согласен(на) на обработку <a href="#" data-bind-href="privacyUrl" target="_blank" rel="noopener">персональных данных</a></span>
+              </label>
+              <p class="field__msg" id="h-agree-msg" role="alert"></p>
+            </div>
+            <button class="btn btn--primary btn--lg btn--block btn--arrow" type="submit">Получить расчёт</button>
+            <p class="small form-card__micro">Без спама. Позвоним один раз, по делу. Режим: <span data-bind="hours">ежедневно 8:00–21:00</span>.</p>
+          </form>
+          <a class="btn btn--ghost" href="#calc">Или посчитайте сами за минуту</a>
+        </div>
+      </div>
+
+      <div class="hero__art" aria-hidden="false">
+        <svg class="scene" viewBox="0 0 520 460" role="img" aria-label="Иллюстрация: биотуалетные кабины на даче, на фоне берёзок, флажков и солнца">
+          <rect width="520" height="460" fill="#FFD6E5"/>
+          <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+            <circle cx="410" cy="96" r="46" fill="#FFD82B" class="scene__sun"/>
+            <path d="M0 330q60-60 130-30t140-20 130 20 120-26v206H0z" fill="#E8E0FF"/>
+            <path d="M0 380q70-36 150-14t160 0 120-16 90 6v110H0z" fill="#FFA6C4"/>
+            <!-- берёзки -->
+            <rect x="52" y="150" width="16" height="230" rx="6" fill="#fff"/><path d="M56 190h8M56 240h8M56 290h8" fill="none"/>
+            <path d="M60 150q-40-8-46-52 40 0 46 30 6-34 46-30-6 44-46 52z" fill="#5B2EFF"/>
+            <rect x="468" y="190" width="14" height="190" rx="6" fill="#fff"/><path d="M472 230h6M472 280h6" fill="none"/>
+            <path d="M475 190q-34-6-38-44 34 0 38 26 4-30 38-26-4 38-38 44z" fill="#4318D9"/>
+            <!-- гирлянда -->
+            <path d="M20 40q120 60 240 10t240 20" fill="none"/>
+            <path d="M70 58l12 26 12-24zM130 74l12 26 12-26zM190 76l12 26 12-26zM250 62l12 26 12-26zM320 56l12 26 12-26zM390 62l12 26 12-26z" fill="#FFD82B"/>
+            <path d="M100 66l12 26 12-26zM160 76l12 26 12-26zM220 70l12 26 12-26zM290 56l12 26 12-26zM360 56l12 26 12-26z" fill="#FF5A1F"/>
+            <path d="M80 160h16v-30h-16z" fill="none" stroke="none"/>
+          </g>
+          <ellipse cx="260" cy="418" rx="200" ry="14" fill="#1D0F3A" opacity=".12"/>
+          <g class="scene__cab" style="--cab:#FFA6C4;--cab-d:#E27AA0;--cab-l:#fff">
+            <use href="#cabin-sink" x="30" y="190" width="200" height="200"/>
+          </g>
+          <g class="scene__cab" style="--cab:#5B2EFF;--cab-d:#4318D9;--cab-l:#E8E0FF">
+            <use href="#cabin" x="250" y="130" width="212" height="275"/>
+          </g>
+        </svg>
+        <aside class="blob blob--yellow hero__blob" aria-label="15 минут на ответ">
+          <p class="blob__num price price--xl">15<small>мин</small></p>
+          <p class="blob__text">Столько уходит, чтобы перезвонить и назвать цену</p>
+        </aside>
+      </div>
+    </div>
+
+    <ul class="facts" id="facts" aria-label="Коротко о нас"></ul>
+  </div>
+</section>
+
+<!-- ===== 3. Бегущая строка ===== -->
+<div class="marquee" id="marquee" role="region" aria-label="Коротко о сервисе">
+  <div class="marquee__track" id="marquee-track"></div>
+  <button class="marquee__pause" type="button" id="marquee-pause" aria-pressed="false" aria-label="Остановить бегущую строку"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-pause"/></svg></button>
+</div>
+
+<!-- ===== 4. Для кого ===== -->
+<section class="section" id="audience" aria-labelledby="aud-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="aud-h">Для кого и зачем</h2>
+      <p class="lead">Выберите свой случай — покажем, что подойдёт.</p>
+    </div>
+    <div class="aud reveal" id="aud" data-active="private">
+      <div class="aud__tabs" role="tablist" aria-label="Для кого">
+        <button class="aud__tab aud__tab--private" type="button" role="tab" id="t-p" aria-selected="true" aria-controls="p-p">Частным лицам</button>
+        <button class="aud__tab aud__tab--org" type="button" role="tab" id="t-o" aria-selected="false" aria-controls="p-o" tabindex="-1">Организациям</button>
+      </div>
+
+      <div class="aud__panel" role="tabpanel" id="p-p" aria-labelledby="t-p" tabindex="0">
+        <div class="aud__main">
+          <h3>Дача, стройка дома, праздник</h3>
+          <ul class="list-dots">
+            <li>Строите дом — рабочим нужен туалет, а в доме ещё нет воды.</li>
+            <li>Свадьба или юбилей на участке — гостей 40, а туалет один.</li>
+            <li>Дача без удобств — нужен надёжный туалет на сезон или навсегда.</li>
+          </ul>
+          <div class="aud__cta">
+            <a class="btn btn--primary btn--arrow" href="#order" data-need="rent-dacha">Подобрать для себя</a>
+            <p class="small">Цена из калькулятора — цена в заявке.</p>
+          </div>
+        </div>
+        <div class="aud__pluses">
+          <h4>Что вы получите</h4>
+          <ul class="list-check">
+            <li>Аренда от 1 суток, без договора на 20 страниц</li>
+            <li>Привезём и поставим там, где вам удобно</li>
+            <li>Можно оплатить картой или переводом</li>
+            <li>Для дачи — продаём торфяные туалеты и объясним, как с ними жить</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="aud__panel" role="tabpanel" id="p-o" aria-labelledby="t-o" tabindex="0" hidden>
+        <div class="aud__main">
+          <h3>Стройплощадки, мероприятия, долгосрочная аренда</h3>
+          <ul class="list-dots">
+            <li>Стройплощадка: бригаде нужны кабины на месяцы, с регулярной чисткой.</li>
+            <li>Фестиваль, забег, ярмарка: тысячи людей, один день, ноль права на ошибку.</li>
+            <li>Офис, склад, производство: постоянные кабины с обслуживанием по графику.</li>
+          </ul>
+          <div class="aud__cta">
+            <a class="btn btn--primary btn--arrow" href="#order" data-need="rent-org">Получить коммерческое предложение</a>
+            <p class="small">КП присылаем в течение рабочего дня.</p>
+          </div>
+        </div>
+        <div class="aud__pluses">
+          <h4>Что вы получите</h4>
+          <ul class="list-check">
+            <li>Договор, счёт, акты и УПД — в срок и без напоминаний</li>
+            <li>График обслуживания закрепляем в договоре</li>
+            <li>Фотоотчёт после каждого визита</li>
+            <li>Помогаем рассчитать количество кабин под вашу площадку</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. Каталог ===== -->
+<section class="section section--lilac section--wave" id="catalog" aria-labelledby="cat-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="cat-h">Какую кабину выбрать</h2>
+      <p class="lead">Пять вариантов на все случаи жизни. Все чистые, дезинфицированные и готовые к работе.</p>
+      <p><span class="sticker sticker--dev">ЗАГЛУШКА — цены и характеристики ориентировочные</span></p>
+    </div>
+    <div class="cab-grid" id="cab-grid"></div>
+    <div class="cat-help reveal">
+      <p class="cat-help__text">Не уверены, что выбрать? Позвоните — подскажем за две минуты.</p>
+      <div class="cat-help__btns">
+        <a class="btn btn--contact" data-bind-href="phoneHref" href="tel:+73830000000"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>Позвонить</a>
+        <a class="btn btn--contact" data-bind-href="telegramUrl" href="https://t.me/eco_service_nsk" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-tg"/></svg>Написать в Telegram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. Калькулятор ===== -->
+<section class="section section--pink section--wave" id="calc" aria-labelledby="calc-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="calc-h">Посчитайте за минуту</h2>
+      <p class="lead">Укажите, что нужно, и увидите примерную сумму. Точную — подтвердим по телефону.</p>
+    </div>
+
+    <div class="calc">
+      <form class="calc__form" id="calc-form" novalidate autocomplete="off">
+        <div class="calc__card">
+          <div class="field" data-fld="n">
+            <span class="field__label" id="n-label">Количество кабин</span>
+            <div class="stepper" role="group" aria-labelledby="n-label" id="stepper-n">
+              <button type="button" class="stepper__btn" data-step="-1" aria-label="Уменьшить количество кабин">−</button>
+              <input class="stepper__input" id="n" name="n" type="number" inputmode="numeric" min="1" max="50" value="2" aria-labelledby="n-label" aria-describedby="n-hint n-msg">
+              <button type="button" class="stepper__btn" data-step="1" aria-label="Увеличить количество кабин">+</button>
+            </div>
+            <p class="field__hint" id="n-hint">Не знаете сколько? Ниже — расчёт для мероприятий.</p>
+            <p class="field__msg" id="n-msg" role="alert"></p>
+          </div>
+
+          <div class="field" data-fld="term">
+            <label class="field__label" for="term">Срок аренды</label>
+            <div class="term-row">
+              <input class="input term-row__input" id="term" name="term" type="number" inputmode="numeric" min="1" step="1" value="10" aria-describedby="term-hint term-msg">
+              <fieldset class="seg">
+                <legend class="visually-hidden">Единица срока</legend>
+                <input type="radio" name="unit" id="u-d" value="d" checked><label for="u-d">Дни</label>
+                <input type="radio" name="unit" id="u-m" value="m"><label for="u-m">Месяцы</label>
+              </fieldset>
+            </div>
+            <p class="field__hint" id="term-hint">Минимум — 1 сутки. 1 месяц = 30 дней.</p>
+            <p class="field__msg" id="term-msg" role="alert"></p>
+          </div>
+
+          <fieldset class="field fieldset" id="service-fs">
+            <legend class="field__label">Обслуживание</legend>
+            <div class="chips" id="service-chips"></div>
+            <p class="field__hint">Для стройки обычно берут 1–2 раза в неделю. Для праздника на 1 день обслуживание не нужно.</p>
+          </fieldset>
+
+          <fieldset class="field fieldset" id="zone-fs">
+            <legend class="field__label">Доставка</legend>
+            <div class="chips">
+              <span class="chip"><input type="radio" name="zone" id="z-city" value="city" checked><label for="z-city">По Новосибирску</label></span>
+              <span class="chip"><input type="radio" name="zone" id="z-region" value="region"><label for="z-region">Новосибирская область</label></span>
+            </div>
+            <div class="field km" id="km-box" hidden>
+              <label class="field__label" for="km">Расстояние от города, км</label>
+              <div class="km__row">
+                <input class="input km__input" id="km" name="km" type="number" inputmode="numeric" min="1" max="300" value="45" aria-describedby="km-hint km-msg">
+                <input class="range" id="km-range" type="range" min="1" max="300" value="45" aria-label="Расстояние от города, километров" aria-valuetext="45 километров">
+              </div>
+              <p class="field__hint" id="km-hint">Расстояние — от границы Новосибирска до места установки.</p>
+              <p class="field__msg" id="km-msg" role="alert"></p>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label class="field__label" for="model">Модель</label>
+            <select class="select" id="model" name="model"></select>
+            <p class="field__hint">Необязательно: по умолчанию считаем по «Базе».</p>
+          </div>
+        </div>
+
+        <!-- Мини-калькулятор -->
+        <div class="calc__card calc__card--event" id="event-calc">
+          <h3 class="h3-sm">Сколько кабин нужно на мероприятие?</h3>
+          <div class="field" data-fld="guests">
+            <label class="field__label" for="guests">Количество гостей</label>
+            <input class="input" id="guests" name="guests" type="number" inputmode="numeric" min="1" placeholder="Например, 120" aria-describedby="guests-msg">
+            <p class="field__msg" id="guests-msg" role="alert"></p>
+          </div>
+          <fieldset class="field fieldset">
+            <legend class="field__label">Длительность</legend>
+            <div class="seg seg--wrap">
+              <input type="radio" name="dur" id="dur-s" value="short"><label for="dur-s">до 4 ч</label>
+              <input type="radio" name="dur" id="dur-m" value="mid" checked><label for="dur-m">4–8 ч</label>
+              <input type="radio" name="dur" id="dur-l" value="long"><label for="dur-l">больше 8 ч</label>
+            </div>
+          </fieldset>
+          <fieldset class="field fieldset">
+            <legend class="field__label">Будет ли алкоголь</legend>
+            <div class="seg">
+              <input type="radio" name="alc" id="alc-n" value="no" checked><label for="alc-n">Нет</label>
+              <input type="radio" name="alc" id="alc-y" value="yes"><label for="alc-y">Да</label>
+            </div>
+          </fieldset>
+          <div class="event-result" id="event-result" role="status" aria-live="polite" hidden>
+            <p class="event-result__text" id="event-text"></p>
+            <button class="btn btn--secondary" type="button" id="event-apply">Подставить в калькулятор</button>
+          </div>
+          <p class="small">Для стройки — 1 кабина на 10–15 рабочих.</p>
+        </div>
+      </form>
+
+      <aside class="calc-result on-dark" id="calc-result" aria-labelledby="res-t">
+        <p class="label" id="res-t">Примерно</p>
+        <p class="price price--xl calc-result__total" aria-hidden="true"><span id="res-total" data-v="0">—</span><span id="res-cur">&nbsp;₽</span></p>
+        <p class="visually-hidden" role="status" aria-live="polite" id="res-sr"></p>
+        <p class="calc-result__custom" id="res-custom" hidden></p>
+        <ul class="calc-result__errors" id="res-errors" hidden></ul>
+        <dl class="breakdown" id="breakdown">
+          <div><dt>Аренда</dt><dd id="b-rent">0&nbsp;₽</dd></div>
+          <div><dt>Обслуживание</dt><dd id="b-service">0&nbsp;₽</dd></div>
+          <div><dt>Доставка и вывоз</dt><dd id="b-delivery">0&nbsp;₽</dd></div>
+          <div class="breakdown__discount" id="b-disc-row" hidden><dt id="b-disc-label">Скидка за количество</dt><dd id="b-disc"></dd></div>
+          <div class="breakdown__total"><dt>Итого</dt><dd id="b-total"></dd></div>
+        </dl>
+        <p class="small calc-result__min" id="res-min" hidden>Минимальный заказ — 1&nbsp;500&nbsp;₽, поэтому итог округлён до него.</p>
+        <div class="discount" id="discount">
+          <p class="discount__text" id="disc-t"></p>
+          <div class="discount__bar" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" aria-labelledby="disc-t" id="disc-bar">
+            <span class="discount__fill"></span>
+            <span class="discount__tick" style="left:50%"><i>5%</i></span>
+            <span class="discount__tick" style="left:100%"><i>10%</i></span>
+          </div>
+        </div>
+        <p class="small">Это ориентир. Итоговую цену назовём до оплаты, и она не изменится.</p>
+        <a class="btn btn--accent btn--block btn--lg" href="#order" id="res-order">Заказать</a>
+        <a class="btn btn--ghost" id="res-share" href="https://t.me/eco_service_nsk" target="_blank" rel="noopener">Отправить расчёт в Telegram</a>
+      </aside>
+
+      <a class="calc-mini" href="#calc-result" id="calc-mini" aria-label="Перейти к расчёту">
+        <span class="calc-mini__label">Примерно</span>
+        <span class="calc-mini__sum price" id="mini-total">—</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. Как работаем ===== -->
+<section class="section" id="how" aria-labelledby="how-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="how-h">Как всё устроено: 4 шага</h2>
+    </div>
+    <div class="steps-wrap">
+      <div class="route" aria-hidden="true">
+        <div class="route__line"></div>
+        <div class="route__cover"></div>
+        <svg class="route__truck" viewBox="0 0 120 70" width="56" height="33"><use href="#truck"/></svg>
+      </div>
+      <ol class="steps" id="steps"></ol>
+    </div>
+    <p class="section__cta reveal"><a class="btn btn--primary btn--arrow" href="#order">Оставить заявку</a></p>
+  </div>
+</section>
+
+<!-- ===== 8. Что входит в обслуживание ===== -->
+<section class="section section--sun section--wave" id="service" aria-labelledby="srv-h">
+  <div class="container">
+    <div class="grid service">
+      <div class="col-full lg-7 reveal">
+        <div class="section__head">
+          <h2 id="srv-h">Что входит в обслуживание</h2>
+          <p class="lead">Мы не просто оставляем кабину. Мы следим, чтобы она оставалась в порядке.</p>
+        </div>
+        <ul class="list-check list-check--big" id="service-list"></ul>
+        <p class="plate" id="service-note"><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-spark"/></svg><span></span></p>
+      </div>
+      <div class="col-full lg-5 reveal">
+        <svg class="scene scene--truck" viewBox="0 0 440 340" role="img" aria-label="Иллюстрация: сервисная машина едет к кабине">
+          <rect width="440" height="340" fill="#E8E0FF"/>
+          <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+            <circle cx="90" cy="70" r="34" fill="#FFD82B"/>
+            <path d="M0 250q80-40 160-10t160-10 120 10v100H0z" fill="#FFD6E5"/>
+            <path d="M340 90q30-18 60 0 28 0 28 22H318q0-18 22-22z" fill="#fff"/>
+          </g>
+          <ellipse cx="220" cy="296" rx="190" ry="12" fill="#1D0F3A" opacity=".12"/>
+          <use href="#truck" x="30" y="170" width="250" height="146"/>
+          <g style="--cab:#5B2EFF;--cab-d:#4318D9;--cab-l:#fff"><use href="#cabin" x="300" y="130" width="120" height="156"/></g>
+          <g stroke="#1D0F3A" stroke-width="3" stroke-linecap="round" fill="none"><path d="M284 232h14M290 224l8 8-8 8"/></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 9. Почему мы ===== -->
+<section class="section section--sun section--tight" id="promises" aria-labelledby="why-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="why-h">Что мы обещаем</h2>
+    </div>
+    <div class="why" id="why"></div>
+    <div class="blobs reveal" id="blobs" aria-label="Цифры"></div>
+
+    <div class="vs-block reveal">
+      <h3 id="vs-h"></h3>
+      <p class="lead" id="vs-lead"></p>
+      <div class="vs" role="table" aria-labelledby="vs-h" id="vs"></div>
+      <p class="small" id="vs-note"></p>
+      <p><a class="btn btn--primary btn--arrow" href="#calc">Рассчитать стоимость</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 10. Для юрлиц ===== -->
+<section class="section section--lilac" id="docs" aria-labelledby="docs-h">
+  <div class="container">
+    <div class="grid">
+      <div class="col-full lg-6 reveal">
+        <h2 id="docs-h">Для организаций: договор, счёт и закрывающие</h2>
+        <p class="lead docs__lead">Бухгалтерия будет довольна. Мы тоже любим порядок — в том числе в документах.</p>
+        <div class="docs__btns">
+          <a class="btn btn--primary" href="#" data-bind-href="contractSampleUrl" id="sample-link">Скачать образец договора</a>
+          <a class="btn btn--secondary" href="#order" data-need="rent-org">Запросить КП</a>
+        </div>
+        <p class="small docs__note" id="sample-note" role="status"></p>
+      </div>
+      <div class="col-full lg-6 reveal">
+        <ul class="docs" id="docs-list"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 11. Зоны ===== -->
+<section class="section" id="zones" aria-labelledby="zones-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="zones-h">Везём по Новосибирску и области</h2>
+      <p class="lead">Если ваша точка есть на карте — приедем. Если нет — всё равно звоните.</p>
+    </div>
+    <div class="grid zones">
+      <div class="col-full lg-6 reveal">
+        <svg class="zone-map" id="zone-map" viewBox="0 0 400 400" role="img" aria-label="Схема зон доставки: город, до 30 км, 30–300 км">
+          <circle data-zone="far" cx="200" cy="200" r="190" fill="#E8E0FF" stroke="#1D0F3A" stroke-width="3" stroke-dasharray="3 10" stroke-linecap="round"/>
+          <circle data-zone="near" cx="200" cy="200" r="120" fill="#FFF0A8" stroke="#1D0F3A" stroke-width="3"/>
+          <circle data-zone="city" cx="200" cy="200" r="58" fill="#FFA6C4" stroke="#1D0F3A" stroke-width="3"/>
+          <path d="M170 215c12-14 24 10 40-4s30 6 22 18" fill="none" stroke="#1D0F3A" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+          <circle cx="200" cy="200" r="9" fill="#5B2EFF" stroke="#1D0F3A" stroke-width="3"/>
+          <g font-family="Onest, sans-serif" font-weight="700" font-size="14" fill="#1D0F3A" id="map-labels">
+            <text x="200" y="184" text-anchor="middle">Новосибирск</text>
+            <text x="200" y="268" text-anchor="middle" font-size="13">до 30 км</text>
+            <text x="200" y="382" text-anchor="middle" font-size="13">30–300 км</text>
+          </g>
+        </svg>
+      </div>
+      <div class="col-full lg-6">
+        <div id="zone-list" class="zone-list"></div>
+        <p class="small zones__note">Один рейс — до 4 кабин. Для стройки и мероприятий в дальней области делаем индивидуальный расчёт.</p>
+      </div>
+      <div class="col-full reveal">
+        <div class="zone-form">
+          <form class="form zone-form__form" data-form="zone" novalidate>
+            <div class="field">
+              <label class="field__label" for="z-place">Название населённого пункта</label>
+              <input class="input" id="z-place" name="place" data-v="text" type="text" autocomplete="off" placeholder="Например, Бердск" required aria-required="true" aria-describedby="z-place-msg">
+              <p class="field__msg" id="z-place-msg" role="alert"></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="z-phone">Телефон</label>
+              <input class="input" id="z-phone" name="phone" data-v="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-required="true" aria-describedby="z-phone-msg">
+              <p class="field__msg" id="z-phone-msg" role="alert"></p>
+            </div>
+            <button class="btn btn--secondary" type="submit">Узнать стоимость доставки</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 12. Отзывы ===== -->
+<section class="section section--violet on-dark section--wave" id="reviews" aria-labelledby="rev-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="rev-h">Что говорят клиенты</h2>
+      <p><span class="sticker sticker--dev">ЗАГЛУШКА — отзывы вымышленные, заменить реальными с согласия авторов</span></p>
+    </div>
+    <div class="slider">
+      <div class="slider__track" id="rev-track" tabindex="0" role="region" aria-label="Отзывы клиентов"></div>
+      <div class="slider__nav">
+        <button class="icon-btn icon-btn--light" type="button" id="rev-prev" aria-label="Предыдущий отзыв"><svg class="icon" width="24" height="24" aria-hidden="true"><use href="#i-prev"/></svg></button>
+        <button class="icon-btn icon-btn--light" type="button" id="rev-next" aria-label="Следующий отзыв"><svg class="icon" width="24" height="24" aria-hidden="true"><use href="#i-next"/></svg></button>
+      </div>
+    </div>
+    <p class="section__cta"><a class="btn btn--primary btn--arrow" href="#order">Оставить заявку</a></p>
+  </div>
+</section>
+
+<!-- ===== 13. FAQ ===== -->
+<section class="section" id="faq" aria-labelledby="faq-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="faq-h">Частые вопросы</h2>
+    </div>
+    <p class="field__label faq-ask" id="faq-ask">Что вас интересует?</p>
+    <fieldset class="chips faq-groups" id="faq-groups"><legend class="visually-hidden">Группа вопросов</legend></fieldset>
+    <div class="faq-list" id="faq-list" aria-live="polite"></div>
+    <p class="faq-more">Не нашли ответ? <a href="tel:+73830000000" data-bind-href="phoneHref">Позвоните</a> — ответим сразу.</p>
+  </div>
+</section>
+
+<!-- ===== 14. Контакты и финальная форма ===== -->
+<section class="section section--lilac section--wave" id="contacts" aria-labelledby="cont-h">
+  <div class="container">
+    <div class="section__head reveal">
+      <h2 id="cont-h">Позвоните, напишите или оставьте заявку</h2>
+      <p class="lead">Отвечаем быстро. Обычно — за 15 минут.</p>
+    </div>
+    <div class="grid contacts">
+      <div class="col-full lg-5 reveal">
+        <ul class="contact-list" id="contact-list"></ul>
+        <div class="ph" role="img" aria-label="Место для карты проезда">Карта проезда: адрес офиса и стоянки парка</div>
+      </div>
+      <div class="col-full lg-7 reveal" id="order">
+        <div class="form-card form-card--order">
+          <h3 class="form-card__title form-card__title--lg">Не откладывайте на «потом»</h3>
+          <form class="form" data-form="order" id="order-form" novalidate>
+            <div class="form__grid">
+              <div class="field">
+                <label class="field__label" for="o-name">Имя</label>
+                <input class="input" id="o-name" name="name" data-v="name" type="text" autocomplete="name" placeholder="Как к вам обращаться" required aria-required="true" aria-describedby="o-name-msg">
+                <p class="field__msg" id="o-name-msg" role="alert"></p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="o-phone">Телефон</label>
+                <input class="input" id="o-phone" name="phone" data-v="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-required="true" aria-describedby="o-phone-msg">
+                <p class="field__msg" id="o-phone-msg" role="alert"></p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="o-need">Что нужно?</label>
+              <select class="select" id="o-need" name="need" data-v="select" data-needs required aria-required="true" aria-describedby="o-need-msg">
+                <option value="" disabled selected>Выберите</option>
+              </select>
+              <p class="field__msg" id="o-need-msg" role="alert"></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="o-comment">Комментарий <span class="field__opt">(необязательно)</span></label>
+              <textarea class="textarea" id="o-comment" name="comment" placeholder="Адрес, даты, сколько человек — что известно"></textarea>
+            </div>
+            <div class="field">
+              <label class="check">
+                <input type="checkbox" name="agree" data-v="consent" required aria-required="true" aria-describedby="o-agree-msg">
+                <span class="check__box" aria-hidden="true"></span>
+                <span class="check__text">Согласен(на) на обработку <a href="#" data-bind-href="privacyUrl" target="_blank" rel="noopener">персональных данных</a></span>
+              </label>
+              <p class="field__msg" id="o-agree-msg" role="alert"></p>
+            </div>
+            <button class="btn btn--primary btn--lg btn--block btn--arrow" type="submit">Отправить заявку</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== Подвал ===== -->
+<footer class="footer on-dark">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__col footer__col--brand">
+        <a class="logo logo--dark" href="#top" aria-label="ЭКО СЕРВИС НОВОСИБИРСК — наверх">
+          <svg class="logo__mark" viewBox="0 0 32 38" aria-hidden="true">
+            <rect x="2" y="2" width="28" height="34" rx="7" fill="#FFD82B" stroke="#FFF6E6" stroke-width="3"/>
+            <rect x="8" y="9" width="16" height="22" rx="3" fill="#1D0F3A"/>
+            <circle cx="20" cy="21" r="2" fill="#FFD82B"/>
+          </svg>
+          <span class="logo__text"><b>ЭКО СЕРВИС</b><span>НОВОСИБИРСК</span></span>
+        </a>
+        <p id="footer-tagline">Туалетные кабины в Новосибирске и области. Привезём, обслужим, заберём.</p>
+      </div>
+      <nav class="footer__col" aria-label="Навигация по странице">
+        <h2 class="footer__h">Навигация</h2>
+        <ul id="footer-nav"></ul>
+      </nav>
+      <nav class="footer__col" aria-label="Клиентам">
+        <h2 class="footer__h">Клиентам</h2>
+        <ul>
+          <li><a href="#audience">Частным лицам</a></li>
+          <li><a href="#docs">Организациям</a></li>
+          <li><a href="#" data-bind-href="contractSampleUrl" class="js-sample">Образец договора</a></li>
+          <li><a href="#event-calc">Сколько кабин нужно</a></li>
+        </ul>
+      </nav>
+      <div class="footer__col">
+        <h2 class="footer__h">Связь</h2>
+        <ul id="footer-contacts"></ul>
+      </div>
+    </div>
+
+    <div class="footer__word" aria-hidden="true"><span>ЭКО</span><span>СЕРВИС</span></div>
+    <p class="footer__sub" aria-hidden="true">НОВОСИБИРСК</p>
+
+    <div class="footer__legal">
+      <span id="footer-copy">© 2026 ЭКО СЕРВИС НОВОСИБИРСК · ООО «ЭКО СЕРВИС НОВОСИБИРСК», ИНН 000000000000</span>
+      <a href="#" data-bind-href="privacyUrl">Политика конфиденциальности</a>
+      <a href="#contacts">Реквизиты</a>
+      <span id="footer-joke">Сделано в Новосибирске. Руки мыли.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== Мобильная sticky-панель ===== -->
+<nav class="sticky-cta" id="sticky-cta" aria-label="Быстрые действия" data-visible="false">
+  <a class="btn btn--secondary" data-bind-href="phoneHref" href="tel:+73830000000"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-phone"/></svg>Позвонить</a>
+  <a class="btn btn--primary" href="#calc">Рассчитать</a>
+</nav>
+
+<!-- ===== Десктопная кнопка «Заказать звонок» (открывается только по клику) ===== -->
+<button class="btn btn--accent fab" type="button" id="fab" aria-expanded="false" aria-controls="callback"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-phone"/></svg>Заказать звонок</button>
+<div class="callback" id="callback" role="dialog" aria-label="Заказать звонок" hidden>
+  <div class="callback__head">
+    <p class="callback__title">Перезвоним за 15 минут</p>
+    <button class="icon-btn" type="button" id="callback-close" aria-label="Закрыть"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <form class="form" data-form="callback" novalidate>
+    <div class="field">
+      <label class="field__label" for="c-name">Имя</label>
+      <input class="input" id="c-name" name="name" data-v="name" type="text" autocomplete="name" placeholder="Как к вам обращаться" required aria-required="true" aria-describedby="c-name-msg">
+      <p class="field__msg" id="c-name-msg" role="alert"></p>
+    </div>
+    <div class="field">
+      <label class="field__label" for="c-phone">Телефон</label>
+      <input class="input" id="c-phone" name="phone" data-v="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-required="true" aria-describedby="c-phone-msg">
+      <p class="field__msg" id="c-phone-msg" role="alert"></p>
+    </div>
+    <div class="field">
+      <label class="check">
+        <input type="checkbox" name="agree" data-v="consent" required aria-required="true" aria-describedby="c-agree-msg">
+        <span class="check__box" aria-hidden="true"></span>
+        <span class="check__text">Согласен(на) на обработку <a href="#" data-bind-href="privacyUrl" target="_blank" rel="noopener">персональных данных</a></span>
+      </label>
+      <p class="field__msg" id="c-agree-msg" role="alert"></p>
+    </div>
+    <button class="btn btn--primary btn--block" type="submit">Жду звонка</button>
+  </form>
+</div>
+
+<script src="js/content.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
