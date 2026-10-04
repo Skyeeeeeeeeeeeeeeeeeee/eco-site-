@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ЭКО СЕРВИС Новосибирск — аренда туалетных кабин от 350 ₽/сутки</title>
+<meta name="description" content="Аренда и продажа туалетных кабин в Новосибирске и области. Доставка по городу 800 ₽, в день заявки при звонке до 14:00.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{--bg:#111;--bg0:#000;--c1:#0B0B0B;--c2:#161616;--c3:#242424;--line:#2c2c2c;--tx:#fff;--mut:#a3a3a3;--lime:#B4FF3C;--r:20px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--tx);font-family:'Onest',system-ui,sans-serif;font-size:16px;line-height:1.5;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+.wrap{width:100%;max-width:1320px;margin:0 auto;padding:0 16px}
+.lime{color:var(--lime)}
+h1,h2,h3{text-transform:uppercase;font-weight:800;line-height:1.02;letter-spacing:-.01em}
+h1{font-size:clamp(34px,6.6vw,92px)}
+h2{font-size:clamp(28px,4.4vw,56px);text-align:center;margin-bottom:32px}
+h3{font-size:20px;line-height:1.15}
+.pill{display:inline-block;border:1.5px solid #fff;border-radius:999px;padding:9px 20px;font-weight:600;text-transform:uppercase;font-size:14px;line-height:1.2;background:var(--bg0);text-align:center}
+.pill-c{display:block;width:max-content;max-width:100%;margin:0 auto 22px}
+section{padding:56px 0}
+.dark0{background:var(--bg0)}
+.card{background:var(--c1);border-radius:var(--r);padding:24px}
+.card2{background:var(--c2);border-radius:var(--r);padding:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:16px 28px;font-weight:700;text-transform:uppercase;cursor:pointer;background:var(--lime);color:#000;font-size:15px;transition:transform .15s,background .15s}
+.btn:hover{background:#c9ff6e}
+.btn:active{transform:translateY(1px)}
+.btn-o{background:transparent;color:#fff;border:1.5px solid #fff}
+.btn-o:hover{background:#fff;color:#000}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+.muted{color:var(--mut)}
+
+/* header */
+header{position:sticky;top:0;z-index:50;padding:10px 0 0}
+.bar{background:#000;border-radius:16px;display:flex;align-items:center;justify-content:space-between;padding:10px 14px 10px 20px;min-height:56px;position:relative}
+.logo{font-weight:800;line-height:1;font-size:15px;text-transform:uppercase;letter-spacing:.02em}
+.logo i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lime);margin-left:4px}
+nav{display:none}
+nav a{padding:6px 4px;font-size:15px;color:#e8e8e8}
+nav a:hover{color:var(--lime)}
+.bar .btn{padding:10px 18px;font-size:13px}
+.burger{background:none;border:0;width:40px;height:40px;cursor:pointer;display:grid;place-content:center;gap:5px}
+.burger span{display:block;width:22px;height:2px;background:#fff}
+.menu{display:none;position:absolute;left:0;right:0;top:64px;background:#000;border-radius:16px;padding:12px 20px 20px;flex-direction:column;gap:2px}
+.menu.open{display:flex}
+.menu a{padding:12px 0;border-bottom:1px solid var(--line)}
+.right{display:flex;align-items:center;gap:8px}
+.right .btn{display:none}
+.tel{display:none}
+
+/* hero */
+.hero{padding:36px 0 56px}
+.hero p.lead{max-width:760px;margin:22px 0 30px;font-size:17px;color:#e9e9e9}
+.hero-grid{display:grid;gap:40px}
+.formbox{position:relative;padding-top:22px}
+.formbox .pill{position:absolute;top:0;left:24px;z-index:2}
+.form{background:#000;border-radius:28px;padding:44px 20px 24px}
+.fgrid{display:grid;gap:18px 24px}
+.fld label{display:block;font-size:12px;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.fld input,.fld select{width:100%;background:transparent;border:0;border-bottom:1px solid #8a8a8a;padding:10px 0;font-size:15px;border-radius:0;outline:0}
+.fld select{appearance:none;background:transparent;cursor:pointer}
+.fld select option{background:#111;color:#fff}
+.fld input::placeholder{color:#666}
+.fld input:focus,.fld select:focus{border-bottom-color:var(--lime)}
+.form .btn{width:100%;margin-top:26px;padding:18px}
+.consent{display:flex;gap:12px;margin-top:20px;font-size:12px;line-height:1.45;color:#ddd}
+.consent input{appearance:none;flex:none;width:18px;height:18px;border:2px solid var(--lime);border-radius:3px;margin-top:2px;cursor:pointer;background:transparent}
+.consent input:checked{background:var(--lime);box-shadow:inset 0 0 0 3px #000}
+.consent a{color:var(--lime)}
+.ok{display:none;margin-top:14px;color:var(--lime);font-weight:600;font-size:14px}
+.ok.show{display:block}
+.art{position:relative;min-height:0;background:radial-gradient(closest-side,rgba(180,255,60,.22),rgba(180,255,60,.07) 60%,transparent 100%);display:grid;gap:12px;padding:8px 0}
+.art .cab{width:min(270px,70%);margin:0 auto}
+.stats{display:grid;gap:12px}
+.stat{background:var(--c1);border-radius:14px;padding:16px 18px;border:1px solid #1d1d1d}
+.stat small{display:block;font-size:13px;color:#ddd}
+.stat b{font-size:34px;color:var(--lime);font-weight:700;line-height:1.2}
+.stat em{font-style:normal;font-size:12px;color:#ddd;margin-left:8px}
+.donut{display:flex;gap:18px;align-items:center}
+.donut ul{list-style:none;font-size:13px;display:grid;gap:4px;flex:1}
+.donut li{display:flex;justify-content:space-between;gap:12px}
+.donut li:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--d);margin:7px 8px 0 0;flex:none}
+.donut li span{flex:1}
+.ph{font-size:11px;color:#777;margin-top:8px}
+
+/* audience */
+.grid3{display:grid;gap:16px}
+.aud{display:flex;flex-direction:column;gap:12px;min-height:240px}
+.aud .n{font-size:13px;color:var(--lime);font-weight:700}
+.aud ul{list-style:none;color:var(--mut);font-size:15px;display:grid;gap:6px;margin-top:auto}
+.aud li:before{content:"";display:inline-block;width:6px;height:6px;background:var(--lime);border-radius:50%;margin-right:10px;vertical-align:middle}
+.aud p{color:#d8d8d8}
+
+/* models */
+.models{display:grid;gap:16px}
+.model{display:flex;flex-direction:column;gap:12px;background:var(--c1);border-radius:var(--r);padding:20px}
+.model .pic{background:var(--c2);border-radius:14px;height:190px;display:grid;place-items:center}
+.model .pic svg{height:170px;width:auto}
+.model .code{font-size:12px;color:var(--lime);font-weight:700;letter-spacing:.06em}
+.model p{font-size:14px;color:var(--mut)}
+.model .pr{margin-top:auto;font-size:13px;color:var(--mut)}
+.model .pr b{display:block;color:var(--lime);font-size:28px;line-height:1.1}
+.model.sale .pr b{color:#fff}
+
+/* pricing */
+.tiers{display:grid;gap:16px}
+.tier{background:var(--c1);border-radius:24px;padding:26px;display:flex;flex-direction:column;gap:14px}
+.tier.hot{outline:1.5px solid var(--lime)}
+.tier .nm{font-size:14px;text-transform:uppercase;font-weight:700;color:#ddd}
+.tier .big{font-size:clamp(48px,6vw,68px);font-weight:800;color:var(--lime);line-height:1}
+.tier .big small{font-size:18px;color:#ddd;font-weight:500;margin-left:6px}
+.tier p{color:var(--mut);font-size:14px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:84px;margin-top:auto}
+.bars div{flex:1;background:#2a2a2a;border-radius:4px 4px 0 0;position:relative}
+.bars div.on{background:var(--lime)}
+.bars-l{display:flex;gap:8px;font-size:11px;color:#777;margin-top:-6px}
+.bars-l span{flex:1;text-align:center}
+.tier .btn{width:100%}
+.example{margin-top:16px;display:grid;gap:16px;background:#000;border-radius:24px;padding:26px;border:1px solid var(--line)}
+.ex-rows{display:grid;gap:10px}
+.ex-rows div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px dashed #333;padding-bottom:10px;font-size:15px}
+.ex-rows b{white-space:nowrap}
+.ex-total{display:flex;flex-direction:column;justify-content:center;gap:4px}
+.ex-total .big{font-size:clamp(44px,6vw,72px);font-weight:800;color:var(--lime);line-height:1}
+.note{font-size:13px;color:var(--mut)}
+
+/* composition */
+.grid2{display:grid;gap:16px}
+.comp{display:flex;flex-direction:column;gap:14px;min-height:300px}
+.comp .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.comp .top span{color:var(--lime);font-weight:800;font-size:22px;white-space:nowrap}
+.comp p{color:var(--mut);font-size:14px}
+.mini{margin-top:auto;background:#000;border-radius:14px;padding:16px}
+.chk{list-style:none;display:grid;gap:8px;font-size:14px}
+.chk li{display:flex;gap:10px;align-items:center}
+.chk li:before{content:"";width:16px;height:16px;border-radius:50%;background:var(--lime) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.3 2.3 4.7-5' fill='none' stroke='%23000' stroke-width='1.8'/%3E%3C/svg%3E");flex:none}
+.tr{display:flex;gap:6px;align-items:center}
+.tr i{display:block;width:30px;height:38px;background:#2b2b2b;border-radius:4px;border-bottom:3px solid var(--lime)}
+.tr span{font-size:13px;color:var(--mut);margin-left:8px}
+.disc{display:grid;gap:12px;font-size:13px}
+.disc .row{display:grid;grid-template-columns:90px 1fr 40px;gap:10px;align-items:center}
+.disc .t{height:10px;background:#262626;border-radius:5px;overflow:hidden}
+.disc .t i{display:block;height:100%;background:var(--lime)}
+
+/* case */
+.case{background:var(--c1);border-radius:28px;padding:16px;display:grid;gap:16px}
+.case .lp{background:var(--lime);color:#000;border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:14px}
+.case .lp h3{font-size:clamp(26px,3.4vw,40px)}
+.case .lp .nums{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:auto}
+.case .lp .nums div{background:#000;color:#fff;border-radius:14px;padding:14px}
+.case .lp .nums b{display:block;font-size:34px;color:var(--lime);line-height:1.1}
+.case .lp .nums span{font-size:12px}
+.case .rp{display:grid;gap:16px;align-content:start;padding:8px 8px 8px}
+.case .chart{background:#000;border-radius:16px;padding:18px}
+.case .chart small{display:block;color:var(--mut);font-size:12px;margin-top:8px}
+.did{list-style:none;display:grid;gap:10px;font-size:15px}
+.did li{display:flex;gap:12px;align-items:flex-start}
+.did li:before{content:"";flex:none;width:8px;height:8px;margin-top:8px;border-radius:50%;background:var(--lime)}
+
+/* steps */
+.steps{display:grid;gap:16px;counter-reset:s}
+.step{position:relative;padding-top:64px}
+.step .no{position:absolute;top:20px;left:24px;font-size:36px;font-weight:800;color:var(--lime);line-height:1}
+.step p{color:var(--mut);font-size:14px;margin-top:8px}
+
+/* delivery */
+.zones{display:grid;gap:16px}
+.zone .pr{font-size:34px;font-weight:800;color:var(--lime);line-height:1.1;margin:10px 0}
+.zone p{color:var(--mut);font-size:14px}
+.map{background:var(--c2);border-radius:var(--r);padding:16px;display:grid;place-items:center}
+.map svg{width:100%;max-width:420px;height:auto}
+.timing{margin-top:16px;display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.timing .pill{background:transparent;border-color:#555;text-transform:none;font-weight:500}
+
+/* reviews */
+.rev{display:flex;flex-direction:column;gap:16px}
+.rev q{quotes:none;font-size:16px;line-height:1.5}
+.rev .who{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;font-size:14px}
+.rev .who b{display:block}
+.rev .who span{color:var(--mut)}
+.rev .tag{align-self:flex-start;font-size:12px;color:var(--lime);border:1px solid var(--lime);border-radius:999px;padding:3px 12px;text-transform:uppercase}
+
+/* why */
+.why .ic{width:44px;height:44px;border-radius:12px;background:#000;display:grid;place-items:center;margin-bottom:16px}
+.why p{color:var(--mut);font-size:14px;margin-top:8px}
+
+/* faq */
+.faq{max-width:900px;margin:0 auto;display:grid;gap:10px}
+.faq details{background:var(--c1);border-radius:16px}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;color:var(--lime);font-weight:700;font-size:17px}
+.faq summary::-webkit-details-marker{display:none}
+.faq .pl{flex:none;width:32px;height:32px;border-radius:50%;background:var(--lime);position:relative}
+.faq .pl:before,.faq .pl:after{content:"";position:absolute;left:50%;top:50%;width:14px;height:2px;background:#000;transform:translate(-50%,-50%);transition:transform .2s}
+.faq .pl:after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq details[open] .pl:after{transform:translate(-50%,-50%) rotate(0)}
+.faq .a{padding:0 22px 22px;color:#ddd;font-size:15px;max-width:760px}
+
+/* cta */
+.cta{padding:56px 0 72px}
+.cta h2{margin-bottom:12px}
+.cta .form{background:#161616}
+.cta .sub{text-align:center;color:#ddd;max-width:620px;margin:0 auto 40px}
+.cta .hero-grid{align-items:center}
+
+/* footer */
+footer{background:#000;padding:48px 0 28px}
+.fgrid2{display:grid;gap:32px}
+footer h4{font-size:13px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;letter-spacing:.06em}
+footer ul{list-style:none;display:grid;gap:8px;font-size:15px;color:#ddd}
+footer a:hover{color:var(--lime)}
+.soc{display:flex;gap:8px;margin-top:14px}
+.soc a{width:44px;height:44px;border:1.5px solid #444;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px}
+.soc a:hover{border-color:var(--lime);color:var(--lime)}
+.copy{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:#777;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+
+@media(min-width:640px){
+ .wrap{padding:0 24px}
+ .fgrid{grid-template-columns:1fr 1fr}
+ .grid2,.zones.z2{grid-template-columns:1fr 1fr}
+ .models{grid-template-columns:1fr 1fr}
+ .stats{grid-template-columns:1fr 1fr}
+ .steps{grid-template-columns:1fr 1fr}
+ .form{padding:48px 32px 28px}
+ .fgrid2{grid-template-columns:1.4fr 1fr 1fr}
+}
+@media(min-width:900px){
+ .wrap{padding:0 30px}
+ section{padding:84px 0}
+ nav{display:flex;gap:30px}
+ .burger,.menu{display:none!important}
+ .right .btn{display:inline-flex}
+ .tel{display:block;font-weight:600;font-size:14px;margin-right:12px}
+ .logo{font-size:17px}
+ .hero{padding:56px 0 80px}
+ .grid3,.tiers{grid-template-columns:repeat(3,1fr)}
+ .models{grid-template-columns:repeat(3,1fr)}
+ .steps{grid-template-columns:repeat(4,1fr)}
+ .zones{grid-template-columns:repeat(3,1fr)}
+ .example{grid-template-columns:1.4fr 1fr;align-items:center;gap:40px}
+ .case{grid-template-columns:1fr 1.1fr;padding:20px}
+ .case .rp{padding:12px 16px}
+ .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:36px;align-items:center}
+ .art{display:block;min-height:560px}
+ .art .cab{position:absolute;left:20%;top:0;width:60%;margin:0}
+ .art .stats{display:block}
+ .art .stat{position:absolute}
+ .art .s1{right:0;top:6%}
+ .art .s2{left:0;top:30%}
+ .art .s3{right:0;bottom:2%;width:62%}
+ .cta .art{min-height:500px}
+ .why-g{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:1100px){.hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}.art .s3{width:56%}.art .stat{max-width:290px}}
+@media(max-width:380px){.pill{font-size:12px;padding:8px 14px}.donut{flex-direction:column;align-items:flex-start}.stat b{font-size:30px}.ex-rows div{font-size:14px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <symbol id="cabin" viewBox="0 0 300 400">
+   <ellipse cx="160" cy="378" rx="125" ry="14" fill="#000" opacity=".55"/>
+   <!-- side -->
+   <polygon points="190,130 260,100 260,340 190,370" fill="#1c1c1c"/>
+   <polygon points="190,130 260,100 260,170 190,200" fill="#232323"/>
+   <polygon points="205,250 245,233 245,246 205,263" fill="#111"/>
+   <polygon points="205,272 245,255 245,268 205,285" fill="#111"/>
+   <polygon points="205,294 245,277 245,290 205,307" fill="#111"/>
+   <!-- front -->
+   <polygon points="50,110 190,130 190,370 50,350" fill="#303030"/>
+   <polygon points="50,110 190,130 190,150 50,130" fill="#3b3b3b"/>
+   <polygon points="50,330 190,350 190,370 50,350" fill="#262626"/>
+   <!-- door -->
+   <polygon points="72,160 168,174 168,342 72,328" fill="#252525"/>
+   <polygon points="72,160 120,167 120,335 72,328" fill="#2c2c2c"/>
+   <polygon points="82,176 158,187 158,205 82,194" fill="#161616"/>
+   <polygon points="82,200 158,211 158,216 82,205" fill="#161616"/>
+   <polygon points="82,222 158,233 158,238 82,227" fill="#161616"/>
+   <rect x="148" y="256" width="6" height="30" rx="3" fill="#8a8a8a" transform="skewY(8)"/>
+   <polygon points="108,128 140,133 140,145 108,140" fill="#B4FF3C"/>
+   <!-- top -->
+   <polygon points="50,110 120,80 260,100 190,130" fill="#474747"/>
+   <polygon points="50,110 120,80 135,82 65,112" fill="#555"/>
+   <polygon points="120,80 260,100 255,103 118,84" fill="#5a5a5a"/>
+   <polygon points="150,98 215,107 200,114 138,105" fill="#3a3a3a"/>
+  </symbol>
+  <symbol id="cabin-sm" viewBox="40 70 230 310">
+   <use href="#cabin" x="0" y="0" width="300" height="400"/>
+  </symbol>
+ </defs>
+</svg>
+
+<header>
+ <div class="wrap">
+  <div class="bar">
+   <a href="#top" class="logo" aria-label="ЭКО СЕРВИС — на главную">ЭКО<br>СЕРВИС<i></i></a>
+   <nav aria-label="Основное меню">
+    <a href="#models">Кабины</a><a href="#price">Цены</a><a href="#private">Частным</a><a href="#org">Организациям</a><a href="#delivery">Доставка</a><a href="#contacts">Контакты</a>
+   </nav>
+   <div class="right">
+    <a class="tel" href="tel:+73830000000">+7 (383) 000-00-00</a>
+    <a class="btn btn-o" href="#order">Связаться</a>
+    <button class="burger" aria-label="Открыть меню" aria-expanded="false" id="burger"><span></span><span></span><span></span></button>
+   </div>
+   <div class="menu" id="menu">
+    <a href="#models">Кабины</a><a href="#price">Цены</a><a href="#private">Частным</a><a href="#org">Организациям</a><a href="#delivery">Доставка</a><a href="#contacts">Контакты</a>
+    <a href="tel:+73830000000" class="lime">+7 (383) 000-00-00</a>
+   </div>
+  </div>
+ </div>
+</header>
+
+<main id="top">
+<section class="hero" style="padding-top:36px">
+ <div class="wrap">
+  <h1>Аренда туалетных кабин</h1>
+  <p class="lead">Привезём по Новосибирску в день заявки, если позвонили до 14:00. Аренда от <b class="lime">350 ₽ в сутки</b>, доставка и вывоз <b class="lime">800 ₽</b> за рейс, перезваниваем за 15 минут. Каждую кабину моем и дезинфицируем перед выдачей.</p>
+  <div class="hero-grid">
+   <div class="formbox" id="order">
+    <span class="pill">Оставьте заявку</span>
+    <form class="form" novalidate data-form>
+     <div class="fgrid">
+      <div class="fld"><label for="h-n">Имя</label><input id="h-n" name="name" placeholder="Как к вам обращаться" autocomplete="name"></div>
+      <div class="fld"><label for="h-t">Телефон</label><input id="h-t" name="tel" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel" required></div>
+      <div class="fld"><label for="h-a">Адрес / район</label><input id="h-a" name="addr" placeholder="Например, Бердск, СНТ" autocomplete="street-address"></div>
+      <div class="fld"><label for="h-w">Что нужно</label><select id="h-w" name="what"><option>Стандартная кабина</option><option>С рукомойником</option><option>Для маломобильных</option><option>Утеплённая</option><option>Торфяной туалет</option><option>Не знаю, подскажите</option></select></div>
+     </div>
+     <button class="btn" type="submit">Отправить заявку</button>
+     <label class="consent"><input type="checkbox" required><span>Нажимая «Отправить заявку», я соглашаюсь на обработку персональных данных для связи по заказу. Подробнее в <a href="#">политике обработки данных</a>.</span></label>
+     <p class="ok" role="status"></p>
+    </form>
+   </div>
+   <div class="art" aria-label="Иллюстрация кабины и показатели">
+    <svg class="cab" viewBox="40 70 230 320" role="img" aria-label="Туалетная кабина"><use href="#cabin" width="300" height="400" style="overflow:visible"/></svg>
+    <div class="stats">
+     <div class="stat s1"><small>Кабин на объектах сейчас</small><b>312</b><em>из 1 200+ с 2018</em></div>
+     <div class="stat s2"><small>Доставка по городу</small><b>800 ₽</b><em>до 4 кабин за рейс</em></div>
+     <div class="stat s3"><small>Кому возим</small>
+      <div class="donut">
+       <svg width="84" height="84" viewBox="0 0 42 42" aria-hidden="true"><circle cx="21" cy="21" r="15.9" fill="none" stroke="#B4FF3C" stroke-width="7" stroke-dasharray="46 54" transform="rotate(-90 21 21)"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#5c8a1a" stroke-width="7" stroke-dasharray="31 69" stroke-dashoffset="-46" transform="rotate(-90 21 21)"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="#555" stroke-width="7" stroke-dasharray="23 77" stroke-dashoffset="-77" transform="rotate(-90 21 21)"/></svg>
+       <ul><li style="--d:#B4FF3C"><span>Стройки</span>46%</li><li style="--d:#5c8a1a"><span>Частные</span>31%</li><li style="--d:#555"><span>События</span>23%</li></ul>
+      </div>
+      <p class="ph">Пример данных, заглушка</p>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="dark0" id="audience">
+ <div class="wrap">
+  <span class="pill pill-c">Для кого</span>
+  <h2>Три задачи — одна схема</h2>
+  <div class="grid3">
+   <article class="card aud" id="private"><span class="n">01</span><h3>Частным лицам</h3><p>Дача, стройка дома, свадьба на участке. Привезём, поставим там, где покажете, заберём в оговорённый день.</p><ul><li>от 1 кабины, минимум заказа 1 500 ₽</li><li>торфяной туалет для дачи — 8 900 ₽</li></ul></article>
+   <article class="card aud" id="org"><span class="n">02</span><h3>Организациям</h3><p>Стройплощадки и долгая аренда. Договор, закрывающие документы, отчёты о визитах обслуживания.</p><ul><li>от 31 суток — 350 ₽ за кабину</li><li>скидка 5% от 5 кабин, 10% от 10</li></ul></article>
+   <article class="card aud"><span class="n">03</span><h3>Мероприятиям</h3><p>Ориентир: 1 кабина на 40–50 гостей на 4–8 часов, с алкоголем — больше. Берём в расчёт кабины для маломобильных гостей.</p><ul><li>на 800 участников — 20 кабин</li><li>ставим до начала, забираем после</li></ul></article>
+  </div>
+ </div>
+</section>
+
+<section id="models">
+ <div class="wrap">
+  <span class="pill pill-c">Какую кабину выбрать?</span>
+  <h2>Модели и цены</h2>
+  <div class="models">
+   <article class="model"><div class="pic"><svg viewBox="40 70 230 320"><use href="#cabin" width="300" height="400"/></svg></div><span class="code">ЭС-01</span><h3>Стандартная</h3><p>Бак 250 л, 110×110×230 см, 75 кг.</p><div class="pr">аренда от 31 суток<b>от 350 ₽/сутки</b></div></article>
+   <article class="model"><div class="pic"><svg viewBox="40 70 230 320"><use href="#cabin" width="300" height="400"/></svg></div><span class="code">ЭС-02</span><h3>С рукомойником</h3><p>Бак для воды 20 л, дозатор мыла.</p><div class="pr">аренда от 31 суток<b>от 490 ₽/сутки</b></div></article>
+   <article class="model"><div class="pic"><svg viewBox="40 70 230 320"><use href="#cabin" width="300" height="400"/></svg></div><span class="code">ЭС-03</span><h3>Для маломобильных посетителей</h3><p>Пандус, поручни, широкая дверь 90 см, 220×165×230 см.</p><div class="pr">аренда от 31 суток<b>от 1 050 ₽/сутки</b></div></article>
+   <article class="model"><div class="pic"><svg viewBox="40 70 230 320"><use href="#cabin" width="300" height="400"/></svg></div><span class="code">ЭС-04</span><h3>Утеплённая</h3><p>Работает до −35 °C, утеплённые стенки, подогрев.</p><div class="pr">аренда от 31 суток<b>от 525 ₽/сутки</b></div></article>
+   <article class="model sale"><div class="pic"><svg viewBox="0 0 120 150" aria-hidden="true"><polygon points="30,60 80,66 80,138 30,132" fill="#303030"/><polygon points="80,66 100,58 100,130 80,138" fill="#1c1c1c"/><polygon points="30,60 50,48 100,58 80,66" fill="#474747"/><polygon points="40,78 70,82 70,126 40,122" fill="#252525"/><circle cx="64" cy="102" r="2.5" fill="#B4FF3C"/></svg></div><span class="code">ПРОДАЖА</span><h3>Торфяной туалет для дачи</h3><p>Покупка, а не аренда: поставили и пользуетесь.</p><div class="pr">цена<b>8 900 ₽</b></div></article>
+   <article class="model" style="background:#000;border:1.5px dashed #444;justify-content:center;align-items:flex-start"><span class="code">НЕ УВЕРЕНЫ?</span><h3>Скажем, сколько и каких кабин нужно</h3><p>Назовите число гостей или рабочих и срок.</p><a class="btn" href="#order" style="margin-top:8px">Подобрать</a></article>
+  </div>
+ </div>
+</section>
+
+<section class="dark0" id="price">
+ <div class="wrap">
+  <span class="pill pill-c">Сколько стоит аренда?</span>
+  <h2>Чем дольше срок, тем дешевле сутки</h2>
+  <div class="tiers">
+   <article class="tier"><span class="nm">На выходные · 1–3 суток</span><div class="big">700 ₽<small>/сут</small></div><p>Дача, праздник, разовая работа. Кабина стандартная ЭС-01.</p><div class="bars" aria-hidden="true"><div class="on" style="height:100%"></div><div style="height:79%"></div><div style="height:64%"></div><div style="height:50%"></div></div><div class="bars-l"><span>1–3</span><span>4–14</span><span>15–30</span><span>31+</span></div><a class="btn" href="#order">Заказать</a></article>
+   <article class="tier hot"><span class="nm">На 2 недели · 4–14 суток</span><div class="big">550 ₽<small>/сут</small></div><p>Ремонт, выезд на природу, небольшая стройка. Самый частый срок.</p><div class="bars" aria-hidden="true"><div style="height:100%"></div><div class="on" style="height:79%"></div><div style="height:64%"></div><div style="height:50%"></div></div><div class="bars-l"><span>1–3</span><span>4–14</span><span>15–30</span><span>31+</span></div><a class="btn" href="#order">Заказать</a></article>
+   <article class="tier"><span class="nm">От месяца · от 31 суток</span><div class="big">350 ₽<small>/сут</small></div><p>Стройплощадки и долгая аренда. На сроке 15–30 суток — 450 ₽.</p><div class="bars" aria-hidden="true"><div style="height:100%"></div><div style="height:79%"></div><div style="height:64%"></div><div class="on" style="height:50%"></div></div><div class="bars-l"><span>1–3</span><span>4–14</span><span>15–30</span><span>31+</span></div><a class="btn" href="#order">Заказать</a></article>
+  </div>
+  <div class="example">
+   <div><span class="pill" style="margin-bottom:18px">Пример расчёта: дача</span>
+    <div class="ex-rows">
+     <div><span>2 кабины × 10 суток × 550 ₽</span><b>11 000 ₽</b></div>
+     <div><span>Чистка раз в неделю</span><b>1 600 ₽</b></div>
+     <div><span>Доставка и вывоз по городу</span><b>800 ₽</b></div>
+    </div></div>
+   <div class="ex-total"><span class="muted">Итого за 10 суток</span><div class="big">13 400 ₽</div><p class="note">Минимальный заказ — 1 500 ₽. Скидка на аренду: 5% от 5 кабин, 10% от 10.</p></div>
+  </div>
+ </div>
+</section>
+
+<section>
+ <div class="wrap">
+  <span class="pill pill-c">Из чего складывается цена</span>
+  <h2>Четыре строки в счёте</h2>
+  <div class="grid2">
+   <article class="card comp"><div class="top"><h3>Аренда</h3><span>350–700 ₽</span></div><p>Ставка за кабину в сутки зависит от срока.</p>
+    <div class="mini"><svg viewBox="0 0 280 90" role="img" aria-label="Ставки по срокам"><g fill="#2a2a2a"><rect x="10" y="10" width="50" height="70" rx="4"/><rect x="80" y="26" width="50" height="54" rx="4"/><rect x="150" y="38" width="50" height="42" rx="4"/></g><rect x="220" y="46" width="50" height="34" rx="4" fill="#B4FF3C"/><g fill="#fff" font-size="11" font-family="Onest,sans-serif" text-anchor="middle"><text x="35" y="28">700</text><text x="105" y="44">550</text><text x="175" y="56">450</text><text x="245" y="64" fill="#000" font-weight="700">350</text></g></svg></div></article>
+   <article class="card comp"><div class="top"><h3>Обслуживание</h3><span>400 ₽</span></div><p>За кабину за выезд. Откачка, мойка и расходники входят.</p>
+    <div class="mini"><ul class="chk"><li>Откачка бака</li><li>Мойка кабины</li><li>Расходники: бумага, жидкость</li></ul></div></article>
+   <article class="card comp"><div class="top"><h3>Доставка</h3><span>800 ₽</span></div><p>По Новосибирску за рейс, в машину помещается 4 кабины. За городом считаем по километрам.</p>
+    <div class="mini"><div class="tr"><i></i><i></i><i></i><i></i><span>4 кабины = 800 ₽, 200 ₽ на кабину</span></div></div></article>
+   <article class="card comp"><div class="top"><h3>Скидки</h3><span>до 10%</span></div><p>Только на аренду, считаем от числа кабин в заказе.</p>
+    <div class="mini"><div class="disc"><div class="row"><span>1–4 кабины</span><div class="t"><i style="width:3%"></i></div><b>0%</b></div><div class="row"><span>от 5 кабин</span><div class="t"><i style="width:50%"></i></div><b class="lime">5%</b></div><div class="row"><span>от 10 кабин</span><div class="t"><i style="width:100%"></i></div><b class="lime">10%</b></div></div></div></article>
+  </div>
+ </div>
+</section>
+
+<section class="dark0">
+ <div class="wrap">
+  <span class="pill pill-c">Кейсы</span>
+  <h2>Забег на 800 участников</h2>
+  <article class="case">
+   <div class="lp"><span style="font-weight:700;text-transform:uppercase;font-size:13px">Мероприятие · Новосибирск</span><h3>Забег на 800 человек: 20 кабин, 2 для маломобильных</h3><p>Поставили до старта, забрали на следующее утро. Организатор не занималась ничем, кроме списка точек.</p>
+    <div class="nums"><div><b>20</b><span>кабин на площадке</span></div><div><b>2</b><span>для маломобильных участников</span></div><div><b>40</b><span>участников на кабину, в рамках ориентира 40–50</span></div><div><b>1 ночь</b><span>между стартом и вывозом</span></div></div></div>
+   <div class="rp">
+    <div class="chart"><svg viewBox="0 0 320 130" role="img" aria-label="Рост числа кабин по этапам подготовки"><g stroke="#262626"><line x1="0" y1="110" x2="320" y2="110"/><line x1="0" y1="70" x2="320" y2="70"/><line x1="0" y1="30" x2="320" y2="30"/></g><polyline points="10,104 90,90 170,60 250,36 310,14" fill="none" stroke="#B4FF3C" stroke-width="3" stroke-linejoin="round"/><g fill="#B4FF3C"><circle cx="10" cy="104" r="4"/><circle cx="90" cy="90" r="4"/><circle cx="170" cy="60" r="4"/><circle cx="250" cy="36" r="4"/><circle cx="310" cy="14" r="5"/></g><g fill="#a3a3a3" font-size="10" font-family="Onest,sans-serif" text-anchor="middle"><text x="20" y="126">0</text><text x="90" y="126">5</text><text x="170" y="126">10</text><text x="250" y="126">15</text><text x="300" y="126">20</text></g></svg><small>Кабин, расставленных по точкам трассы до старта. Схема-заглушка.</small></div>
+    <div><h3 style="margin-bottom:14px">Что сделали</h3><ul class="did"><li>Посчитали число кабин от числа участников и расписания старта</li><li>Добавили 2 кабины для маломобильных участников у старта и финиша</li><li>Расставили кабины до старта по плану организатора</li><li>Вывезли и обслужили на следующее утро</li></ul></div>
+   </div>
+  </article>
+ </div>
+</section>
+
+<section>
+ <div class="wrap">
+  <span class="pill pill-c">Как это работает</span>
+  <h2>Четыре шага до готовой кабины</h2>
+  <div class="steps">
+   <article class="card2 step"><span class="no">01</span><h3>Заявка</h3><p>Звоните или оставляйте форму. Перезваним за 15 минут в рабочее время, 8:00–21:00.</p></article>
+   <article class="card2 step"><span class="no">02</span><h3>Доставка</h3><p>По городу в день заявки, если позвонили до 14:00. Ставим там, где покажете.</p></article>
+   <article class="card2 step"><span class="no">03</span><h3>Обслуживание</h3><p>Выезжаем по графику: откачка, мойка, расходники. 400 ₽ за кабину за выезд.</p></article>
+   <article class="card2 step"><span class="no">04</span><h3>Вывоз</h3><p>Забираем в оговорённый день. Для юрлиц — договор и закрывающие документы.</p></article>
+  </div>
+ </div>
+</section>
+
+<section class="dark0" id="delivery">
+ <div class="wrap">
+  <span class="pill pill-c">Куда возим?</span>
+  <h2>Доставка: зоны и цены</h2>
+  <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))">
+   <div class="zones" style="grid-template-columns:1fr">
+    <article class="card zone"><span class="muted">Новосибирск</span><div class="pr">800 ₽ за рейс</div><p>В машину помещается 4 кабины. Привезём в день заявки при звонке до 14:00.</p></article>
+    <article class="card zone"><span class="muted">Ближняя зона до 30 км</span><div class="pr">1 500 ₽</div><p>За рейс. Бердск, Обь, Кольцово и посёлки рядом.</p></article>
+    <article class="card zone"><span class="muted">Область 30–300 км</span><div class="pr">1 500 ₽ + 45 ₽/км</div><p>45 ₽ за каждый километр свыше 30. Работаем в радиусе 300 км.</p></article>
+   </div>
+   <div class="map"><svg viewBox="0 0 400 400" role="img" aria-label="Схема зон доставки"><circle cx="200" cy="200" r="185" fill="none" stroke="#333" stroke-dasharray="4 6"/><circle cx="200" cy="200" r="105" fill="#1d1d1d" stroke="#444"/><circle cx="200" cy="200" r="42" fill="#B4FF3C" opacity=".9"/><g font-family="Onest,sans-serif" font-size="12" text-anchor="middle"><text x="200" y="204" fill="#000" font-weight="700">НСК</text><text x="200" y="152" fill="#fff">до 30 км</text><text x="200" y="40" fill="#a3a3a3">до 300 км</text></g><g fill="#B4FF3C"><circle cx="290" cy="120" r="4"/><circle cx="120" cy="300" r="4"/><circle cx="330" cy="260" r="4"/></g></svg></div>
+  </div>
+  <div class="timing"><span class="pill">Позвонили до 14:00 — привезём сегодня</span><span class="pill">Ежедневно 8:00–21:00</span></div>
+ </div>
+</section>
+
+<section>
+ <div class="wrap">
+  <span class="pill pill-c">Что говорят клиенты</span>
+  <h2>Отзывы</h2>
+  <div class="grid3">
+   <article class="card rev"><span class="tag">Свадьба, 80 гостей</span><q>Заказали две кабины на 80 гостей, одну с рукомойником. Привезли утром, вечером кабины были в порядке. Просили поставить подальше от беседки — водитель поставил ровно там, где показали.</q><div class="who"><b>Анна</b><span>Бердск, свадьба на участке</span></div></article>
+   <article class="card rev"><span class="tag">Стройплощадка</span><q>Три кабины на объекте полгода. Присылают отчёты о визитах, закрывающие документы приходят вовремя. У бухгалтерии вопросов нет.</q><div class="who"><b>Дмитрий</b><span>Прораб, ООО «СтройГрад»</span></div></article>
+   <article class="card rev"><span class="tag">Забег, 800 участников</span><q>Взяли 20 кабин, две для маломобильных. Поставили до старта, забрали на следующее утро.</q><div class="who"><b>Елена</b><span>Организатор забега</span></div></article>
+  </div>
+ </div>
+</section>
+
+<section class="dark0">
+ <div class="wrap">
+  <span class="pill pill-c">Почему мы</span>
+  <h2>Шесть фактов вместо обещаний</h2>
+  <div class="grid3 why-g">
+   <article class="card2 why"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4FF3C" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></div><h3>1 200+ кабин</h3><p>Выдано с 2018 года. Знаем, как они ведут себя на стройке и на празднике.</p></article>
+   <article class="card2 why"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4FF3C" stroke-width="2"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg></div><h3>Мойка перед выдачей</h3><p>Каждую кабину моем и дезинфицируем перед тем, как отправить к вам.</p></article>
+   <article class="card2 why"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4FF3C" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Звонок за 15 минут</h3><p>Перезваниваем в рабочее время, 8:00–21:00 каждый день.</p></article>
+   <article class="card2 why"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4FF3C" stroke-width="2"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></div><h3>Радиус 300 км</h3><p>Новосибирск и область. Цена доставки считается заранее, без сюрпризов в день рейса.</p></article>
+   <article class="card2 why"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4FF3C" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg></div><h3>Документы для юрлиц</h3><p>Договор и закрывающие документы приходят вместе с отчётом о визитах.</p></article>
+   <article class="card2 why"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B4FF3C" stroke-width="2"><path d="M12 3v18M7 8l5-5 5 5M5 14h14"/></svg></div><h3>Для всех посетителей</h3><p>Есть кабина с пандусом и дверью 90 см. Мероприятие без неё неполное.</p></article>
+  </div>
+ </div>
+</section>
+
+<section>
+ <div class="wrap">
+  <span class="pill pill-c">Частые вопросы</span>
+  <h2>Вопросы и ответы</h2>
+  <div class="faq">
+   <details><summary>Сколько кабин нужно на мероприятие?<span class="pl"></span></summary><div class="a">Ориентир: 1 кабина на 40–50 гостей на 4–8 часов. Если будет алкоголь, кабин нужно больше. Назовите число гостей и время — посчитаем точнее.</div></details>
+   <details><summary>Когда привезёте?<span class="pl"></span></summary><div class="a">По Новосибирску привозим в день заявки, если вы позвонили до 14:00. За городом срок называем при расчёте доставки.</div></details>
+   <details><summary>Что входит в обслуживание?<span class="pl"></span></summary><div class="a">Откачка, мойка и расходники. Стоит 400 ₽ за кабину за выезд. Частоту выездов выбираете вы, для стройки обычно раз в неделю.</div></details>
+   <details><summary>Какой минимальный заказ?<span class="pl"></span></summary><div class="a">1 500 ₽. Скидка на аренду: 5% от 5 кабин и 10% от 10 кабин.</div></details>
+   <details><summary>Работает ли кабина зимой?<span class="pl"></span></summary><div class="a">Да, модель ЭС-04 работает до −35 °C: утеплённые стенки и подогрев. Аренда от 525 ₽ в сутки при сроке от 31 суток.</div></details>
+   <details><summary>Какие документы вы даёте организациям?<span class="pl"></span></summary><div class="a">Договор и закрывающие документы. По долгой аренде присылаем отчёты о визитах обслуживания.</div></details>
+  </div>
+ </div>
+</section>
+
+<section class="cta dark0" id="contacts">
+ <div class="wrap">
+  <h2>Остались вопросы? Давайте посчитаем</h2>
+  <p class="sub">Назовите срок, число кабин и адрес. Посчитаем аренду, доставку и обслуживание и назовём итог при звонке.</p>
+  <div class="hero-grid">
+   <div class="formbox">
+    <span class="pill">Оставьте заявку</span>
+    <form class="form" novalidate data-form>
+     <div class="fgrid">
+      <div class="fld"><label for="f-n">Имя</label><input id="f-n" name="name" placeholder="Как к вам обращаться" autocomplete="name"></div>
+      <div class="fld"><label for="f-t">Телефон</label><input id="f-t" name="tel" type="tel" placeholder="+7 (___) ___-__-__" autocomplete="tel" required></div>
+      <div class="fld"><label for="f-a">Адрес / район</label><input id="f-a" name="addr" placeholder="Например, Бердск, СНТ"></div>
+      <div class="fld"><label for="f-w">Что нужно</label><select id="f-w" name="what"><option>Стандартная кабина</option><option>С рукомойником</option><option>Для маломобильных</option><option>Утеплённая</option><option>Торфяной туалет</option><option>Не знаю, подскажите</option></select></div>
+     </div>
+     <button class="btn" type="submit">Отправить заявку</button>
+     <label class="consent"><input type="checkbox" required><span>Нажимая «Отправить заявку», я соглашаюсь на обработку персональных данных для связи по заказу. Подробнее в <a href="#">политике обработки данных</a>.</span></label>
+     <p class="ok" role="status"></p>
+    </form>
+   </div>
+   <div class="art" aria-hidden="true">
+    <svg class="cab" viewBox="40 70 230 320"><use href="#cabin" width="300" height="400" style="overflow:visible"/></svg>
+    <div class="stats">
+     <div class="stat s1"><small>Перезвон</small><b>15 мин</b><em>8:00–21:00</em></div>
+     <div class="stat s2"><small>Кабин выдано с 2018</small><b>1 200+</b></div>
+     <div class="stat s3"><small>Привезём сегодня</small><b>до 14:00</b><em>по городу</em></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap">
+  <div class="fgrid2">
+   <div><a href="#top" class="logo" style="font-size:20px">ЭКО<br>СЕРВИС<i></i></a><p class="muted" style="margin-top:14px;font-size:14px;max-width:320px">Аренда и продажа туалетных кабин в Новосибирске и области.</p>
+    <div class="soc"><a href="#" aria-label="Telegram">TG</a><a href="#" aria-label="WhatsApp">WA</a><a href="#" aria-label="ВКонтакте">VK</a></div></div>
+   <div><h4>Разделы</h4><ul><li><a href="#models">Кабины</a></li><li><a href="#price">Цены</a></li><li><a href="#private">Частным</a></li><li><a href="#org">Организациям</a></li><li><a href="#delivery">Доставка</a></li></ul></div>
+   <div><h4>Контакты</h4><ul><li><a href="tel:+73830000000">+7 (383) 000-00-00</a></li><li>Ежедневно 8:00–21:00</li><li>Новосибирск, ул. Примерная, 1</li></ul></div>
+  </div>
+  <div class="copy"><span>© 2026 ЭКО СЕРВИС Новосибирск</span><a href="#">Политика обработки персональных данных</a></div>
+ </div>
+</footer>
+
+<script>
+(function(){
+ var b=document.getElementById('burger'),m=document.getElementById('menu');
+ b.addEventListener('click',function(){var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+ m.addEventListener('click',function(e){if(e.target.tagName==='A'){m.classList.remove('open');b.setAttribute('aria-expanded','false')}});
+ document.querySelectorAll('[data-form]').forEach(function(f){
+  f.addEventListener('submit',function(e){
+   e.preventDefault();
+   var ok=f.querySelector('.ok'),t=f.querySelector('[name=tel]'),c=f.querySelector('[type=checkbox]');
+   ok.classList.add('show');
+   if(t.value.replace(/\D/g,'').length<10){ok.textContent='Укажите телефон, чтобы мы могли перезвонить.';t.focus();return}
+   if(!c.checked){ok.textContent='Поставьте галочку согласия на обработку данных.';return}
+   ok.textContent='Заявка принята (демо). Перезвоним за 15 минут в рабочее время.';f.reset();
+  });
+ });
+})();
+</script>
+</body>
+</html>
