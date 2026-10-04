@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вариант 2 — «Цена крупно» · ЭКО СЕРВИС</title>
+<!-- Превью первого экрана. Цифры — ЗАГЛУШКИ из js/content.js -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E2412B;      /* фон */
+    --ink: #1A1714;      /* текст */
+    --paper: #F6EFE3;    /* акцент: цифра и чек */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--red); color: var(--ink); font: 500 16px/1.5 Manrope, system-ui, sans-serif; overflow-x: hidden; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--paper); outline-offset: 3px; }
+
+  .bar { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 18px 16px; }
+  .logo { font: 400 19px/1 "Dela Gothic One", sans-serif; text-decoration: none; letter-spacing: .01em; }
+  .bar nav { display: none; gap: 26px; font-weight: 600; font-size: 15px; }
+  .bar nav a { text-decoration: none; border-bottom: 2px solid transparent; }
+  .bar nav a:hover { border-color: var(--ink); }
+  .tel { font-weight: 700; text-decoration: none; white-space: nowrap; }
+
+  .hero { position: relative; display: grid; gap: 32px; padding: 12px 16px 48px; overflow: hidden; }
+  h1 { font-weight: 400; }
+  .pre {
+    display: block; max-width: 16ch;
+    font: 700 clamp(22px, 5.4vw, 34px)/1.12 Manrope, sans-serif; letter-spacing: -.01em;
+  }
+  .num {
+    display: block;
+    font: 400 clamp(112px, 31vw, 360px)/.82 "Dela Gothic One", sans-serif;
+    color: var(--paper);
+    letter-spacing: -.045em;
+    margin: .06em 0 0 -.04em;
+    white-space: nowrap;
+  }
+  .num sup { font-size: .32em; vertical-align: top; position: relative; top: .25em; margin-left: .06em; letter-spacing: 0; }
+  .per { display: block; font: 700 18px/1.3 Manrope, sans-serif; margin-top: 10px; max-width: 30ch; }
+  .joke { margin-top: 18px; font-size: 17px; max-width: 30ch; }
+
+  /* чек */
+  .receipt {
+    background: var(--paper); color: var(--ink);
+    padding: 22px 20px 34px;
+    font: 500 15px/1.4 Manrope, sans-serif;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), 95% 100%, 90% calc(100% - 10px), 85% 100%, 80% calc(100% - 10px), 75% 100%, 70% calc(100% - 10px), 65% 100%, 60% calc(100% - 10px), 55% 100%, 50% calc(100% - 10px), 45% 100%, 40% calc(100% - 10px), 35% 100%, 30% calc(100% - 10px), 25% 100%, 20% calc(100% - 10px), 15% 100%, 10% calc(100% - 10px), 5% 100%, 0 calc(100% - 10px));
+    transform: rotate(-1.2deg);
+    max-width: 420px;
+  }
+  .receipt h2 { font: 400 15px/1.2 "Dela Gothic One", sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+  .receipt .sub { font-size: 13px; margin: 4px 0 14px; }
+  .receipt dl { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; border-top: 2px dashed var(--ink); padding-top: 12px; }
+  .receipt dd { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .receipt .total { border-top: 2px solid var(--ink); padding-top: 10px; margin-top: 4px; font: 400 22px/1 "Dela Gothic One", sans-serif; }
+  .receipt .total + dd { border-top: 2px solid var(--ink); padding-top: 10px; margin-top: 4px; font: 400 22px/1 "Dela Gothic One", sans-serif; }
+
+  form { margin-top: 22px; display: grid; gap: 8px; max-width: 420px; }
+  label { font-weight: 700; font-size: 15px; }
+  .row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  input {
+    font: 600 18px/1 Manrope, sans-serif; min-height: 56px; padding: 0 16px;
+    background: transparent; color: var(--ink);
+    border: 0; border-bottom: 3px solid var(--ink); border-radius: 0;
+  }
+  input::placeholder { color: var(--ink); opacity: .55; }
+  button {
+    min-height: 56px; padding: 0 22px; cursor: pointer;
+    font: 400 17px/1 "Dela Gothic One", sans-serif; letter-spacing: .02em;
+    background: var(--ink); color: var(--paper); border: 0; border-radius: 999px;
+    transition: background .15s, color .15s;
+  }
+  button:hover { background: var(--paper); color: var(--ink); }
+  .msg { font-weight: 700; min-height: 1.5em; }
+
+  @media (min-width: 560px) {
+    .row { grid-template-columns: 1fr auto; }
+  }
+  @media (min-width: 960px) {
+    .bar { padding: 22px 40px; }
+    .bar nav { display: flex; }
+    .hero { grid-template-columns: minmax(0, 1fr) 400px; column-gap: 56px; padding: 16px 40px 64px; align-items: start; }
+    .lede { grid-column: 1; }
+    .num { font-size: min(21vw, 320px); }
+    .aside { grid-column: 2; padding-top: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="#">ЭКО СЕРВИС</a>
+  <nav aria-label="Основное"><a href="#">Кабины</a><a href="#">Цены</a><a href="#">Стройкам</a><a href="#">Праздникам</a><a href="#">Доставка</a></nav>
+  <a class="tel" href="tel:+73830000000">+7 383 000-00-00</a>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="h">
+    <div class="lede">
+      <h1 id="h">
+        <span class="pre">Сутки аренды туалетной кабины в Новосибирске</span>
+        <span class="num">350<sup>₽</sup></span>
+      </h1>
+      <p class="per">при аренде от месяца. На выходные — 700&nbsp;₽ в&nbsp;сутки.</p>
+      <p class="joke">Дешевле, чем объяснять соседям по даче, почему все гости ушли «прогуляться к лесу».</p>
+    </div>
+
+    <div class="aside">
+      <section class="receipt" aria-labelledby="r">
+        <h2 id="r">Чек: дача, 10 дней</h2>
+        <p class="sub">Реальный расчёт из калькулятора. Без звёздочек мелким шрифтом.</p>
+        <dl>
+          <dt>2 кабины × 10 суток × 550 ₽</dt><dd>11 000 ₽</dd>
+          <dt>Чистка раз в неделю</dt><dd>1 600 ₽</dd>
+          <dt>Доставка и вывоз по городу</dt><dd>800 ₽</dd>
+          <dt class="total">Итого</dt><dd>13 400 ₽</dd>
+        </dl>
+      </section>
+
+      <form novalidate>
+        <label for="tel">Посчитаем ваш случай за 15 минут</label>
+        <div class="row">
+          <input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 ___ ___-__-__">
+          <button type="submit">Хочу чек</button>
+        </div>
+        <p class="msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script>
+  document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = this.tel.value.replace(/\D/g, ''), m = this.querySelector('.msg');
+    m.textContent = v.length >= 10 ? 'Приняли. Чек пришлём после звонка.' : 'В номере не хватает цифр.';
+  });
+</script>
+</body>
+</html>

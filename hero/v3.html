@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вариант 3 — «Свободно» · ЭКО СЕРВИС</title>
+<!-- Превью первого экрана. Цифры — ЗАГЛУШКИ из js/content.js -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #2340D6;     /* цвет пластика кабины, фон */
+    --cream: #F4EEE2;    /* текст и плашка */
+    --go: #3BE07A;       /* единственный акцент: «свободно» */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--blue); color: var(--cream); font: 400 16px/1.5 Onest, system-ui, sans-serif; overflow-x: hidden; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--go); outline-offset: 3px; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; }
+  .logo { font: 400 22px/1 "Yeseva One", serif; text-decoration: none; }
+  .bar nav { display: none; gap: 24px; font-weight: 500; font-size: 15px; }
+  .bar nav a { text-decoration: none; opacity: .85; }
+  .bar nav a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 5px; }
+  .tel { font-weight: 700; text-decoration: none; white-space: nowrap; }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr); padding: 20px 16px 48px; gap: 36px; }
+  .kicker { font-weight: 500; font-size: 14px; letter-spacing: .02em; }
+  h1 {
+    margin-top: 10px;
+    font: 400 clamp(54px, min(16.5vw, 26vh), 232px)/.86 "Yeseva One", serif;
+    letter-spacing: -.02em;
+  }
+  h1 .dot { color: var(--go); }
+  .facts { margin-top: 26px; font-size: 18px; line-height: 1.55; max-width: 34ch; }
+  .facts b { font-weight: 700; }
+  .facts .big { font: 400 1.6em/1 "Yeseva One", serif; }
+
+  /* защёлка */
+  .latch-wrap { display: grid; gap: 14px; justify-items: start; }
+  .latch {
+    position: relative;
+    width: min(100%, 520px); aspect-ratio: 2 / 1.05;
+    background: var(--cream);
+    border-radius: 34px 34px 34px 120px;
+    border: 0; cursor: pointer; color: var(--blue);
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6%;
+    padding: 0 8% 0 9%;
+    font: inherit;
+  }
+  .window {
+    position: relative; height: 38%; border-radius: 10px; overflow: hidden;
+    background: var(--blue);
+  }
+  .strip {
+    position: absolute; inset: 0; width: 200%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    transition: transform .45s cubic-bezier(.7, 0, .2, 1);
+  }
+  .strip span {
+    display: flex; align-items: center; justify-content: center;
+    font: 700 clamp(16px, 4.6vw, 26px)/1 Onest, sans-serif; letter-spacing: .1em;
+  }
+  .strip .free { background: var(--go); color: var(--blue); }
+  .strip .busy { background: var(--blue); color: var(--cream); }
+  .latch[aria-pressed="true"] .strip { transform: translateX(-50%); }
+  .knob {
+    width: clamp(64px, 17vw, 118px); aspect-ratio: 1; border-radius: 50%;
+    background: var(--blue); position: relative;
+    transition: transform .45s cubic-bezier(.7, 0, .2, 1);
+  }
+  .knob::after { content: ""; position: absolute; left: 18%; right: 18%; top: 44%; height: 12%; background: var(--cream); border-radius: 4px; }
+  .latch[aria-pressed="true"] .knob { transform: rotate(90deg); }
+  .screws { position: absolute; inset: 0; pointer-events: none; }
+  .screws::before, .screws::after {
+    content: ""; position: absolute; width: 12px; height: 12px; border-radius: 50%; background: var(--blue); opacity: .35;
+  }
+  .screws::before { top: 14%; left: 7%; } .screws::after { bottom: 14%; right: 5%; }
+  .latch-note { font-size: 15px; max-width: 40ch; min-height: 3em; }
+
+  form { display: grid; gap: 8px; width: 100%; max-width: 520px; }
+  label { font-weight: 500; font-size: 15px; }
+  .row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  input {
+    min-height: 56px; padding: 0 16px; font: 500 18px/1 Onest, sans-serif;
+    background: var(--cream); color: var(--blue); border: 0; border-radius: 6px;
+  }
+  input::placeholder { color: var(--blue); opacity: .55; }
+  button.go {
+    min-height: 56px; padding: 0 24px; cursor: pointer;
+    font: 700 17px/1 Onest, sans-serif;
+    background: var(--go); color: var(--blue); border: 0; border-radius: 6px 6px 6px 22px;
+    transition: transform .12s;
+  }
+  button.go:hover { transform: translateY(-2px); }
+  .msg { font-weight: 500; min-height: 1.5em; }
+
+  @media (min-width: 560px) { .row { grid-template-columns: 1fr auto; } }
+  @media (min-width: 960px) {
+    .bar { padding: 20px 40px; }
+    .bar nav { display: flex; }
+    .hero { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); column-gap: 56px; row-gap: 0; padding: 24px 40px 56px; }
+    .head { grid-column: 1 / -1; }
+    .facts-col { grid-column: 1; align-self: start; }
+    .latch-wrap { grid-column: 2; margin-top: 28px; }
+    .latch { width: 100%; max-width: 480px; transform: rotate(-3deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="#">Эко сервис</a>
+  <nav aria-label="Основное"><a href="#">Кабины и цены</a><a href="#">Стройкам</a><a href="#">Праздникам</a><a href="#">Доставка</a></nav>
+  <a class="tel" href="tel:+73830000000">+7 383 000-00-00</a>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="h">
+    <div class="head">
+      <p class="kicker">Аренда биотуалетов в Новосибирске и области</p>
+      <h1 id="h">Всегда свободно<span class="dot">.</span></h1>
+    </div>
+    <div class="facts-col">
+      <p class="facts">
+        Кабина <span class="big">от 350 ₽</span> в сутки.
+        По городу привезём <b>в день заявки</b>, если позвонили до 14:00.
+        Доставка — <b>800 ₽ за рейс</b>, в машину помещается 4 кабины.
+      </p>
+    </div>
+
+    <div class="latch-wrap">
+      <button class="latch" type="button" aria-pressed="false" aria-describedby="latch-note">
+        <span class="screws" aria-hidden="true"></span>
+        <span class="window" aria-hidden="true"><span class="strip"><span class="free">СВОБОДНО</span><span class="busy">ЗАНЯТО</span></span></span>
+        <span class="knob" aria-hidden="true"></span>
+        <span class="vh" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Повернуть защёлку</span>
+      </button>
+      <p class="latch-note" id="latch-note" aria-live="polite">Поверните защёлку.</p>
+
+      <form novalidate>
+        <label for="tel">Номер телефона — перезвоним за 15 минут</label>
+        <div class="row">
+          <input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 ___ ___-__-__">
+          <button class="go" type="submit">Заказать кабину</button>
+        </div>
+        <p class="msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script>
+  var latch = document.querySelector('.latch'), note = document.getElementById('latch-note');
+  latch.addEventListener('click', function () {
+    var busy = latch.getAttribute('aria-pressed') !== 'true';
+    latch.setAttribute('aria-pressed', busy);
+    note.textContent = busy
+      ? 'Так бывает, когда кабина одна на 80 гостей. Возьмите две — 1 кабина на 40 человек.'
+      : 'Вот так лучше.';
+  });
+  document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = this.tel.value.replace(/\D/g, ''), m = this.querySelector('.msg');
+    m.textContent = v.length >= 10 ? 'Приняли. Перезвоним в течение 15 минут.' : 'В номере не хватает цифр.';
+  });
+</script>
+</body>
+</html>

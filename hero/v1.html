@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вариант 1 — «Объявление» · ЭКО СЕРВИС</title>
+<!-- Превью первого экрана. Цифры — ЗАГЛУШКИ из js/content.js -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@800;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EFE9DC;
+    --ink: #161412;
+    --hot: #FF4A1C;      /* единственный акцент */
+    --line: #161412;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 16px/1.45 "Golos Text", system-ui, sans-serif;
+  }
+  a { color: inherit; }
+
+  .bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 14px 16px;
+    border-bottom: 2px solid var(--line);
+  }
+  .logo { font: 900 22px/1 "Fira Sans Extra Condensed", sans-serif; text-transform: uppercase; letter-spacing: .01em; text-decoration: none; }
+  .logo span { color: var(--hot); }
+  .bar nav { display: none; gap: 28px; font-weight: 500; font-size: 15px; }
+  .bar nav a { text-decoration: none; }
+  .bar nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .bar .tel { font-weight: 600; text-decoration: none; white-space: nowrap; }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding: 28px 16px 0;
+  }
+  .kicker {
+    display: inline-block;
+    font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .08em;
+    border: 2px solid var(--ink); padding: 4px 8px 3px;
+    transform: rotate(-1.5deg);
+  }
+  h1 {
+    margin-top: 18px;
+    font: 900 clamp(60px, min(16vw, 17vh), 200px)/.88 "Fira Sans Extra Condensed", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -.01em;
+  }
+  h1 em { font-style: normal; color: var(--hot); }
+  h1 .small { display: block; font-size: .42em; line-height: 1; letter-spacing: 0; margin-top: .18em; }
+
+  .side { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; align-content: start; }
+  .price {
+    font: 900 64px/.9 "Fira Sans Extra Condensed", sans-serif;
+  }
+  .price small { font: 600 16px/1.2 "Golos Text", sans-serif; display: block; margin-top: 8px; }
+  .facts { list-style: none; border-top: 2px solid var(--ink); }
+  .facts li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ink); font-size: 15px; }
+  .facts b { font-weight: 600; white-space: nowrap; }
+  .lead { font-size: 17px; max-width: 34ch; }
+
+  form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+  .row { display: flex; }
+  input {
+    flex: 1; min-width: 0;
+    font: 500 18px/1 "Golos Text", sans-serif;
+    padding: 14px 14px; min-height: 56px;
+    background: #fff; color: var(--ink);
+    border: 2px solid var(--ink); border-right: 0; border-radius: 0;
+  }
+  input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--hot); outline-offset: 2px; }
+  button {
+    font: 900 22px/1 "Fira Sans Extra Condensed", sans-serif; text-transform: uppercase; letter-spacing: .02em;
+    background: var(--hot); color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 0;
+    padding: 0 14px; min-height: 56px; cursor: pointer; flex: none;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform .12s, box-shadow .12s;
+  }
+  button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  button:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+  .note { font-size: 13px; }
+  .msg { font-size: 14px; font-weight: 500; min-height: 1.4em; }
+
+  /* отрывные листочки */
+  .tabs {
+    margin-top: 36px;
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    border-top: 2px dashed var(--ink);
+  }
+  .tab {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 150px;
+    border-right: 2px dashed var(--ink);
+    text-decoration: none;
+    transform-origin: top center;
+    transition: transform .2s;
+  }
+  .tab:last-child { border-right: 0; }
+  .tab span {
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font: 800 17px/1 "Fira Sans Extra Condensed", sans-serif; letter-spacing: .03em; white-space: nowrap;
+  }
+  .tab:hover { transform: rotate(-4deg); }
+  .tab.gone { border-right-style: dashed; }
+  .tab.gone span { visibility: hidden; }
+  .tab.gone::after {
+    content: "уже\Aоторвали"; white-space: pre; text-align: center;
+    position: absolute; top: 14px; left: 0; right: 0;
+    font-size: 11px; line-height: 1.2; font-weight: 500;
+  }
+  .tab:nth-child(n+5) { display: none; }
+
+  @media (min-width: 560px) {
+    .tab:nth-child(n+5) { display: flex; }
+  }
+  @media (min-width: 900px) {
+    .bar { padding: 16px 40px; }
+    .bar nav { display: flex; }
+    .hero { grid-template-columns: minmax(0, 8fr) minmax(300px, 3.4fr); gap: 48px; padding: 28px 40px 0; align-items: end; }
+    .side { padding-bottom: 8px; }
+    .price { font-size: 96px; }
+    .tabs { grid-template-columns: repeat(10, 1fr); margin: 28px 40px 0; }
+    .tab:nth-child(n) { display: flex; }
+    .tab { min-height: 120px; }
+  }
+  @media (min-width: 1300px) {
+    .hero { padding-top: 56px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="logo" href="#">Эко<span>·</span>сервис</a>
+  <nav aria-label="Основное">
+    <a href="#">Кабины и цены</a><a href="#">Для стройки</a><a href="#">Для праздника</a><a href="#">Доставка</a>
+  </nav>
+  <a class="tel" href="tel:+73830000000">+7 383 000-00-00</a>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="h">
+    <div>
+      <p class="kicker">Аренда биотуалетов · Новосибирск и область</p>
+      <h1 id="h">Туалет приедет <em>раньше</em> гостей<span class="small">а уедет после всех</span></h1>
+    </div>
+
+    <div class="side">
+      <p class="price">350&nbsp;₽<small>сутки кабины при аренде от месяца. На выходные — 700&nbsp;₽ в сутки.</small></p>
+      <ul class="facts">
+        <li>Доставка по городу <b>800 ₽ за рейс</b></li>
+        <li>Позвонили до 14:00 <b>привезём сегодня</b></li>
+        <li>Кабин выдали с 2018 <b>1 200+</b></li>
+      </ul>
+      <form novalidate>
+        <label for="tel">Оставьте номер — посчитаем за 15 минут</label>
+        <div class="row">
+          <input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 ___ ___-__-__">
+          <button type="submit">Посчитать</button>
+        </div>
+        <p class="msg" role="status" aria-live="polite"></p>
+        <p class="note">Перезвоним один раз и по делу. Не продадим ваш номер даже за очень хорошую кабину.</p>
+      </form>
+    </div>
+  </section>
+
+  <nav class="tabs" aria-label="Отрывные листочки с телефоном">
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+    <a class="tab gone" href="tel:+73830000000" aria-label="Позвонить: +7 383 000-00-00"><span>+7 383 000-00-00</span></a>
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+    <a class="tab gone" href="tel:+73830000000" aria-label="Позвонить: +7 383 000-00-00"><span>+7 383 000-00-00</span></a>
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+    <a class="tab" href="tel:+73830000000"><span>+7 383 000-00-00</span></a>
+  </nav>
+</main>
+
+<script>
+  document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = this.tel.value.replace(/\D/g, ''), m = this.querySelector('.msg');
+    m.textContent = v.length >= 10 ? 'Приняли. Перезвоним в течение 15 минут.' : 'Номер короче, чем надо. Проверьте цифры.';
+  });
+</script>
+</body>
+</html>
