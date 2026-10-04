@@ -6,7 +6,7 @@
   var S = window.SITE;
   if (!S) { console.error('SITE data (js/content.js) not loaded'); return; }
   var C = S.calc, DL = C.delivery, M = S.messages, K = S.contacts;
-  var NB = ' ';
+  var NB = '\u00a0'; // неразрывный пробел
 
   /* ---------- утилиты ---------- */
   function $(sel, root) { return (root || document).querySelector(sel); }
@@ -21,7 +21,9 @@
   /* ---------- привязка контактов ---------- */
   function bindContacts() {
     $$('[data-bind]').forEach(function (el) { var v = K[el.dataset.bind]; if (v != null) el.textContent = v; });
-    $$('[data-bind-href]').forEach(function (el) { var v = K[el.dataset.bindHref]; if (v != null) el.setAttribute('href', v); });
+    $$('[data-bind-href]').forEach(function (el) { var v = K[el.dataset.bindHref]; if (v != null && /^(tel:|mailto:|https?:|#)/.test(v)) el.setAttribute('href', v); });
+    $$('[data-copy]').forEach(function (el) { var v = (S.copy || {})[el.dataset.copy]; if (v != null) el.textContent = v; });
+    $$('[data-calc]').forEach(function (el) { var v = C[el.dataset.calc]; if (v != null) el.textContent = v; });
   }
 
   /* ---------- «Что нужно» в select ---------- */
@@ -64,13 +66,13 @@
         ? '<span class="price">' + rub(m.price) + '</span><span class="small">' + esc(m.extra) + '</span>'
         : '<span class="price"><small>от</small> ' + rub(m.rentDay) + '<small>/сутки</small></span><span class="small">от ' + rub(m.rentMonth) + '/месяц</span>';
       var btn = m.calcModel
-        ? '<a class="btn btn--primary btn--block btn--arrow" href="#calc" data-model="' + m.calcModel + '">' + esc(m.cta) + '</a>'
-        : '<a class="btn btn--accent btn--block btn--arrow" href="#order" data-need="' + m.need + '">' + esc(m.cta) + '</a>';
+        ? '<a class="btn btn--primary btn--block btn--arrow" href="#calc" data-model="' + esc(m.calcModel) + '">' + esc(m.cta) + '</a>'
+        : '<a class="btn btn--accent btn--block btn--arrow" href="#order" data-need="' + esc(m.need) + '">' + esc(m.cta) + '</a>';
       var c = m.colors;
-      return '<article class="cab-card reveal' + (m.sale ? ' is-sale' : '') + '" style="--i:' + i + ';--stage:var(--c-stage-' + m.stage + ');--cab:' + c.cab + ';--cab-d:' + c.cabD + ';--cab-l:' + c.cabL + '">' +
+      return '<article class="cab-card reveal' + (m.sale ? ' is-sale' : '') + '" style="--i:' + i + ';--stage:var(--c-stage-' + (Number(m.stage) || 1) + ');--cab:' + esc(c.cab) + ';--cab-d:' + esc(c.cabD) + ';--cab-l:' + esc(c.cabL) + '">' +
         '<div class="cab-card__stage">' +
         (m.sticker ? '<span class="sticker' + (m.sale ? ' sticker--yellow' : '') + '">' + esc(m.sticker) + '</span>' : '') +
-        '<svg class="cab-card__art" viewBox="' + m.art.vb + '" role="img" aria-label="Иллюстрация: ' + esc(m.name) + '"><use href="#' + m.art.sym + '"/></svg></div>' +
+        '<svg class="cab-card__art" viewBox="' + esc(m.art.vb) + '" role="img" aria-label="Иллюстрация: ' + esc(m.name) + '"><use href="#' + esc(m.art.sym) + '"/></svg></div>' +
         '<div class="cab-card__body"><h3>' + esc(m.name) + '</h3><p class="small">' + esc(m.desc) + '</p>' +
         '<ul class="specs">' + m.specs.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>' +
         '<details class="more"><summary>Подробнее</summary><ul>' + m.more.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></details>' +
@@ -86,10 +88,10 @@
     $('#service-list').innerHTML = S.serviceList.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
     $('#service-note span').textContent = S.serviceNote;
     $('#why').innerHTML = S.why.map(function (w, i) {
-      return '<article class="why__card reveal" style="--i:' + i + '"><span class="why__ico">' + icon(w.icon, 28) + '</span><h3>' + esc(w.title) + '</h3><p>' + esc(w.text) + '</p></article>';
+      return '<article class="why__card reveal" style="--i:' + i + '"><span class="why__ico">' + icon(String(w.icon).replace(/[^\w-]/g, ''), 28) + '</span><h3>' + esc(w.title) + '</h3><p>' + esc(w.text) + '</p></article>';
     }).join('');
     $('#blobs').innerHTML = S.stats.map(function (s, i) {
-      return '<aside class="blob blob--' + (s.tone === 'pink' ? 'pink' : 'yellow') + (i % 2 ? ' blob--b' : '') + '"><p class="blob__num price price--xl">' + esc(s.num) + '</p><p class="blob__text">' + esc(s.text) + '</p></aside>';
+      return '<div class="blob blob--' + (s.tone === 'pink' ? 'pink' : 'yellow') + (i % 2 ? ' blob--b' : '') + '"><p class="blob__num price price--xl">' + esc(s.num) + '</p><p class="blob__text">' + esc(s.text) + '</p></div>';
     }).join('');
 
     var vs = S.vs;
@@ -109,12 +111,14 @@
   /* ---------- зоны доставки ---------- */
   function renderZones() {
     $('#zone-list').innerHTML = S.zones.map(function (z, i) {
-      return '<article class="zone zone--' + z.cls + ' reveal" style="--i:' + i + '" data-zone="' + z.id + '" tabindex="0" aria-label="' + esc(z.name) + '">' +
+      return '<article class="zone zone--' + esc(z.cls) + ' reveal" style="--i:' + i + '" data-zone="' + esc(z.id) + '">' +
         '<span class="zone__dot" aria-hidden="true"></span><h3 class="zone__name">' + esc(z.name) + '</h3>' +
         (z.places ? '<p class="zone__terms small">' + esc(z.places) + '</p>' : '') +
         '<p class="zone__terms zone__price">' + esc(z.terms) + '</p><p class="zone__time small">' + esc(z.time) + '</p></article>';
     }).join('');
     $('.zones__note').textContent = S.zonesNote;
+    $('#map-near').textContent = 'до ' + DL.nearKm + ' км';
+    $('#map-far').textContent = DL.nearKm + '–' + DL.maxKm + ' км';
     var pts = [[268, 250, 20], [128, 178, -10], [270, 140, -10]];
     $('#map-labels').insertAdjacentHTML('beforeend', S.mapLabels.map(function (t, i) {
       var p = pts[i] || [200, 200];
@@ -124,8 +128,8 @@
     $$('.zone').forEach(function (z) {
       z.addEventListener('mouseenter', function () { hl(z.dataset.zone, true); });
       z.addEventListener('mouseleave', function () { hl(z.dataset.zone, false); });
-      z.addEventListener('focus', function () { hl(z.dataset.zone, true); });
-      z.addEventListener('blur', function () { hl(z.dataset.zone, false); });
+      z.addEventListener('focusin', function () { hl(z.dataset.zone, true); });
+      z.addEventListener('focusout', function () { hl(z.dataset.zone, false); });
     });
   }
 
@@ -133,12 +137,12 @@
   function renderReviews() {
     $('#rev-track').innerHTML = S.reviews.map(function (r, i) {
       var stars = '';
-      for (var k = 1; k <= 5; k++) stars += icon('i-star', 20, 'icon--fill' + (k > r.stars ? ' off' : ''));
+      for (var k = 1; k <= 5; k++) stars += icon('i-star', 20, 'icon--fill' + (k > Number(r.stars) ? ' off' : ''));
       return '<article class="review reveal" style="--i:' + i + '">' +
-        '<span class="review__stars" role="img" aria-label="Оценка ' + r.stars + ' из 5">' + stars + '</span>' +
+        '<span class="review__stars" role="img" aria-label="Оценка ' + Number(r.stars) + ' из 5">' + stars + '</span>' +
         '<blockquote class="review__quote">«' + esc(r.text) + '»</blockquote>' +
         '<div class="review__meta"><span class="review__who">' + esc(r.who) + (r.where ? ', ' + esc(r.where) : '') + '</span>' +
-        '<span class="badge badge--' + r.kind + '">' + esc(r.kindLabel) + '</span><span class="small">' + esc(r.ctx) + '</span></div></article>';
+        '<span class="badge badge--' + esc(r.kind) + '">' + esc(r.kindLabel) + '</span><span class="small">' + esc(r.ctx) + '</span></div></article>';
     }).join('');
     var tr = $('#rev-track');
     function by(dir) { var c = tr.querySelector('.review'); var w = c ? c.getBoundingClientRect().width + 16 : 300; tr.scrollBy({ left: dir * w, behavior: reduced() ? 'auto' : 'smooth' }); }
@@ -149,11 +153,12 @@
   /* ---------- FAQ ---------- */
   function renderFaq() {
     var groups = $('#faq-groups');
+    $$('.chip', groups).forEach(function (c) { c.remove(); });   // страница может быть пререндерена
     groups.insertAdjacentHTML('beforeend', S.faqGroups.map(function (g, i) {
-      return '<span class="chip chip--' + g.id + '"><input type="radio" name="fg" id="fg-' + g.id + '" value="' + g.id + '"' + (i === 0 ? ' checked' : '') + '><label for="fg-' + g.id + '">' + esc(g.label) + '</label></span>';
+      return '<span class="chip chip--' + esc(g.id) + '"><input type="radio" name="fg" id="fg-' + esc(g.id) + '" value="' + esc(g.id) + '"' + (i === 0 ? ' checked' : '') + '><label for="fg-' + esc(g.id) + '">' + esc(g.label) + '</label></span>';
     }).join(''));
     $('#faq-list').innerHTML = S.faq.map(function (f) {
-      return '<details class="faq" name="faq-' + f.g + '" data-g="' + f.g + '"><summary><h3 class="faq__q">' + esc(f.q) + '</h3><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>' + esc(f.a) + '</p></div></details>';
+      return '<details class="faq" name="faq-' + esc(f.g) + '" data-g="' + esc(f.g) + '"><summary><span class="faq__q" role="heading" aria-level="3">' + esc(f.q) + '</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>' + esc(f.a) + '</p></div></details>';
     }).join('');
     function show(g) {
       var first = true;
@@ -167,14 +172,38 @@
     groups.addEventListener('change', function (e) { if (e.target.name === 'fg') show(e.target.value); });
     show(S.faqGroups[0].id);
 
-    // FAQPage JSON-LD собираем из тех же данных
-    var ld = document.createElement('script');
-    ld.type = 'application/ld+json';
-    ld.textContent = JSON.stringify({
+    renderJsonLd();
+  }
+
+  /* ---------- JSON-LD из content.js (LocalBusiness, FAQPage, Product/Offer) ---------- */
+  function setLd(id, obj) {
+    var el = document.getElementById(id);
+    if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = id; document.head.appendChild(el); }
+    el.textContent = JSON.stringify(obj);
+  }
+  function renderJsonLd() {
+    var d = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(function (x) { return 'https://schema.org/' + x; });
+    var tm = K.hours.match(/(\d{1,2}):(\d{2})\D+(\d{1,2}):(\d{2})/) || [0, 8, '00', 21, '00'];
+    function hh(h, m) { return ('0' + h).slice(-2) + ':' + m; }
+    setLd('ld-business', {
+      '@context': 'https://schema.org', '@type': 'LocalBusiness', name: S.company.name, url: S.company.url,
+      description: 'Аренда и продажа биотуалетов и туалетных кабин в Новосибирске и области.',
+      telephone: K.phone.replace(/[^\d+]/g, ''), email: K.email,
+      address: { '@type': 'PostalAddress', streetAddress: K.address.replace(/^г\.\s*[^,]+,\s*/, ''), addressLocality: S.company.city, addressCountry: 'RU' },
+      areaServed: 'Новосибирск и Новосибирская область',
+      openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: d, opens: hh(tm[1], tm[2]), closes: hh(tm[3], tm[4]) }
+    });
+    setLd('ld-faq', {
       '@context': 'https://schema.org', '@type': 'FAQPage',
       mainEntity: S.faq.map(function (f) { return { '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }; })
     });
-    document.head.appendChild(ld);
+    setLd('ld-products', {
+      '@context': 'https://schema.org',
+      '@graph': S.catalog.map(function (m) {
+        return { '@type': 'Product', name: m.name, description: m.desc,
+          offers: { '@type': 'Offer', priceCurrency: 'RUB', price: String(m.sale ? m.price : m.rentDay), availability: 'https://schema.org/InStock' } };
+      })
+    });
   }
 
   /* ---------- контакты и подвал ---------- */
@@ -212,6 +241,7 @@
       burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
       burger.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-burger');
       document.body.classList.toggle('menu-open', open);
+      ['main', 'footer'].forEach(function (t) { var el = $(t); if (el) { if (open) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } });
       if (open) { menu.classList.remove('is-in'); void menu.offsetWidth; menu.classList.add('is-in'); var f = menu.querySelector('a'); if (f) f.focus(); }
     }
     burger.addEventListener('click', function () { setOpen(menu.hidden); });
@@ -220,14 +250,19 @@
       if (menu.hidden) return;
       if (e.key === 'Escape') { setOpen(false); burger.focus(); return; }
       if (e.key === 'Tab') {
-        var f = $$('a, button', menu).concat([burger]).filter(function (x) { return x.offsetParent !== null || x === burger; });
-        var first = f[0], last = f[f.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); burger.focus(); }
-        else if (!e.shiftKey && document.activeElement === burger) { e.preventDefault(); first.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); burger.focus(); }
+        // кольцо фокуса: бургер (в шапке, до меню в DOM) -> ссылки меню -> снова бургер
+        var items = $$('a, button', menu).filter(function (x) { return x.offsetParent !== null; });
+        var first = items[0], last = items[items.length - 1], cur = document.activeElement;
+        if (!e.shiftKey && cur === last) { e.preventDefault(); burger.focus(); }
+        else if (!e.shiftKey && cur === burger) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && cur === first) { e.preventDefault(); burger.focus(); }
+        else if (e.shiftKey && cur === burger) { e.preventDefault(); last.focus(); }
+        else if (!menu.contains(cur) && cur !== burger) { e.preventDefault(); first.focus(); }
       }
     });
-    window.matchMedia('(min-width: 1280px)').addEventListener('change', function (m) { if (m.matches && !menu.hidden) setOpen(false); });
+    var mq = window.matchMedia('(min-width: 1280px)');
+    function mqChange(m) { if (m.matches && !menu.hidden) setOpen(false); }
+    if (mq.addEventListener) mq.addEventListener('change', mqChange); else if (mq.addListener) mq.addListener(mqChange);
 
     // активный пункт
     if ('IntersectionObserver' in window) {
@@ -239,6 +274,8 @@
         });
       }, { rootMargin: '-40% 0px -55% 0px' });
       S.nav.forEach(function (n) { var s = document.getElementById(n.id); if (s) io.observe(s); });
+      var heroEl = $('.hero');
+      if (heroEl) new IntersectionObserver(function (es) { if (es[0].isIntersecting) links.forEach(function (a) { a.removeAttribute('aria-current'); }); }, { rootMargin: '0px 0px -50% 0px' }).observe(heroEl);
     }
   }
 
@@ -292,9 +329,9 @@
     if (s.term === '' || !isFinite(term) || term < 1 || Math.floor(term) !== term) errors.term = M.calcTerm;
     if (s.zone === 'region' && (s.km === '' || !isFinite(km) || km < 1)) errors.km = M.calcKm;
     if (Object.keys(errors).length) return { errors: errors };
-    if (n > C.maxCabins || (s.zone === 'region' && km > DL.maxKm)) return { custom: true, n: n, D: 0 };
-
     var D = s.unit === 'm' ? term * C.daysInMonth : term;
+    if (n > C.maxCabins || D > C.maxDays || (s.zone === 'region' && km > DL.maxKm)) return { custom: true, n: n, D: D };
+
     var model = C.models.filter(function (m) { return m.id === s.model; })[0] || C.models[0];
     var rate = rateFor(D) * model.coef;
     var rent = n * D * rate;
@@ -310,7 +347,8 @@
     var sub = rent - discount + service + delivery;
     var minHit = sub < C.minOrder;
     var total = Math.round(Math.max(sub, C.minOrder) / C.roundTo) * C.roundTo;
-    return { n: n, D: D, rent: rent, service: service, delivery: delivery, pct: pct, discount: discount, total: total, minHit: minHit, model: model, visits: V, trips: trips };
+    var rounded = !minHit && Math.abs(total - sub) >= 1;
+    return { rounded: rounded, n: n, D: D, rent: rent, service: service, delivery: delivery, pct: pct, discount: discount, total: total, minHit: minHit, model: model, visits: V, trips: trips };
   }
   window.SITE_CALC = { compute: compute };
 
@@ -333,6 +371,14 @@
   function initCalc() {
     var form = $('#calc-form');
     var n = $('#n'), term = $('#term'), km = $('#km'), range = $('#km-range'), kmBox = $('#km-box');
+
+    n.max = C.maxCabins; km.max = DL.maxKm; range.max = DL.maxKm;
+    // шкала скидок строится из CALC.discounts
+    (function () {
+      var ds = C.discounts.slice().sort(function (a, b) { return a.minCabins - b.minCabins; }), top = ds[ds.length - 1].minCabins, bar = $('#disc-bar');
+      bar.setAttribute('aria-valuemax', top);
+      ds.forEach(function (d) { var t = document.createElement('span'); t.className = 'discount__tick'; t.style.left = (d.minCabins / top * 100) + '%'; t.innerHTML = '<i>' + d.pct + '%</i>'; bar.appendChild(t); });
+    })();
 
     $('#model').innerHTML = C.models.map(function (m) { return '<option value="' + m.id + '">' + esc(m.label) + '</option>'; }).join('');
     $('#service-chips').innerHTML = C.serviceModes.map(function (m, i) {
@@ -370,7 +416,7 @@
       box.classList.toggle('is-custom', !!r.custom);
       errs.hidden = !r.errors; custom.hidden = !r.custom;
       bd.hidden = !!(r.errors || r.custom);
-      $('#res-min').hidden = !(r.minHit);
+      $('#res-min').hidden = !(r.minHit || r.rounded);
       $('#discount').hidden = !!(r.errors || r.custom);
       order.removeAttribute('aria-disabled');
       var mini = $('#mini-total'), sr = '';
@@ -378,11 +424,11 @@
       if (r.errors) {
         errs.innerHTML = Object.keys(r.errors).map(function (k) { return '<li>' + esc(r.errors[k]) + '</li>'; }).join('');
         $('#res-total').textContent = '—'; $('#res-total').dataset.v = 0; $('#res-cur').hidden = true;
-        order.textContent = 'Проверьте поля слева'; order.setAttribute('aria-disabled', 'true');
+        order.textContent = S.copy.invalidFields; order.setAttribute('aria-disabled', 'true');
         mini.textContent = '—'; sr = 'Проверьте поля: ' + Object.keys(r.errors).map(function (k) { return r.errors[k]; }).join('. ');
         $('#res-t').textContent = 'Примерно';
       } else if (r.custom) {
-        custom.textContent = 'Нужен индивидуальный расчёт — оставьте заявку, посчитаем вручную.';
+        custom.textContent = S.copy.customCalc;
         $('#res-total').textContent = '—'; $('#res-total').dataset.v = 0; $('#res-cur').hidden = true;
         order.textContent = 'Оставить заявку'; mini.textContent = 'индивидуально';
         sr = custom.textContent;
@@ -393,7 +439,7 @@
         tween($('#b-total'), r.total, C.roundTo, rub);
         var dr = $('#b-disc-row'); dr.hidden = !r.pct;
         if (r.pct) { $('#b-disc-label').textContent = 'Скидка за количество −' + r.pct + '%'; $('#b-disc').textContent = '−' + rub(r.discount); }
-        $('#res-min').textContent = 'Минимальный заказ — ' + rub(C.minOrder) + ', поэтому итог поднят до него.';
+        $('#res-min').textContent = r.minHit ? 'Минимальный заказ — ' + rub(C.minOrder) + ', поэтому итог поднят до него.' : S.copy.roundNote + '.';
         order.textContent = 'Заказать за ' + rub(r.total);
         mini.textContent = '≈ ' + rub(r.total);
         sr = 'Примерно ' + fmt(r.total) + ' рублей';
@@ -420,20 +466,21 @@
       if (r.errors) return 'Расчёт стоимости аренды';
       var model = (C.models.filter(function (m) { return m.id === s.model; })[0] || C.models[0]).label;
       var sv = C.serviceModes.filter(function (m) { return m.id === s.service; })[0];
-      var parts = ['Расчёт с сайта: ' + s.n + ' ' + plural(Number(s.n), ['кабина', 'кабины', 'кабин']) + ' («' + model + '»)',
-        'срок ' + s.term + (s.unit === 'm' ? ' мес.' : ' дн.'),
+      var parts = ['Расчёт с сайта: ' + Number(s.n) + ' ' + plural(Number(s.n), ['кабина', 'кабины', 'кабин']) + ' («' + model + '»)',
+        'срок ' + Number(s.term) + (s.unit === 'm' ? ' мес.' : ' дн.'),
         'обслуживание: ' + (sv ? sv.label.toLowerCase() : ''),
-        'доставка: ' + (s.zone === 'region' ? 'область, ' + s.km + ' км' : 'по Новосибирску')];
+        'доставка: ' + (s.zone === 'region' ? 'область, ' + Number(s.km) + ' км' : 'по Новосибирску')];
       return parts.join(', ') + (r.custom ? '. Нужен индивидуальный расчёт.' : '. Ориентир: ' + rub(r.total) + '.');
     }
 
     form.addEventListener('input', function (e) {
       if (e.target === range) km.value = range.value;
-      if (e.target === km && km.value !== '') { var kv = Math.min(Math.max(Number(km.value) || 1, 1), 300); range.value = kv; }
+      if (e.target === km && km.value !== '') { var kv = Math.min(Math.max(Number(km.value) || 1, 1), DL.maxKm); range.value = kv; }
       setRange(); update();
     });
     form.addEventListener('change', function (e) {
-      if (e.target === n && n.value !== '') { var v = Math.floor(Number(n.value)); if (v < 1) n.value = 1; }
+      if (e.target === n && n.value !== '' && isFinite(Number(n.value))) { n.value = String(Math.max(1, Math.floor(Number(n.value)))); }
+      if (e.target === term && term.value !== '' && isFinite(Number(term.value)) && Number(term.value) >= 1) term.value = String(Math.floor(Number(term.value)));
       update();
     });
     form.addEventListener('submit', function (e) { e.preventDefault(); });
@@ -447,7 +494,7 @@
         if (e.button > 0) return;
         step(d); clearTimeout(timer); clearInterval(rep);
         timer = setTimeout(function () { rep = setInterval(function () { step(d); }, 80); }, 400);
-        b._pd = true;
+        
       });
       ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { b.addEventListener(ev, function () { clearTimeout(timer); clearInterval(rep); }); });
       b.addEventListener('click', function (e) { if (e.detail === 0) step(d); });
@@ -484,7 +531,7 @@
     }
     ev.addEventListener('input', evUpdate); ev.addEventListener('change', evUpdate);
     $('#event-apply').addEventListener('click', function () {
-      n.value = Math.min(C.maxCabins, Math.max(1, evNeed)); update();
+      n.value = Math.max(1, evNeed); update();  // больше максимума -> «индивидуальный расчёт»
       var f = $('#calc-form'); f.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
     });
 
@@ -500,23 +547,45 @@
     if (o.comment != null) f.elements.comment.value = o.comment;
   }
 
-  function phoneDigits(v) { var d = String(v).replace(/\D/g, ''); if (d[0] === '7' || d[0] === '8') d = d.slice(1); return d.slice(0, 10); }
+  /* Маска телефона +7 (XXX) XXX-XX-XX.
+     Ведущий 7 или 8 считаем кодом страны/«8» только когда это однозначно:
+     - значение уже начинается с «+7» (наша же маска или вставка);
+     - иначе «7» — всегда код; «8» — код, если за ним не «0» (8-800… вводится как 8 800… и как 800…). */
+  function nationalDigits(str) {
+    var raw = String(str), d = raw.replace(/\D/g, '');
+    if (d[0] === '7' && (/^\s*\+/.test(raw) || d.length > 0)) d = d.slice(1);
+    if (d[0] === '8' && d.length > 1 && d[1] !== '0') d = d.slice(1);   // «8» как междугородний префикс
+    return d.slice(0, 10);
+  }
   function maskPhone(d) {
-    if (!d) return '';
     var o = '+7 (' + d.slice(0, 3);
     if (d.length > 3) o += ') ' + d.slice(3, 6);
     if (d.length > 6) o += '-' + d.slice(6, 8);
     if (d.length > 8) o += '-' + d.slice(8, 10);
     return o;
   }
+  function caretAfter(formatted, n) {          // позиция сразу после n-й национальной цифры
+    if (n <= 0) return formatted.length >= 4 ? 4 : formatted.length;
+    var seen = 0;
+    for (var i = 3; i < formatted.length; i++) if (/\d/.test(formatted[i]) && ++seen === n) return i + 1;
+    return formatted.length;
+  }
   function attachMask(el) {
     var prev = '';
     el.addEventListener('input', function (e) {
-      var d = phoneDigits(el.value);
-      if (e.inputType && e.inputType.indexOf('delete') === 0 && d === prev && d.length) d = d.slice(0, -1);
-      prev = d; el.value = maskPhone(d);
+      var raw = el.value, pos = el.selectionStart == null ? raw.length : el.selectionStart;
+      var d = nationalDigits(raw), left = nationalDigits(raw.slice(0, pos)).length;
+      var type = e.inputType || '';
+      if (type.indexOf('delete') === 0 && d === prev && d.length) {      // удалили только разделитель
+        var k = type === 'deleteContentForward' ? left : left - 1;
+        if (k >= 0 && k < d.length) { d = d.slice(0, k) + d.slice(k + 1); left = k; }
+      }
+      prev = d;
+      var out = d ? maskPhone(d) : (raw.replace(/\D/g, '') && type.indexOf('delete') !== 0 ? '+7 (' : '');
+      el.value = out;
+      if (out && document.activeElement === el && el.setSelectionRange) { var c = caretAfter(out, Math.min(left, d.length)); el.setSelectionRange(c, c); }
     });
-    el.addEventListener('focus', function () { if (!el.value) { /* подсказка не навязываем */ } });
+    el.addEventListener('reset-mask', function () { prev = ''; });
   }
 
   function setFieldError(el, msg) {
@@ -532,7 +601,7 @@
     if (t === 'name') return v.length < 2 ? M.name : '';
     if (t === 'text') return v.length < 2 ? M.place : '';
     if (t === 'phone') {
-      var d = phoneDigits(el.value);
+      var d = nationalDigits(el.value);
       if (d.length < 10) return M.phoneShort;
       if ('34589'.indexOf(d[0]) < 0) return M.phoneBad;
       return '';
@@ -570,7 +639,7 @@
     form.hidden = true;
     form.parentNode.insertBefore(box, form.nextSibling);
     box.querySelector('button').addEventListener('click', function () {
-      form.reset(); $$('[data-v]', form).forEach(function (el) { setFieldError(el, ''); });
+      form.reset(); $$('[data-v]', form).forEach(function (el) { setFieldError(el, ''); el.dispatchEvent(new Event('reset-mask')); });
       box.remove(); form.hidden = false; var f = form.querySelector('input'); if (f) f.focus();
     });
     box.focus();
@@ -578,20 +647,26 @@
 
   /* ---------- sticky-панель, FAB, обратный звонок ---------- */
   function initFloating() {
-    var cta = $('#sticky-cta'), hero = $('.hero');
+    var cta = $('#sticky-cta'), hero = $('.hero'), calcEl = $('#calc'), fab = $('#fab');
+    var heroGone = false, inCalc = false;
+    function sync() {
+      cta.dataset.visible = (heroGone && !inCalc) ? 'true' : 'false';     // внутри калькулятора работает мини-итог, панель не нужна
+      document.body.classList.toggle('in-calc', inCalc);
+      fab.classList.toggle('is-away', inCalc);                           // FAB не перекрывает карточку результата
+    }
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es) {
-        var e = es[0]; cta.dataset.visible = (!e.isIntersecting && e.boundingClientRect.bottom <= 0) ? 'true' : 'false';
-      }).observe(hero);
-    } else cta.dataset.visible = 'true';
+      new IntersectionObserver(function (es) { var e = es[0]; heroGone = !e.isIntersecting && e.boundingClientRect.bottom <= 0; sync(); }).observe(hero);
+      new IntersectionObserver(function (es) { inCalc = es[0].isIntersecting; sync(); }, { rootMargin: '-10% 0px -10% 0px' }).observe(calcEl);
+    } else { heroGone = true; sync(); }
     document.addEventListener('focusin', function (e) { if (e.target.matches('input, select, textarea')) document.body.classList.add('keyboard-open'); });
     document.addEventListener('focusout', function () { document.body.classList.remove('keyboard-open'); });
 
-    var fab = $('#fab'), cb = $('#callback');
+    var cb = $('#callback');
     function setCb(open) { cb.hidden = !open; fab.setAttribute('aria-expanded', open ? 'true' : 'false'); if (open) { var f = cb.querySelector('input'); if (f) f.focus(); } }
     fab.addEventListener('click', function () { setCb(cb.hidden); });
     $('#callback-close').addEventListener('click', function () { setCb(false); fab.focus(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !cb.hidden) { setCb(false); fab.focus(); } });
+    document.addEventListener('click', function (e) { if (!cb.hidden && !cb.contains(e.target) && !fab.contains(e.target)) setCb(false); });
   }
 
   /* ---------- reveal, маршрут шагов ---------- */

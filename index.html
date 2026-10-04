@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Аренда биотуалетов в Новосибирске — цены, доставка | ЭКО СЕРВИС</title>
+  <title>Аренда биотуалетов в Новосибирске — цены | ЭКО СЕРВИС</title>
   <meta name="description" content="Аренда биотуалетов и туалетных кабин в Новосибирске и области: для дачи, стройки, мероприятий. Доставка, обслуживание, документы. Рассчитайте цену онлайн.">
   <meta name="theme-color" content="#5B2EFF">
   <meta name="color-scheme" content="light">
@@ -12,46 +12,27 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ru_RU">
   <meta property="og:site_name" content="ЭКО СЕРВИС НОВОСИБИРСК">
-  <meta property="og:title" content="Аренда биотуалетов в Новосибирске — цены, доставка | ЭКО СЕРВИС">
+  <meta property="og:title" content="Аренда биотуалетов в Новосибирске — цены | ЭКО СЕРВИС">
   <meta property="og:description" content="Привезём, установим, обслужим и заберём. Для дачи, стройки, свадьбы и фестиваля. Рассчитайте цену онлайн.">
   <meta property="og:url" content="https://example.ru/">
   <meta property="og:image" content="https://example.ru/assets/og.png"><!-- ЗАГЛУШКА: добавить картинку 1200×630 -->
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700;900&display=swap">
+  <!-- Шрифты Unbounded и Onest (лицензия SIL OFL 1.1) лежат в /fonts, внешних запросов нет -->
+  <link rel="preload" href="fonts/unbounded-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/unbounded-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/onest-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
   <script>document.documentElement.classList.add('js');</script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "ЭКО СЕРВИС НОВОСИБИРСК",
-    "description": "Аренда и продажа биотуалетов и туалетных кабин в Новосибирске и области.",
-    "url": "https://example.ru/",
-    "telephone": "+7-383-000-00-00",
-    "email": "info@example.ru",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "ул. Примерная, 1",
-      "addressLocality": "Новосибирск",
-      "addressCountry": "RU"
-    },
-    "areaServed": "Новосибирск и Новосибирская область",
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-      "opens": "08:00",
-      "closes": "21:00"
-    },
-    "priceRange": "₽₽"
-  }
-  </script>
+  <!-- JSON-LD собирается в js/main.js из content.js; tools/prerender.mjs копирует готовый текст сюда для краулеров без JS -->
+  <script type="application/ld+json" id="ld-business">{"@context":"https://schema.org","@type":"LocalBusiness","name":"ЭКО СЕРВИС НОВОСИБИРСК","url":"https://example.ru/","description":"Аренда и продажа биотуалетов и туалетных кабин в Новосибирске и области.","telephone":"+73830000000","email":"info@example.ru","address":{"@type":"PostalAddress","streetAddress":"ул. Примерная, 1","addressLocality":"Новосибирск","addressCountry":"RU"},"areaServed":"Новосибирск и Новосибирская область","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["https://schema.org/Monday","https://schema.org/Tuesday","https://schema.org/Wednesday","https://schema.org/Thursday","https://schema.org/Friday","https://schema.org/Saturday","https://schema.org/Sunday"],"opens":"08:00","closes":"21:00"}}</script>
+  <script type="application/ld+json" id="ld-faq">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Нужна ли предоплата?","acceptedAnswer":{"@type":"Answer","text":"Для частных лиц — предоплата 50% при заказе, остаток по факту доставки. Для организаций по договору — предоплата или постоплата, в зависимости от условий."}},{"@type":"Question","name":"Как быстро вы привозите?","acceptedAnswer":{"@type":"Answer","text":"По Новосибирску — в день заявки (если позвонили до 14:00). Ближняя зона — в течение суток. Дальняя область — 1–2 суток. Для мероприятий лучше заказывать за 3–5 дней."}},{"@type":"Question","name":"Нужно ли быть на месте при доставке?","acceptedAnswer":{"@type":"Answer","text":"Не обязательно. Достаточно сказать, где поставить, и оставить доступ. Позвоним за 30 минут до приезда."}},{"@type":"Question","name":"Можно ли купить кабину?","acceptedAnswer":{"@type":"Answer","text":"Туалетные кабины — да, по запросу (цена от 45 000 ₽). Торфяные туалеты для дачи — всегда в наличии, цена в каталоге."}},{"@type":"Question","name":"Какие документы нужны юрлицам?","acceptedAnswer":{"@type":"Answer","text":"Договор, счёт, акты и УПД. Нужны только реквизиты вашей компании. Ещё можем работать через ЭДО."}},{"@type":"Question","name":"Сколько кабин нужно на мероприятие?","acceptedAnswer":{"@type":"Answer","text":"Правило: 1 кабина на 50 гостей при мероприятии до 4 часов; на 40 при 4–8 часах; на 30, если дольше. При алкоголе — на треть больше. На 200+ человек добавьте кабину для маломобильных. Или воспользуйтесь расчётом выше."}},{"@type":"Question","name":"Что будет, если кабину повредят?","acceptedAnswer":{"@type":"Answer","text":"Бывает. Обычный износ — наша забота. Если кабину сломали или испачкали сверх нормы, стоимость ремонта или чистки оценим по акту и согласуем с вами. Для мероприятий можно оформить страховой залог (3 000 ₽)."}},{"@type":"Question","name":"Как часто нужно чистить кабину?","acceptedAnswer":{"@type":"Answer","text":"Зависит от количества людей. На стройке из 10–15 человек — 1–2 раза в неделю. На даче с редкими гостями — раз в 1–2 недели. На мероприятии — перед началом и после (при длительных — в течение). Подскажем график под вашу ситуацию."}},{"@type":"Question","name":"Зимой не замерзает?","acceptedAnswer":{"@type":"Answer","text":"Зимой заправляем бак незамерзающим составом, а утеплённые кабины рассчитаны на работу при −35 °C. Дверь у них утеплённая, не примерзает."}},{"@type":"Question","name":"Куда вы сливаете отходы?","acceptedAnswer":{"@type":"Answer","text":"Вывозим в специально предусмотренные для этого места и работаем по договору. Детали расскажем при заказе."}}]}</script>
+  <script type="application/ld+json" id="ld-products">{"@context":"https://schema.org","@graph":[{"@type":"Product","name":"Стандартная кабина «База»","description":"Классика для стройки, дачи и мероприятий. Просто работает.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"600","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Кабина с рукомойником «Чистые руки»","description":"Та же кабина, но с раковиной. Для мероприятий и мест, где важна гигиена.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"850","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Кабина для маломобильных людей «Без барьеров»","description":"Просторная, с пандусом и поручнями. Для мероприятий, где нужны все.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"1800","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Утеплённая кабина «Зима не страшна»","description":"Для холодного сезона. Работает при −35 °C, дверь не примерзает.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"900","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Торфяной туалет для дачи «Дачник»","description":"Не нужны вода и канализация. Просто засыпьте торф — и забудьте.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"8900","availability":"https://schema.org/InStock"}}]}</script>
 </head>
-<body class="has-sticky">
+<body>
 
 <!-- ===== SVG-спрайт: кабины, иконки, мелкие иллюстрации ===== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -186,7 +167,7 @@
 </header>
 
 <div class="menu on-dark" id="menu" hidden>
-  <nav class="menu__nav" aria-label="Мобильное меню" id="menu-nav"></nav>
+  <nav class="menu__nav" aria-label="Мобильное меню" id="menu-nav"><a href="#catalog">Каталог</a><a href="#calc">Калькулятор</a><a href="#how">Как работаем</a><a href="#zones">Доставка</a><a href="#reviews">Отзывы</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a></nav>
   <div class="menu__foot">
     <a class="btn btn--contact btn--lg" data-bind-href="phoneHref" href="tel:+73830000000"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg><span data-bind="phone">+7 (383) 000-00-00</span></a>
     <a class="btn btn--accent btn--lg" href="#calc" data-menu-close>Рассчитать</a>
@@ -204,7 +185,7 @@
         <p class="lead hero__lead">Привезём, установим, обслужим и заберём. Для дачи, стройки, свадьбы и фестиваля.</p>
 
         <div class="form-card" id="hero-form-card">
-          <p class="form-card__title">Оставьте заявку — перезвоним за 15 минут</p>
+          <p class="form-card__title">Оставьте заявку — перезвоним за <span data-copy="reply">15 минут</span></p>
           <form class="form" data-form="hero" novalidate>
             <div class="field">
               <label class="field__label" for="h-name">Имя</label>
@@ -238,7 +219,7 @@
         </div>
       </div>
 
-      <div class="hero__art" aria-hidden="false">
+      <div class="hero__art">
         <svg class="scene" viewBox="0 0 520 460" role="img" aria-label="Иллюстрация: биотуалетные кабины на даче, на фоне берёзок, флажков и солнца">
           <rect width="520" height="460" fill="#FFD6E5"/>
           <g stroke="#1D0F3A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
@@ -264,20 +245,20 @@
             <use href="#cabin" x="250" y="130" width="212" height="275"/>
           </g>
         </svg>
-        <aside class="blob blob--yellow hero__blob" aria-label="15 минут на ответ">
+        <div class="blob blob--yellow hero__blob">
           <p class="blob__num price price--xl">15<small>мин</small></p>
           <p class="blob__text">Столько уходит, чтобы перезвонить и назвать цену</p>
-        </aside>
+        </div>
       </div>
     </div>
 
-    <ul class="facts" id="facts" aria-label="Коротко о нас"></ul>
+    <ul class="facts" id="facts" aria-label="Коротко о нас"><li class="fact"><b class="fact__big">1 200+</b><span class="fact__text">кабин выдано с 2018 года</span></li><li class="fact"><b class="fact__big">В день</b><span class="fact__text">заявки — доставка по городу</span></li><li class="fact"><b class="fact__big">Чистка</b><span class="fact__text">и дезинфекция перед каждой выдачей</span></li><li class="fact"><b class="fact__big">Договор</b><span class="fact__text">и закрывающие документы для юрлиц</span></li></ul>
   </div>
 </section>
 
 <!-- ===== 3. Бегущая строка ===== -->
 <div class="marquee" id="marquee" role="region" aria-label="Коротко о сервисе">
-  <div class="marquee__track" id="marquee-track"></div>
+  <div class="marquee__track" id="marquee-track"><ul class="marquee__group"><li>Работаем зимой при −35</li><li>Без скрытых доплат</li><li>Моем и дезинфицируем каждую кабину перед выдачей</li><li>Новосибирск и область</li><li>Обслуживание по графику</li><li>Свой автопарк и откачка</li><li>Оплата по счёту и картой</li><li aria-hidden="true" class="is-dup">Работаем зимой при −35</li><li aria-hidden="true" class="is-dup">Без скрытых доплат</li><li aria-hidden="true" class="is-dup">Моем и дезинфицируем каждую кабину перед выдачей</li><li aria-hidden="true" class="is-dup">Новосибирск и область</li><li aria-hidden="true" class="is-dup">Обслуживание по графику</li><li aria-hidden="true" class="is-dup">Свой автопарк и откачка</li><li aria-hidden="true" class="is-dup">Оплата по счёту и картой</li></ul><ul class="marquee__group" aria-hidden="true"><li>Работаем зимой при −35</li><li>Без скрытых доплат</li><li>Моем и дезинфицируем каждую кабину перед выдачей</li><li>Новосибирск и область</li><li>Обслуживание по графику</li><li>Свой автопарк и откачка</li><li>Оплата по счёту и картой</li><li aria-hidden="true" class="is-dup">Работаем зимой при −35</li><li aria-hidden="true" class="is-dup">Без скрытых доплат</li><li aria-hidden="true" class="is-dup">Моем и дезинфицируем каждую кабину перед выдачей</li><li aria-hidden="true" class="is-dup">Новосибирск и область</li><li aria-hidden="true" class="is-dup">Обслуживание по графику</li><li aria-hidden="true" class="is-dup">Свой автопарк и откачка</li><li aria-hidden="true" class="is-dup">Оплата по счёту и картой</li></ul></div>
   <button class="marquee__pause" type="button" id="marquee-pause" aria-pressed="false" aria-label="Остановить бегущую строку"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-pause"/></svg></button>
 </div>
 
@@ -304,7 +285,7 @@
           </ul>
           <div class="aud__cta">
             <a class="btn btn--primary btn--arrow" href="#order" data-need="rent-dacha">Подобрать для себя</a>
-            <p class="small">Цена из калькулятора — цена в заявке.</p>
+            <p class="small">Итоговую цену назовём и подтвердим до оплаты.</p>
           </div>
         </div>
         <div class="aud__pluses">
@@ -328,7 +309,7 @@
           </ul>
           <div class="aud__cta">
             <a class="btn btn--primary btn--arrow" href="#order" data-need="rent-org">Получить коммерческое предложение</a>
-            <p class="small">КП присылаем в течение рабочего дня.</p>
+            <p class="small">КП присылаем <span data-copy="proposal">в течение рабочего дня</span>.</p>
           </div>
         </div>
         <div class="aud__pluses">
@@ -353,7 +334,7 @@
       <p class="lead">Пять вариантов на все случаи жизни. Все чистые, дезинфицированные и готовые к работе.</p>
       <p><span class="sticker sticker--dev">ЗАГЛУШКА — цены и характеристики ориентировочные</span></p>
     </div>
-    <div class="cab-grid" id="cab-grid"></div>
+    <div class="cab-grid" id="cab-grid"><article class="cab-card reveal" style="--i:0;--stage:var(--c-stage-1);--cab:#5B2EFF;--cab-d:#4318D9;--cab-l:#E8E0FF"><div class="cab-card__stage"><span class="sticker">Хит</span><svg class="cab-card__art" viewBox="0 0 200 260" role="img" aria-label="Иллюстрация: Стандартная кабина «База»"><use href="#cabin"></use></svg></div><div class="cab-card__body"><h3>Стандартная кабина «База»</h3><p class="small">Классика для стройки, дачи и мероприятий. Просто работает.</p><ul class="specs"><li>Бак 250 л</li><li>110×110×230 см</li><li>75 кг</li></ul><details class="more"><summary>Подробнее</summary><ul><li>Вентиляция, запирающаяся дверь, держатель бумаги</li></ul></details><div class="cab-card__price"><span class="price"><small>от</small> 600&nbsp;₽<small>/сутки</small></span><span class="small">от 6&nbsp;500&nbsp;₽/месяц</span></div><a class="btn btn--primary btn--block btn--arrow" href="#calc" data-model="base">Арендовать</a></div></article><article class="cab-card reveal" style="--i:1;--stage:var(--c-stage-2);--cab:#FFA6C4;--cab-d:#E27AA0;--cab-l:#FFFFFF"><div class="cab-card__stage"><svg class="cab-card__art" viewBox="0 0 260 260" role="img" aria-label="Иллюстрация: Кабина с рукомойником «Чистые руки»"><use href="#cabin-sink"></use></svg></div><div class="cab-card__body"><h3>Кабина с рукомойником «Чистые руки»</h3><p class="small">Та же кабина, но с раковиной. Для мероприятий и мест, где важна гигиена.</p><ul class="specs"><li>Вода 20 л, ножная помпа</li><li>120×120×230 см</li></ul><details class="more"><summary>Подробнее</summary><ul><li>Мыло и диспенсер в комплекте</li><li>Зеркало и крючок для сумки</li></ul></details><div class="cab-card__price"><span class="price"><small>от</small> 850&nbsp;₽<small>/сутки</small></span><span class="small">от 9&nbsp;000&nbsp;₽/месяц</span></div><a class="btn btn--primary btn--block btn--arrow" href="#calc" data-model="sink">Арендовать</a></div></article><article class="cab-card reveal" style="--i:2;--stage:var(--c-stage-3);--cab:#FFD82B;--cab-d:#D9B400;--cab-l:#FFF6E6"><div class="cab-card__stage"><svg class="cab-card__art" viewBox="0 0 340 260" role="img" aria-label="Иллюстрация: Кабина для маломобильных людей «Без барьеров»"><use href="#cabin-access"></use></svg></div><div class="cab-card__body"><h3>Кабина для маломобильных людей «Без барьеров»</h3><p class="small">Просторная, с пандусом и поручнями. Для мероприятий, где нужны все.</p><ul class="specs"><li>Дверь 90 см</li><li>Круг 150 см</li><li>220×165×230 см</li></ul><details class="more"><summary>Подробнее</summary><ul><li>Пандус в комплекте</li><li>Поручни и откидное сиденье</li></ul></details><div class="cab-card__price"><span class="price"><small>от</small> 1&nbsp;800&nbsp;₽<small>/сутки</small></span><span class="small">от 19&nbsp;000&nbsp;₽/месяц</span></div><a class="btn btn--primary btn--block btn--arrow" href="#calc" data-model="access">Арендовать</a></div></article><article class="cab-card reveal" style="--i:3;--stage:var(--c-stage-4);--cab:#DCEBFF;--cab-d:#5B2EFF;--cab-l:#FFFFFF"><div class="cab-card__stage"><span class="sticker">−35 °C</span><svg class="cab-card__art" viewBox="0 0 200 260" role="img" aria-label="Иллюстрация: Утеплённая кабина «Зима не страшна»"><use href="#cabin-winter"></use></svg></div><div class="cab-card__body"><h3>Утеплённая кабина «Зима не страшна»</h3><p class="small">Для холодного сезона. Работает при −35 °C, дверь не примерзает.</p><ul class="specs"><li>Утеплённые стенки и пол</li><li>115×115×230 см</li></ul><details class="more"><summary>Подробнее</summary><ul><li>Незамерзающая жидкость в баке</li><li>Электрообогрев (220 В) или автономный вариант</li></ul></details><div class="cab-card__price"><span class="price"><small>от</small> 900&nbsp;₽<small>/сутки</small></span><span class="small">от 10&nbsp;000&nbsp;₽/месяц</span></div><a class="btn btn--primary btn--block btn--arrow" href="#calc" data-model="winter">Арендовать</a></div></article><article class="cab-card reveal is-sale" style="--i:4;--stage:var(--c-stage-5);--cab:#FF5A1F;--cab-d:#C93A00;--cab-l:#FFD9C7"><div class="cab-card__stage"><span class="sticker sticker--yellow">Продажа</span><svg class="cab-card__art" viewBox="0 0 200 260" role="img" aria-label="Иллюстрация: Торфяной туалет для дачи «Дачник»"><use href="#cabin-peat"></use></svg></div><div class="cab-card__body"><h3>Торфяной туалет для дачи «Дачник»</h3><p class="small">Не нужны вода и канализация. Просто засыпьте торф — и забудьте.</p><ul class="specs"><li>Бак 40 л</li><li>8 кг</li><li>Гарантия 12 месяцев</li></ul><details class="more"><summary>Подробнее</summary><ul><li>Работает при любой погоде, без подключений</li><li>Аренды нет — только продажа</li></ul></details><div class="cab-card__price"><span class="price">8&nbsp;900&nbsp;₽</span><span class="small">торф в мешке 40 л — 350 ₽</span></div><a class="btn btn--accent btn--block btn--arrow" href="#order" data-need="buy-peat">Купить</a></div></article></div>
     <div class="cat-help reveal">
       <p class="cat-help__text">Не уверены, что выбрать? Позвоните — подскажем за две минуты.</p>
       <div class="cat-help__btns">
@@ -383,7 +364,7 @@
               <button type="button" class="stepper__btn" data-step="1" aria-label="Увеличить количество кабин">+</button>
             </div>
             <p class="field__hint" id="n-hint">Не знаете сколько? Ниже — расчёт для мероприятий.</p>
-            <p class="field__msg" id="n-msg" role="alert"></p>
+            <p class="field__msg" id="n-msg"></p>
           </div>
 
           <div class="field" data-fld="term">
@@ -396,8 +377,8 @@
                 <input type="radio" name="unit" id="u-m" value="m"><label for="u-m">Месяцы</label>
               </fieldset>
             </div>
-            <p class="field__hint" id="term-hint">Минимум — 1 сутки. 1 месяц = 30 дней.</p>
-            <p class="field__msg" id="term-msg" role="alert"></p>
+            <p class="field__hint" id="term-hint">Минимум — 1 сутки. 1 месяц = <span data-calc="daysInMonth">30</span> дней.</p>
+            <p class="field__msg" id="term-msg"></p>
           </div>
 
           <fieldset class="field fieldset" id="service-fs">
@@ -419,7 +400,7 @@
                 <input class="range" id="km-range" type="range" min="1" max="300" value="45" aria-label="Расстояние от города, километров" aria-valuetext="45 километров">
               </div>
               <p class="field__hint" id="km-hint">Расстояние — от границы Новосибирска до места установки.</p>
-              <p class="field__msg" id="km-msg" role="alert"></p>
+              <p class="field__msg" id="km-msg"></p>
             </div>
           </fieldset>
 
@@ -436,7 +417,7 @@
           <div class="field" data-fld="guests">
             <label class="field__label" for="guests">Количество гостей</label>
             <input class="input" id="guests" name="guests" type="number" inputmode="numeric" min="1" placeholder="Например, 120" aria-describedby="guests-msg">
-            <p class="field__msg" id="guests-msg" role="alert"></p>
+            <p class="field__msg" id="guests-msg"></p>
           </div>
           <fieldset class="field fieldset">
             <legend class="field__label">Длительность</legend>
@@ -479,11 +460,9 @@
           <p class="discount__text" id="disc-t"></p>
           <div class="discount__bar" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" aria-labelledby="disc-t" id="disc-bar">
             <span class="discount__fill"></span>
-            <span class="discount__tick" style="left:50%"><i>5%</i></span>
-            <span class="discount__tick" style="left:100%"><i>10%</i></span>
           </div>
         </div>
-        <p class="small">Это ориентир. Итоговую цену назовём до оплаты, и она не изменится.</p>
+        <p class="small">Это ориентир. Итоговую цену назовём и подтвердим до оплаты.</p>
         <a class="btn btn--accent btn--block btn--lg" href="#order" id="res-order">Заказать</a>
         <a class="btn btn--ghost" id="res-share" href="https://t.me/eco_service_nsk" target="_blank" rel="noopener">Отправить расчёт в Telegram</a>
       </aside>
@@ -508,7 +487,7 @@
         <div class="route__cover"></div>
         <svg class="route__truck" viewBox="0 0 120 70" width="56" height="33"><use href="#truck"/></svg>
       </div>
-      <ol class="steps" id="steps"></ol>
+      <ol class="steps" id="steps"><li class="step reveal" style="--i:0"><span class="step__num" aria-hidden="true">1</span><h3 class="step__title">Заявка</h3><p>Звоните, пишите или заполните форму. Назовём цену и время за 15 минут.</p></li><li class="step reveal" style="--i:1"><span class="step__num" aria-hidden="true">2</span><h3 class="step__title">Доставка</h3><p>Привезём кабину в согласованное время и поставим на ровное место. Вам — только показать, где.</p></li><li class="step reveal" style="--i:2"><span class="step__num" aria-hidden="true">3</span><h3 class="step__title">Обслуживание</h3><p>Приезжаем по графику: чистим, откачиваем, пополняем бумагу и жидкость. Без напоминаний.</p></li><li class="step reveal" style="--i:3"><span class="step__num" aria-hidden="true">4</span><h3 class="step__title">Вывоз</h3><p>Закончили — позвоните. Заберём, и на участке останется только хорошее настроение.</p></li></ol>
     </div>
     <p class="section__cta reveal"><a class="btn btn--primary btn--arrow" href="#order">Оставить заявку</a></p>
   </div>
@@ -523,8 +502,8 @@
           <h2 id="srv-h">Что входит в обслуживание</h2>
           <p class="lead">Мы не просто оставляем кабину. Мы следим, чтобы она оставалась в порядке.</p>
         </div>
-        <ul class="list-check list-check--big" id="service-list"></ul>
-        <p class="plate" id="service-note"><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-spark"/></svg><span></span></p>
+        <ul class="list-check list-check--big" id="service-list"><li>Откачка бака и промывка</li><li>Дезинфекция сиденья, стен и ручек</li><li>Заправка жидкостью (биоактиватор или незамерзающий состав зимой)</li><li>Туалетная бумага и мыло — по необходимости</li><li>Уборка территории вокруг кабины</li><li>Фотоотчёт в мессенджер после каждого визита (для организаций)</li></ul>
+        <p class="plate" id="service-note"><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-spark"></use></svg><span>Каждую кабину моем и дезинфицируем перед выдачей.</span></p>
       </div>
       <div class="col-full lg-5 reveal">
         <svg class="scene scene--truck" viewBox="0 0 440 340" role="img" aria-label="Иллюстрация: сервисная машина едет к кабине">
@@ -550,14 +529,14 @@
     <div class="section__head reveal">
       <h2 id="why-h">Что мы обещаем</h2>
     </div>
-    <div class="why" id="why"></div>
-    <div class="blobs reveal" id="blobs" aria-label="Цифры"></div>
+    <div class="why" id="why"><article class="why__card reveal" style="--i:0"><span class="why__ico"><svg class="icon" width="28" height="28" aria-hidden="true"><use href="#i-truck"></use></svg></span><h3>Приедем в согласованное время</h3><p>Договариваемся о времени заранее и звоним за 30 минут до приезда.</p></article><article class="why__card reveal" style="--i:1"><span class="why__ico"><svg class="icon" width="28" height="28" aria-hidden="true"><use href="#i-spark"></use></svg></span><h3>Кабина будет чистой</h3><p>Каждую моем и дезинфицируем перед выдачей.</p></article><article class="why__card reveal" style="--i:2"><span class="why__ico"><svg class="icon" width="28" height="28" aria-hidden="true"><use href="#i-tag"></use></svg></span><h3>Цена без сюрпризов</h3><p>Итоговую цену называем до оплаты. Допуслуг без вашего согласия не бывает.</p></article><article class="why__card reveal" style="--i:3"><span class="why__ico"><svg class="icon" width="28" height="28" aria-hidden="true"><use href="#i-snow"></use></svg></span><h3>Работаем зимой</h3><p>Утеплённые кабины и незамерзающая жидкость. Новосибирскую зиму знаем лично.</p></article></div>
+    <div class="blobs reveal" id="blobs"><div class="blob blob--yellow"><p class="blob__num price price--xl">1 200+</p><p class="blob__text">кабин выдано с 2018 года</p></div><div class="blob blob--pink blob--b"><p class="blob__num price price--xl">−35 °C</p><p class="blob__text">для нас не повод отказаться</p></div></div>
 
     <div class="vs-block reveal">
-      <h3 id="vs-h"></h3>
-      <p class="lead" id="vs-lead"></p>
-      <div class="vs" role="table" aria-labelledby="vs-h" id="vs"></div>
-      <p class="small" id="vs-note"></p>
+      <h3 id="vs-h">Чем мы отличаемся от обычного проката</h3>
+      <p class="lead" id="vs-lead">Многие прокаты делают хорошо. Вот что мы делаем всегда.</p>
+      <div class="vs" role="table" aria-labelledby="vs-h" id="vs"><div class="vs__head" role="row"><span role="columnheader" class="vs__corner"><span class="visually-hidden">Критерий</span></span><span role="columnheader" class="vs__us">ЭКО СЕРВИС</span><span role="columnheader" class="vs__them">Обычный прокат</span></div><div class="vs__row" role="row"><span role="rowheader" class="vs__crit">Мойка и дезинфекция перед каждой выдачей</span><span role="cell" class="vs__us"><i class="vs__ico vs__ico--yes" aria-hidden="true">✓</i><span class="visually-hidden">Да: </span><span>Каждую кабину</span></span><span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span><span>Часто «вроде чистая»</span></span></div><div class="vs__row" role="row"><span role="rowheader" class="vs__crit">Время доставки</span><span role="cell" class="vs__us"><i class="vs__ico vs__ico--yes" aria-hidden="true">✓</i><span class="visually-hidden">Да: </span><span>Согласовываем заранее</span></span><span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span><span>Обычно «в течение дня»</span></span></div><div class="vs__row" role="row"><span role="rowheader" class="vs__crit">Цена</span><span role="cell" class="vs__us"><i class="vs__ico vs__ico--yes" aria-hidden="true">✓</i><span class="visually-hidden">Да: </span><span>Фиксируем в договоре до оплаты</span></span><span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span><span>Доплаты за доставку и вывоз</span></span></div><div class="vs__row" role="row"><span role="rowheader" class="vs__crit">Зимой</span><span role="cell" class="vs__us"><i class="vs__ico vs__ico--yes" aria-hidden="true">✓</i><span class="visually-hidden">Да: </span><span>Утеплённые кабины и незамерзающая жидкость</span></span><span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span><span>Не везде</span></span></div><div class="vs__row" role="row"><span role="rowheader" class="vs__crit">Документы для юрлиц</span><span role="cell" class="vs__us"><i class="vs__ico vs__ico--yes" aria-hidden="true">✓</i><span class="visually-hidden">Да: </span><span>Договор, акты, УПД, ЭДО</span></span><span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span><span>По запросу, не всегда вовремя</span></span></div><div class="vs__row" role="row"><span role="rowheader" class="vs__crit">Обслуживание</span><span role="cell" class="vs__us"><i class="vs__ico vs__ico--yes" aria-hidden="true">✓</i><span class="visually-hidden">Да: </span><span>По графику с фотоотчётом</span></span><span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span><span>По звонку</span></span></div></div>
+      <p class="small" id="vs-note">Сравнение — с типичной практикой рынка, не с конкретной компанией.</p>
       <p><a class="btn btn--primary btn--arrow" href="#calc">Рассчитать стоимость</a></p>
     </div>
   </div>
@@ -577,7 +556,7 @@
         <p class="small docs__note" id="sample-note" role="status"></p>
       </div>
       <div class="col-full lg-6 reveal">
-        <ul class="docs" id="docs-list"></ul>
+        <ul class="docs" id="docs-list"><li><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-doc"></use></svg><span>Договор аренды или оказания услуг — подготовим за 1 рабочий день</span></li><li><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-doc"></use></svg><span>Счёт на оплату</span></li><li><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-doc"></use></svg><span>Акты и УПД — после каждого периода обслуживания</span></li><li><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-doc"></use></svg><span>Электронный документооборот (ЭДО) — по запросу</span></li><li><svg class="icon" width="26" height="26" aria-hidden="true"><use href="#i-doc"></use></svg><span>Постоплата для постоянных клиентов — обсуждается</span></li></ul>
       </div>
     </div>
   </div>
@@ -600,13 +579,13 @@
           <circle cx="200" cy="200" r="9" fill="#5B2EFF" stroke="#1D0F3A" stroke-width="3"/>
           <g font-family="Onest, sans-serif" font-weight="700" font-size="14" fill="#1D0F3A" id="map-labels">
             <text x="200" y="184" text-anchor="middle">Новосибирск</text>
-            <text x="200" y="268" text-anchor="middle" font-size="13">до 30 км</text>
-            <text x="200" y="382" text-anchor="middle" font-size="13">30–300 км</text>
+            <text x="200" y="268" text-anchor="middle" id="map-near">до 30 км</text>
+            <text x="200" y="382" text-anchor="middle" id="map-far">30–300 км</text>
           </g>
         </svg>
       </div>
       <div class="col-full lg-6">
-        <div id="zone-list" class="zone-list"></div>
+        <div id="zone-list" class="zone-list"><article class="zone zone--city reveal" style="--i:0" data-zone="city"><span class="zone__dot" aria-hidden="true"></span><h3 class="zone__name">Город (Новосибирск)</h3><p class="zone__terms zone__price">Доставка и вывоз — от 800&nbsp;₽ за рейс</p><p class="zone__time small">В день заявки, если позвонили до 14:00</p></article><article class="zone zone--near reveal" style="--i:1" data-zone="near"><span class="zone__dot" aria-hidden="true"></span><h3 class="zone__name">Ближняя зона (до ~30 км)</h3><p class="zone__terms small">Бердск, Обь, Кольцово, Краснообск и др.</p><p class="zone__terms zone__price">Фикс 1&nbsp;500&nbsp;₽ за рейс</p><p class="zone__time small">В течение суток</p></article><article class="zone zone--far reveal" style="--i:2" data-zone="far"><span class="zone__dot" aria-hidden="true"></span><h3 class="zone__name">Дальняя область (30–300 км)</h3><p class="zone__terms zone__price">1&nbsp;500&nbsp;₽ + 45&nbsp;₽ за каждый км сверх 30</p><p class="zone__time small">1–2 суток, согласуем при заявке</p></article></div>
         <p class="small zones__note">Один рейс — до 4 кабин. Для стройки и мероприятий в дальней области делаем индивидуальный расчёт.</p>
       </div>
       <div class="col-full reveal">
@@ -621,6 +600,14 @@
               <label class="field__label" for="z-phone">Телефон</label>
               <input class="input" id="z-phone" name="phone" data-v="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-required="true" aria-describedby="z-phone-msg">
               <p class="field__msg" id="z-phone-msg" role="alert"></p>
+            </div>
+            <div class="field zone-form__agree">
+              <label class="check">
+                <input type="checkbox" name="agree" data-v="consent" required aria-required="true" aria-describedby="z-agree-msg">
+                <span class="check__box" aria-hidden="true"></span>
+                <span class="check__text">Согласен(на) на обработку <a href="#" data-bind-href="privacyUrl" target="_blank" rel="noopener">персональных данных</a></span>
+              </label>
+              <p class="field__msg" id="z-agree-msg" role="alert"></p>
             </div>
             <button class="btn btn--secondary" type="submit">Узнать стоимость доставки</button>
           </form>
@@ -638,7 +625,7 @@
       <p><span class="sticker sticker--dev">ЗАГЛУШКА — отзывы вымышленные, заменить реальными с согласия авторов</span></p>
     </div>
     <div class="slider">
-      <div class="slider__track" id="rev-track" tabindex="0" role="region" aria-label="Отзывы клиентов"></div>
+      <div class="slider__track" id="rev-track" tabindex="0" role="region" aria-label="Отзывы клиентов"><article class="review reveal" style="--i:0"><span class="review__stars" role="img" aria-label="Оценка 5 из 5"><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg></span><blockquote class="review__quote">«Заказали две кабины на 60 гостей, одну с рукомойником. Привезли утром, к вечеру приезжали проверить — всё чисто. Единственное: просила поставить подальше от беседки, водитель сначала поставил рядом, но переставил без вопросов.»</blockquote><div class="review__meta"><span class="review__who">Анна, Новосибирск</span><span class="badge badge--private">Частное лицо</span><span class="small">свадьба на даче</span></div></article><article class="review reveal" style="--i:1"><span class="review__stars" role="img" aria-label="Оценка 4 из 5"><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill off" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg></span><blockquote class="review__quote">«Брал на 2 месяца, обслуживание раз в неделю. Один раз приехали на день позже, но позвонили заранее. Зимой дверь не примерзала, это главное.»</blockquote><div class="review__meta"><span class="review__who">Сергей, Бердск</span><span class="badge badge--private">Частное лицо</span><span class="small">стройка дома</span></div></article><article class="review reveal" style="--i:2"><span class="review__stars" role="img" aria-label="Оценка 5 из 5"><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg></span><blockquote class="review__quote">«Три кабины на объекте уже полгода. Присылают фотоотчёты, закрывающие приходят вовремя. Бухгалтерия вопросов не задаёт — а это дорогого стоит.»</blockquote><div class="review__meta"><span class="review__who">ООО «СтройГрад», прораб Дмитрий</span><span class="badge badge--org">Организация</span><span class="small">стройплощадка</span></div></article><article class="review reveal" style="--i:3"><span class="review__stars" role="img" aria-label="Оценка 5 из 5"><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg></span><blockquote class="review__quote">«На 800 участников заказали 20 кабин, 2 для МГН. Расставили за ночь до старта. Очередей не было, жалоб не было. На следующий год заказываем снова.»</blockquote><div class="review__meta"><span class="review__who">Елена, организатор забега «Сибирский марафон»</span><span class="badge badge--org">Организация</span><span class="small">забег</span></div></article><article class="review reveal" style="--i:4"><span class="review__stars" role="img" aria-label="Оценка 4 из 5"><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill off" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg></span><blockquote class="review__quote">«Купила торфяной туалет, объяснили, как пользоваться. Работает, запаха нет. Минус — торф пришлось докупать, но это ожидаемо.»</blockquote><div class="review__meta"><span class="review__who">Ольга, дачный кооператив</span><span class="badge badge--private">Частное лицо</span><span class="small">торфяной туалет</span></div></article><article class="review reveal" style="--i:5"><span class="review__stars" role="img" aria-label="Оценка 5 из 5"><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg><svg class="icon icon--fill" width="20" height="20" aria-hidden="true"><use href="#i-star"></use></svg></span><blockquote class="review__quote">«Заказываем кабины на каждую ярмарку. Звоню в четверг, в пятницу стоят на месте. После мероприятия забирают. Ни разу не подвели.»</blockquote><div class="review__meta"><span class="review__who">ИП Андрей</span><span class="badge badge--org">Организация</span><span class="small">ярмарка выходного дня</span></div></article></div>
       <div class="slider__nav">
         <button class="icon-btn icon-btn--light" type="button" id="rev-prev" aria-label="Предыдущий отзыв"><svg class="icon" width="24" height="24" aria-hidden="true"><use href="#i-prev"/></svg></button>
         <button class="icon-btn icon-btn--light" type="button" id="rev-next" aria-label="Следующий отзыв"><svg class="icon" width="24" height="24" aria-hidden="true"><use href="#i-next"/></svg></button>
@@ -655,8 +642,8 @@
       <h2 id="faq-h">Частые вопросы</h2>
     </div>
     <p class="field__label faq-ask" id="faq-ask">Что вас интересует?</p>
-    <fieldset class="chips faq-groups" id="faq-groups"><legend class="visually-hidden">Группа вопросов</legend></fieldset>
-    <div class="faq-list" id="faq-list" aria-live="polite"></div>
+    <fieldset class="chips faq-groups" id="faq-groups"><legend class="visually-hidden">Группа вопросов</legend><span class="chip chip--private"><input type="radio" name="fg" id="fg-private" value="private" checked=""><label for="fg-private">Частным</label></span><span class="chip chip--org"><input type="radio" name="fg" id="fg-org" value="org"><label for="fg-org">Организациям</label></span><span class="chip chip--service"><input type="radio" name="fg" id="fg-service" value="service"><label for="fg-service">Обслуживание и зима</label></span></fieldset>
+    <div class="faq-list" id="faq-list" aria-live="polite"><details class="faq" name="faq-private" data-g="private" open=""><summary><span class="faq__q" role="heading" aria-level="3">Нужна ли предоплата?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Для частных лиц — предоплата 50% при заказе, остаток по факту доставки. Для организаций по договору — предоплата или постоплата, в зависимости от условий.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Как быстро вы привозите?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>По Новосибирску — в день заявки (если позвонили до 14:00). Ближняя зона — в течение суток. Дальняя область — 1–2 суток. Для мероприятий лучше заказывать за 3–5 дней.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Нужно ли быть на месте при доставке?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Не обязательно. Достаточно сказать, где поставить, и оставить доступ. Позвоним за 30 минут до приезда.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Можно ли купить кабину?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Туалетные кабины — да, по запросу (цена от 45 000 ₽). Торфяные туалеты для дачи — всегда в наличии, цена в каталоге.</p></div></details><details class="faq" name="faq-org" data-g="org" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Какие документы нужны юрлицам?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Договор, счёт, акты и УПД. Нужны только реквизиты вашей компании. Ещё можем работать через ЭДО.</p></div></details><details class="faq" name="faq-org" data-g="org" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Сколько кабин нужно на мероприятие?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Правило: 1 кабина на 50 гостей при мероприятии до 4 часов; на 40 при 4–8 часах; на 30, если дольше. При алкоголе — на треть больше. На 200+ человек добавьте кабину для маломобильных. Или воспользуйтесь расчётом выше.</p></div></details><details class="faq" name="faq-org" data-g="org" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Что будет, если кабину повредят?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Бывает. Обычный износ — наша забота. Если кабину сломали или испачкали сверх нормы, стоимость ремонта или чистки оценим по акту и согласуем с вами. Для мероприятий можно оформить страховой залог (3 000 ₽).</p></div></details><details class="faq" name="faq-service" data-g="service" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Как часто нужно чистить кабину?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Зависит от количества людей. На стройке из 10–15 человек — 1–2 раза в неделю. На даче с редкими гостями — раз в 1–2 недели. На мероприятии — перед началом и после (при длительных — в течение). Подскажем график под вашу ситуацию.</p></div></details><details class="faq" name="faq-service" data-g="service" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Зимой не замерзает?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Зимой заправляем бак незамерзающим составом, а утеплённые кабины рассчитаны на работу при −35 °C. Дверь у них утеплённая, не примерзает.</p></div></details><details class="faq" name="faq-service" data-g="service" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Куда вы сливаете отходы?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Вывозим в специально предусмотренные для этого места и работаем по договору. Детали расскажем при заказе.</p></div></details></div>
     <p class="faq-more">Не нашли ответ? <a href="tel:+73830000000" data-bind-href="phoneHref">Позвоните</a> — ответим сразу.</p>
   </div>
 </section>
@@ -666,11 +653,11 @@
   <div class="container">
     <div class="section__head reveal">
       <h2 id="cont-h">Позвоните, напишите или оставьте заявку</h2>
-      <p class="lead">Отвечаем быстро. Обычно — за 15 минут.</p>
+      <p class="lead">Отвечаем быстро. Обычно — за <span data-copy="reply">15 минут</span>.</p>
     </div>
     <div class="grid contacts">
       <div class="col-full lg-5 reveal">
-        <ul class="contact-list" id="contact-list"></ul>
+        <ul class="contact-list" id="contact-list"><li><span class="contact-list__ico"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-phone"></use></svg></span><span><span class="small contact-list__k">Телефон</span><span class="contact-list__v"><a href="tel:+73830000000">+7 (383) 000-00-00</a></span></span></li><li><span class="contact-list__ico"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-tg"></use></svg></span><span><span class="small contact-list__k">Telegram / WhatsApp</span><span class="contact-list__v"><a href="https://t.me/eco_service_nsk" target="_blank" rel="noopener">@eco_service_nsk</a></span></span></li><li><span class="contact-list__ico"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-mail"></use></svg></span><span><span class="small contact-list__k">Email</span><span class="contact-list__v"><a href="mailto:info@example.ru">info@example.ru</a></span></span></li><li><span class="contact-list__ico"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-pin"></use></svg></span><span><span class="small contact-list__k">Адрес</span><span class="contact-list__v">г. Новосибирск, ул. Примерная, 1</span></span></li><li><span class="contact-list__ico"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-clock"></use></svg></span><span><span class="small contact-list__k">Часы работы</span><span class="contact-list__v">ежедневно 8:00–21:00</span></span></li><li><span class="contact-list__ico"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-doc"></use></svg></span><span><span class="small contact-list__k">Реквизиты</span><span class="contact-list__v">ООО «ЭКО СЕРВИС НОВОСИБИРСК», ИНН 000000000000</span></span></li></ul>
         <div class="ph" role="img" aria-label="Место для карты проезда">Карта проезда: адрес офиса и стоянки парка</div>
       </div>
       <div class="col-full lg-7 reveal" id="order">
@@ -735,7 +722,7 @@
       </div>
       <nav class="footer__col" aria-label="Навигация по странице">
         <h2 class="footer__h">Навигация</h2>
-        <ul id="footer-nav"></ul>
+        <ul id="footer-nav"><li><a href="#catalog">Каталог</a></li><li><a href="#calc">Калькулятор</a></li><li><a href="#how">Как работаем</a></li><li><a href="#zones">Доставка</a></li><li><a href="#reviews">Отзывы</a></li><li><a href="#faq">Вопросы</a></li><li><a href="#contacts">Контакты</a></li></ul>
       </nav>
       <nav class="footer__col" aria-label="Клиентам">
         <h2 class="footer__h">Клиентам</h2>
@@ -748,7 +735,7 @@
       </nav>
       <div class="footer__col">
         <h2 class="footer__h">Связь</h2>
-        <ul id="footer-contacts"></ul>
+        <ul id="footer-contacts"><li><a href="tel:+73830000000">+7 (383) 000-00-00</a></li><li><a href="mailto:info@example.ru">info@example.ru</a></li><li><a href="https://t.me/eco_service_nsk" target="_blank" rel="noopener">Telegram @eco_service_nsk</a></li><li><span>г. Новосибирск, ул. Примерная, 1</span></li><li><span>ежедневно 8:00–21:00</span></li></ul>
       </div>
     </div>
 
@@ -772,9 +759,9 @@
 
 <!-- ===== Десктопная кнопка «Заказать звонок» (открывается только по клику) ===== -->
 <button class="btn btn--accent fab" type="button" id="fab" aria-expanded="false" aria-controls="callback"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-phone"/></svg>Заказать звонок</button>
-<div class="callback" id="callback" role="dialog" aria-label="Заказать звонок" hidden>
+<div class="callback" id="callback" role="group" aria-label="Заказать звонок" hidden>
   <div class="callback__head">
-    <p class="callback__title">Перезвоним за 15 минут</p>
+    <p class="callback__title">Перезвоним за <span data-copy="reply">15 минут</span></p>
     <button class="icon-btn" type="button" id="callback-close" aria-label="Закрыть"><svg class="icon" width="22" height="22" aria-hidden="true"><use href="#i-close"/></svg></button>
   </div>
   <form class="form" data-form="callback" novalidate>
