@@ -31,6 +31,7 @@
 Дружелюбный, уверенный, лёгкий юмор в микрокопи (ошибки форм, пустые состояния, подписи). Никакого юмора ниже пояса. Примеры заданы в разделе 6.
 
 ### Чего нет (из «Что не брать»)
+Попапов поверх первого экрана (кроме мобильной sticky-панели), 
 Плёночной зернистости, акварели, стоковых фото кабин, тяжёлых анимаций, корзины, платных шрифтов.
 
 ---
@@ -546,6 +547,10 @@ a:hover { color: var(--c-violet-press); }
 .btn--accent { --btn-bg: var(--c-tangerine); --btn-fg: var(--c-ink); --btn-bg-hover: #FF7040; }
 /* ink-кнопка для violet-фона hero (контраст: yellow/ink) */
 .on-dark .btn--primary { --btn-bg: var(--c-yellow); --btn-fg: var(--c-ink); --btn-bg-hover: #FFE35C; --btn-bd: var(--c-ink); }
+
+/* CTA со стрелкой «→» (закономерность референсов): добавлять к главным кнопкам блоков */
+.btn--arrow::after { content: "→"; font-weight: 700; transition: transform var(--dur-fast) var(--ease-out); }
+.btn--arrow:hover::after { transform: translateX(4px); }
 
 /* ghost: текстовая ссылка со стрелкой */
 .btn--ghost { --btn-bg: transparent; --btn-fg: var(--c-violet); --btn-bd: transparent;
@@ -1141,6 +1146,137 @@ FAB — `btn btn--accent` с иконкой телефона; пульсация
 
 Содержимое: огромный вордмарк «ЭКО СЕРВИС» желтым, телефон, мессенджеры, адрес, часы, ссылки на политику и реквизиты, мелкая шутка в нижней строке («Сделано в Новосибирске. Руки мыли»). Вордмарк — декор; для скринридеров `aria-hidden="true"` или обычный текст.
 
+### 6.18 Таблица «Мы vs обычный прокат»
+
+Две колонки значений, строки-критерии. На 360px без горизонтального скролла: каждая строка превращается в карточку (критерий сверху, под ним две ячейки рядом с подписями «Мы» / «Обычный прокат»). На ≥768px — настоящая таблица.
+
+```html
+<div class="vs" role="table" aria-label="Сравнение с обычным прокатом">
+  <div class="vs__head" role="row">
+    <span role="columnheader" class="vs__corner"></span>
+    <span role="columnheader" class="vs__us">Мы</span>
+    <span role="columnheader" class="vs__them">Обычный прокат</span>
+  </div>
+  <div class="vs__row" role="row">
+    <span role="rowheader" class="vs__crit">Мойка и дезинфекция перед выдачей</span>
+    <span role="cell" class="vs__us"><i class="vs__ico vs__ico--yes" aria-hidden="true">✓</i><span class="visually-hidden">Да: </span>Каждую кабину</span>
+    <span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span>«Кажется, мыли»</span>
+  </div>
+</div>
+```
+
+```css
+.vs { border: var(--bw) solid var(--c-ink); border-radius: var(--r-door); background: var(--c-paper); box-shadow: var(--shadow-hard); overflow: hidden; }
+.vs__head { display: grid; grid-template-columns: 1fr 1fr; }
+.vs__corner { display: none; }
+.vs__head .vs__us   { background: var(--c-violet); color: #fff; }          /* 6.40 */
+.vs__head .vs__them { background: var(--c-lilac-soft); color: var(--c-ink-2); }
+.vs__head > span { padding: 14px 16px; font: 700 .9375rem/1.2 var(--font-display); }
+.vs__row { display: grid; grid-template-columns: 1fr 1fr; border-top: var(--bw) solid var(--c-ink); }
+.vs__crit { grid-column: 1 / -1; padding: 12px 16px 4px; font: 700 1rem/1.3 var(--font-text); }   /* критерий на всю ширину */
+.vs__row .vs__us, .vs__row .vs__them { display: flex; gap: 8px; align-items: flex-start; padding: 8px 16px 14px; font-size: var(--fs-small); line-height: 1.35; }
+.vs__row .vs__us { font-weight: 600; background: var(--c-lilac-soft); }
+.vs__ico { flex: none; width: 24px; height: 24px; display: grid; place-items: center; border: 2px solid var(--c-ink); border-radius: 50%; font: 700 .8125rem/1 var(--font-text); font-style: normal; }
+.vs__ico--yes { background: var(--c-yellow); color: var(--c-ink); } .vs__ico--no { background: var(--c-paper); color: var(--c-error); }   /* смысл и в символе, не только в цвете */
+@media (min-width: 768px) {
+  .vs__head, .vs__row { grid-template-columns: 1.4fr 1fr 1fr; }
+  .vs__corner { display: block; }
+  .vs__crit { grid-column: auto; padding: 18px 20px; display: flex; align-items: center; }
+  .vs__row .vs__us, .vs__row .vs__them { padding: 18px 20px; align-items: center; font-size: 1rem; }
+}
+```
+
+Строки (из структуры): мойка перед выдачей; окно доставки 2 часа; цена в договоре = цена в калькуляторе; работа зимой при −35; документы для юрлиц; фотоотчёт после визита. Подпись «обычного проката» — мягкая и без называния конкурентов. Строк 5–6, не больше.
+
+### 6.19 Переключатель групп FAQ
+
+Три группы: «Частным», «Организациям», «Обслуживание и зима». Цвета групп: розовый, жёлтый, лиловый. Это радио-чипы (фильтр), аккордеон 6.11 ниже. Панели не ARIA-tabs, а фильтр списка; `<details>` вне выбранной группы получают `hidden`.
+
+```html
+<fieldset class="chips faq-groups">
+  <legend class="visually-hidden">Группа вопросов</legend>
+  <span class="chip chip--private"><input type="radio" name="fg" id="fg-p" value="private" checked><label for="fg-p">Частным</label></span>
+  <span class="chip chip--org"><input type="radio" name="fg" id="fg-o" value="org"><label for="fg-o">Организациям</label></span>
+  <span class="chip chip--service"><input type="radio" name="fg" id="fg-s" value="service"><label for="fg-s">Обслуживание и зима</label></span>
+</fieldset>
+<div class="faq-list" data-group="private" aria-live="polite">…<details class="faq" data-g="private">…</details>…</div>
+```
+
+```css
+.faq-groups { margin-bottom: 24px; }
+.chip--service input:checked + label { background: var(--c-lilac); color: var(--c-violet-press); }  /* 6.97+ на lilac */
+.faq-list > .faq[hidden] { display: none; }
+.faq-list { animation: fadeIn var(--dur-base) var(--ease-out); }   /* перезапускать классом при смене */
+@media (max-width: 767px) { .faq-groups { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--page-pad) * -1); padding: 4px var(--page-pad); scroll-snap-type: x proximity; } .faq-groups .chip { flex: none; } }
+```
+
+При смене группы раскрыт первый вопрос новой группы; сводка группы не нужна. Вопросы из `structure.md` раскидать: «Частным» (чистка, предоплата, повреждение, свой ли приезд), «Организациям» (документы и НДС, сколько кабин на мероприятие, утилизация), «Обслуживание и зима» (частота, не замерзает, скорость доставки). Вопрос без группы не оставлять; общий (покупка) — в «Частным».
+
+### 6.20 Гигантский вордмарк в футере
+
+Занимает всю ширину контейнера и не вылезает на 360px. Две строки «ЭКО / СЕРВИС» вместо одной — шрифт Unbounded очень широкий.
+
+```html
+<div class="footer__word" aria-hidden="true"><span>ЭКО</span><span>СЕРВИС</span></div>
+```
+
+```css
+.footer__word { display: grid; font: 900 min(15.5vw, 5rem)/.86 var(--font-display); letter-spacing: -.04em;
+  color: var(--c-yellow); text-transform: uppercase; user-select: none; overflow: clip; margin-top: 40px; }
+.footer__word span { display: block; white-space: nowrap; }
+.footer__word span:last-child { color: transparent; -webkit-text-stroke: 3px var(--c-yellow); }   /* вторая строка контуром */
+@media (min-width: 768px) { .footer__word { grid-auto-flow: column; justify-content: space-between; font-size: min(10.4vw, 11rem); } }
+```
+
+Расчёт: «СЕРВИС» в Unbounded 900 ≈ 5.2em шириной. На 360px (контент 328px) `15.5vw` = 55.8px даёт ≈ 290px, влезает. На ≥768px обе строки в один ряд «ЭКО СЕРВИС» ≈ 8.8em с зазором; `10.4vw` при 1280px = 133px → кап 11rem (176px) не достигается, ряд занимает ≈ 1170px при контейнере 1200. Это оценка по ширине глифов: обязательно проверить в браузере на 360/768/1280 и подправить множитель, если ряд шире контейнера (`overflow: clip` — только страховка). Декор: `aria-hidden`, настоящее название лежит в `.logo` и тексте.
+
+### 6.21 Рейтинг и доверие под CTA в hero
+
+Одна строка под формой/кнопкой: 5 звёзд + текст. Данные — заглушки (4,9 из 5, «по 240 отзывам», «1 200+ кабин с 2018»). Не имитировать чужие сервисы-агрегаторы, пока нет реальной ссылки.
+
+```html
+<p class="trust">
+  <span class="trust__stars" role="img" aria-label="Оценка 4,9 из 5">★★★★★</span>
+  <span><b>4,9</b> по 240 отзывам · <span class="trust__sep">1 200+ кабин с 2018 года</span></span>
+</p>
+```
+
+```css
+.trust { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin: 16px 0 0; font-size: var(--fs-small); line-height: 1.35; color: var(--text-2); }
+.trust__stars { color: var(--c-yellow); font-size: 1.125rem; letter-spacing: 2px; text-shadow: 0 0 0 var(--c-ink); }
+.trust b { color: var(--text); font-weight: 700; }
+.trust__sep::before { content: ""; display: inline-block; width: 4px; height: 4px; margin: 0 8px 3px 0; border-radius: 50%; background: currentColor; }
+.on-dark.hero .trust { color: var(--c-lilac); }   /* 5.04:1 на violet */
+```
+
+Звёзды жёлтые на violet: 4.61:1 (UI ≥ 3:1). Рядом всегда числовой рейтинг (смысл не только в цвете).
+
+### 6.22 «Клякса»-врезка с фактом (blob callout)
+
+Органичный цветной блок с одним крупным фактом («1 200+ кабин», «−35 °C — не страшно», «15 минут — перезвоним»). Форма — через `border-radius` с эллиптическими значениями (без SVG) либо SVG-маска для более неровного контура.
+
+```html
+<aside class="blob blob--yellow">
+  <p class="blob__num price price--xl">15<small>мин</small></p>
+  <p class="blob__text">Столько уходит, чтобы перезвонить и назвать цену</p>
+</aside>
+```
+
+```css
+.blob { --blob-bg: var(--c-yellow); position: relative; display: grid; align-content: center; justify-items: center; text-align: center; gap: 8px;
+  width: min(100%, 280px); aspect-ratio: 1 / .92; padding: 28px; color: var(--c-ink); background: var(--blob-bg);
+  border: var(--bw-bold) solid var(--c-ink);
+  border-radius: 58% 42% 55% 45% / 48% 56% 44% 52%;       /* органика CSS-ом */
+  box-shadow: 6px 6px 0 var(--c-ink); transform: rotate(-3deg); }
+.blob--pink { --blob-bg: var(--c-private); } .blob--lilac { --blob-bg: var(--c-lilac); } .blob--tang { --blob-bg: var(--c-tangerine); }   /* ink на tangerine 5.70 */
+.blob__num { margin: 0; } .blob__text { margin: 0; font: 600 var(--fs-small)/1.35 var(--font-text); max-width: 20ch; color: var(--c-ink); }
+@media (hover: hover) { .blob { transition: border-radius var(--dur-slow) var(--ease-out), transform var(--dur-base) var(--ease-spring); }
+  .blob:hover { transform: rotate(1deg) scale(1.03); } }          /* border-radius не анимируем на мобильных; на десктопе допустимо, элемент один */
+.blob--b { border-radius: 44% 56% 48% 52% / 56% 44% 56% 44%; transform: rotate(2.5deg); }   /* вариант формы для чередования */
+```
+
+Вариант с SVG: `mask: url("data:image/svg+xml,…") center/100% 100% no-repeat` с кривой `path` на 8 точках; контур тогда рисуется вторым SVG-слоем. Для простоты начинать с CSS-варианта. Размещать 1–3 клякс в блоках «Почему мы», hero (рядом с иллюстрацией, частично перекрывая кабину) и калькуляторе; не больше двух на экран; цвета чередовать, не использовать tangerine рядом с жёлтой. Текст внутри — только ink.
+
 ---
 
 ## 7. Иллюстрации и плейсхолдеры (вместо фото)
@@ -1341,10 +1477,28 @@ const fmt = n => n.toLocaleString('ru-RU').replace(/\s/g, ' ');
 - Не скрывать фокус; не делать плейсхолдер единственной подписью поля; не передавать ошибку только красным.
 - Не копировать логотипы, тексты и иллюстрации референсов: берём только приёмы (свой цвет, вкладки, marquee, прогресс-скидка, прозрачная смета, SVG на цветном фоне).
 - Не делать корзину, подписки и mix-and-match: у нас заявка.
+- **Никаких попапов, модальных окон и оверлеев поверх первого экрана** (подписка, скидка, «заказать звонок», cookie-баннер на пол-экрана, чат-виджеты с автооткрытием). Единственное разрешённое фиксированное наложение на мобильном — sticky-панель CTA (она появляется после ухода hero). Форма «Заказать звонок» открывается только по клику пользователя. Cookie-уведомление — узкая строка внизу, не перекрывающая форму и не одновременно со sticky-панелью.
 
 ---
 
-## 11. Чек-лист для вёрстки
+## 11. Changelog (сверка с живым исследованием 14 сайтов)
+
+Сверка показала, что система уже совпадает с доминирующими паттернами: pill-кнопки (`--r-pill`, r ≥ 30px), кремовый фон `#FFF6E6`, бегущая лента, волнистые швы, FAQ ближе к концу, отзывы-карточки со звёздами, рисованная карта зон. Концепция, палитра и шрифты не менялись. Изменено:
+
+| Что | Почему |
+|---|---|
+| Добавлен `.btn--arrow` («→» в главных CTA), в hero/каталоге/калькуляторе использовать на primary | Стрелка в CTA — повторяющийся приём референсов; подсказывает движение, мы уже используем её в ghost |
+| 6.18 таблица «Мы vs обычный прокат» | Приём из топ-10 (Duradry, Snacklins, Collider); закрывает страхи «грязно / опоздают / цена вырастет» |
+| 6.19 переключатель групп FAQ | Приём топ-10 (Calm): три группы вместо длинного списка из 10 вопросов |
+| 6.20 гигантский вордмарк | Приём топ-10 (FreshCap, 207ouest); заменил обычный `footer__brand` по размеру; расчёт ширины для 360px |
+| 6.21 рейтинг под CTA | Приём топ-10 (Collider); данные — заглушки |
+| 6.22 «клякса» с фактом | Приём топ-10 (Nugget, LEIF, WGAC): органичные формы вместо только волн |
+| Новый пункт в Don't: никаких попапов поверх первого экрана | Антипример из исследования (Nugget, Great Jones, Everlane); мешает главной форме |
+| Не добавлено: курсивные заголовки (WGAC), фото-сцены/видео, полоса «о нас пишут» | У Unbounded нет курсива, своих фото нет, реальных публикаций нет |
+
+---
+
+## 12. Чек-лист для вёрстки
 
 1. Подключить шрифты (раздел 1), `lang="ru"`, `meta theme-color #5B2EFF`.
 2. Вставить `:root` из разделов 2.4, 3, 4, 5, 8.1 одним блоком в начало CSS.
