@@ -11,6 +11,9 @@
   /* ---------- утилиты ---------- */
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  // подстановка {ключ} из SITE.copy ({name} и неизвестные ключи остаются как есть)
+  function fill(s) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { var v = S.copy && S.copy[k]; return v != null ? v : m; }); }
+  function safeHref(u) { return /^(tel:|mailto:|https?:|#)/.test(String(u)) ? String(u) : '#'; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function fmt(n) { return Math.round(n).toLocaleString('ru-RU').replace(/\s/g, NB); }
   function rub(n) { return fmt(n) + NB + '₽'; }
@@ -83,15 +86,15 @@
   /* ---------- шаги, обслуживание, почему мы, сравнение, документы ---------- */
   function renderBlocks() {
     $('#steps').innerHTML = S.steps.map(function (s, i) {
-      return '<li class="step reveal" style="--i:' + i + '"><span class="step__num" aria-hidden="true">' + (i + 1) + '</span><h3 class="step__title">' + esc(s.title) + '</h3><p>' + esc(s.text) + '</p></li>';
+      return '<li class="step reveal" style="--i:' + i + '"><span class="step__num" aria-hidden="true">' + (i + 1) + '</span><h3 class="step__title">' + esc(fill(s.title)) + '</h3><p>' + esc(fill(s.text)) + '</p></li>';
     }).join('');
     $('#service-list').innerHTML = S.serviceList.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
     $('#service-note span').textContent = S.serviceNote;
     $('#why').innerHTML = S.why.map(function (w, i) {
-      return '<article class="why__card reveal" style="--i:' + i + '"><span class="why__ico">' + icon(String(w.icon).replace(/[^\w-]/g, ''), 28) + '</span><h3>' + esc(w.title) + '</h3><p>' + esc(w.text) + '</p></article>';
+      return '<article class="why__card reveal" style="--i:' + i + '"><span class="why__ico">' + icon(String(w.icon).replace(/[^\w-]/g, ''), 28) + '</span><h3>' + esc(fill(w.title)) + '</h3><p>' + esc(fill(w.text)) + '</p></article>';
     }).join('');
     $('#blobs').innerHTML = S.stats.map(function (s, i) {
-      return '<div class="blob blob--' + (s.tone === 'pink' ? 'pink' : 'yellow') + (i % 2 ? ' blob--b' : '') + '"><p class="blob__num price price--xl">' + esc(s.num) + '</p><p class="blob__text">' + esc(s.text) + '</p></div>';
+      return '<div class="blob blob--' + (s.tone === 'pink' ? 'pink' : 'yellow') + (i % 2 ? ' blob--b' : '') + '"><p class="blob__num price price--xl">' + esc(s.num) + '</p><p class="blob__text">' + esc(fill(s.text)) + '</p></div>';
     }).join('');
 
     var vs = S.vs;
@@ -105,21 +108,21 @@
           '<span role="cell" class="vs__them"><i class="vs__ico vs__ico--no" aria-hidden="true">✗</i><span class="visually-hidden">Нет: </span><span>' + esc(r.them) + '</span></span></div>';
       }).join('');
 
-    $('#docs-list').innerHTML = S.docs.map(function (d) { return '<li>' + icon('i-doc', 26) + '<span>' + esc(d) + '</span></li>'; }).join('');
+    $('#docs-list').innerHTML = S.docs.map(function (d) { return '<li>' + icon('i-doc', 26) + '<span>' + esc(fill(d)) + '</span></li>'; }).join('');
   }
 
   /* ---------- зоны доставки ---------- */
   function renderZones() {
     $('#zone-list').innerHTML = S.zones.map(function (z, i) {
       return '<article class="zone zone--' + esc(z.cls) + ' reveal" style="--i:' + i + '" data-zone="' + esc(z.id) + '">' +
-        '<span class="zone__dot" aria-hidden="true"></span><h3 class="zone__name">' + esc(z.name) + '</h3>' +
-        (z.places ? '<p class="zone__terms small">' + esc(z.places) + '</p>' : '') +
-        '<p class="zone__terms zone__price">' + esc(z.terms) + '</p><p class="zone__time small">' + esc(z.time) + '</p></article>';
+        '<span class="zone__dot" aria-hidden="true"></span><h3 class="zone__name">' + esc(fill(z.name)) + '</h3>' +
+        (z.places ? '<p class="zone__terms small">' + esc(fill(z.places)) + '</p>' : '') +
+        '<p class="zone__terms zone__price">' + esc(fill(z.terms)) + '</p><p class="zone__time small">' + esc(fill(z.time)) + '</p></article>';
     }).join('');
     $('.zones__note').textContent = S.zonesNote;
     $('#map-near').textContent = 'до ' + DL.nearKm + ' км';
     $('#map-far').textContent = DL.nearKm + '–' + DL.maxKm + ' км';
-    var pts = [[268, 250, 20], [128, 178, -10], [270, 140, -10]];
+    var pts = [[292, 232, -10], [128, 178, -10], [270, 140, -10]];   // «Бердск» сдвинут от подписи «до 30 км»
     $('#map-labels').insertAdjacentHTML('beforeend', S.mapLabels.map(function (t, i) {
       var p = pts[i] || [200, 200];
       return '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="5" fill="#5B2EFF" stroke="#1D0F3A" stroke-width="2"/><text x="' + p[0] + '" y="' + (p[1] + p[2]) + '" text-anchor="middle" font-size="13">' + esc(t) + '</text>';
@@ -158,7 +161,7 @@
       return '<span class="chip chip--' + esc(g.id) + '"><input type="radio" name="fg" id="fg-' + esc(g.id) + '" value="' + esc(g.id) + '"' + (i === 0 ? ' checked' : '') + '><label for="fg-' + esc(g.id) + '">' + esc(g.label) + '</label></span>';
     }).join(''));
     $('#faq-list').innerHTML = S.faq.map(function (f) {
-      return '<details class="faq" name="faq-' + esc(f.g) + '" data-g="' + esc(f.g) + '"><summary><span class="faq__q" role="heading" aria-level="3">' + esc(f.q) + '</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>' + esc(f.a) + '</p></div></details>';
+      return '<details class="faq" name="faq-' + esc(f.g) + '" data-g="' + esc(f.g) + '"><summary><span class="faq__q" role="heading" aria-level="3">' + esc(fill(f.q)) + '</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>' + esc(fill(f.a)) + '</p></div></details>';
     }).join('');
     function show(g) {
       var first = true;
@@ -190,18 +193,21 @@
       description: 'Аренда и продажа биотуалетов и туалетных кабин в Новосибирске и области.',
       telephone: K.phone.replace(/[^\d+]/g, ''), email: K.email,
       address: { '@type': 'PostalAddress', streetAddress: K.address.replace(/^г\.\s*[^,]+,\s*/, ''), addressLocality: S.company.city, addressCountry: 'RU' },
+      image: S.company.url + 'assets/og.png', // ЗАГЛУШКА: добавить картинку
       areaServed: 'Новосибирск и Новосибирская область',
       openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: d, opens: hh(tm[1], tm[2]), closes: hh(tm[3], tm[4]) }
     });
     setLd('ld-faq', {
       '@context': 'https://schema.org', '@type': 'FAQPage',
-      mainEntity: S.faq.map(function (f) { return { '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }; })
+      mainEntity: S.faq.map(function (f) { return { '@type': 'Question', name: fill(f.q), acceptedAnswer: { '@type': 'Answer', text: fill(f.a) } }; })
     });
     setLd('ld-products', {
       '@context': 'https://schema.org',
       '@graph': S.catalog.map(function (m) {
-        return { '@type': 'Product', name: m.name, description: m.desc,
-          offers: { '@type': 'Offer', priceCurrency: 'RUB', price: String(m.sale ? m.price : m.rentDay), availability: 'https://schema.org/InStock' } };
+        var offer = m.sale
+          ? { '@type': 'Offer', priceCurrency: 'RUB', price: String(m.price), availability: 'https://schema.org/InStock' }
+          : { '@type': 'Offer', availability: 'https://schema.org/InStock', priceSpecification: { '@type': 'UnitPriceSpecification', priceCurrency: 'RUB', price: String(m.rentDay), unitCode: 'DAY' } };
+        return { '@type': 'Product', name: m.name, description: m.desc, offers: offer };
       })
     });
   }
@@ -209,9 +215,9 @@
   /* ---------- контакты и подвал ---------- */
   function renderContacts() {
     var rows = [
-      ['i-phone', 'Телефон', '<a href="' + esc(K.phoneHref) + '">' + esc(K.phone) + '</a>'],
-      ['i-tg', 'Telegram / WhatsApp', '<a href="' + esc(K.telegramUrl) + '" target="_blank" rel="noopener">' + esc(K.telegram) + '</a>'],
-      ['i-mail', 'Email', '<a href="' + esc(K.emailHref) + '">' + esc(K.email) + '</a>'],
+      ['i-phone', 'Телефон', '<a href="' + esc(safeHref(K.phoneHref)) + '">' + esc(K.phone) + '</a>'],
+      ['i-tg', 'Telegram / WhatsApp', '<a href="' + esc(safeHref(K.telegramUrl)) + '" target="_blank" rel="noopener">' + esc(K.telegram) + '</a>'],
+      ['i-mail', 'Email', '<a href="' + esc(safeHref(K.emailHref)) + '">' + esc(K.email) + '</a>'],
       ['i-pin', 'Адрес', esc(K.address)],
       ['i-clock', 'Часы работы', esc(K.hours)],
       ['i-doc', 'Реквизиты', esc(K.requisites)]
@@ -222,9 +228,9 @@
 
     $('#footer-nav').innerHTML = S.nav.map(function (n) { return '<li><a href="#' + n.id + '">' + esc(n.label) + '</a></li>'; }).join('');
     $('#footer-contacts').innerHTML =
-      '<li><a href="' + esc(K.phoneHref) + '">' + esc(K.phone) + '</a></li>' +
-      '<li><a href="' + esc(K.emailHref) + '">' + esc(K.email) + '</a></li>' +
-      '<li><a href="' + esc(K.telegramUrl) + '" target="_blank" rel="noopener">Telegram ' + esc(K.telegram) + '</a></li>' +
+      '<li><a href="' + esc(safeHref(K.phoneHref)) + '">' + esc(K.phone) + '</a></li>' +
+      '<li><a href="' + esc(safeHref(K.emailHref)) + '">' + esc(K.email) + '</a></li>' +
+      '<li><a href="' + esc(safeHref(K.telegramUrl)) + '" target="_blank" rel="noopener">Telegram ' + esc(K.telegram) + '</a></li>' +
       '<li><span>' + esc(K.address) + '</span></li><li><span>' + esc(K.hours) + '</span></li>';
     $('#footer-tagline').textContent = S.footer.tagline;
     $('#footer-joke').textContent = S.footer.joke;
@@ -237,6 +243,7 @@
     nav.innerHTML = S.nav.map(function (n) { return '<a href="#' + n.id + '">' + esc(n.label) + '</a>'; }).join('');
     function setOpen(open) {
       menu.hidden = !open;
+      if ($('#menu-backdrop')) $('#menu-backdrop').hidden = !open;
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
       burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
       burger.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-burger');
@@ -244,6 +251,8 @@
       ['main', 'footer'].forEach(function (t) { var el = $(t); if (el) { if (open) el.setAttribute('inert', ''); else el.removeAttribute('inert'); } });
       if (open) { menu.classList.remove('is-in'); void menu.offsetWidth; menu.classList.add('is-in'); var f = menu.querySelector('a'); if (f) f.focus(); }
     }
+    var backdrop = $('#menu-backdrop');
+    if (backdrop) backdrop.addEventListener('click', function () { setOpen(false); burger.focus(); });
     burger.addEventListener('click', function () { setOpen(menu.hidden); });
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
     document.addEventListener('keydown', function (e) {
@@ -326,7 +335,7 @@
   function compute(s) {
     var errors = {}, n = Number(s.n), term = Number(s.term), km = Number(s.km);
     if (s.n === '' || !isFinite(n) || n < 1 || Math.floor(n) !== n) errors.n = M.calcCabins;
-    if (s.term === '' || !isFinite(term) || term < 1 || Math.floor(term) !== term) errors.term = M.calcTerm;
+    if (s.term === '' || !isFinite(term) || term < 1 || Math.floor(term) !== term) errors.term = fill(M.calcTerm);
     if (s.zone === 'region' && (s.km === '' || !isFinite(km) || km < 1)) errors.km = M.calcKm;
     if (Object.keys(errors).length) return { errors: errors };
     var D = s.unit === 'm' ? term * C.daysInMonth : term;
@@ -380,9 +389,9 @@
       ds.forEach(function (d) { var t = document.createElement('span'); t.className = 'discount__tick'; t.style.left = (d.minCabins / top * 100) + '%'; t.innerHTML = '<i>' + d.pct + '%</i>'; bar.appendChild(t); });
     })();
 
-    $('#model').innerHTML = C.models.map(function (m) { return '<option value="' + m.id + '">' + esc(m.label) + '</option>'; }).join('');
+    $('#model').innerHTML = C.models.map(function (m) { return '<option value="' + esc(m.id) + '">' + esc(m.label) + '</option>'; }).join('');
     $('#service-chips').innerHTML = C.serviceModes.map(function (m, i) {
-      return '<span class="chip"><input type="radio" name="service" id="s-' + m.id + '" value="' + m.id + '"' + (m.id === 'weekly' ? ' checked' : '') + '><label for="s-' + m.id + '">' + esc(m.label) + (m.note ? ' <span class="chip__note">(' + esc(m.note) + ')</span>' : '') + '</label></span>';
+      return '<span class="chip"><input type="radio" name="service" id="s-' + esc(m.id) + '" value="' + esc(m.id) + '"' + (m.id === 'weekly' ? ' checked' : '') + '><label for="s-' + esc(m.id) + '">' + esc(m.label) + (m.note ? ' <span class="chip__note">(' + esc(m.note) + ')</span>' : '') + '</label></span>';
     }).join('');
 
     function val(name) { var r = form.querySelector('input[name="' + name + '"]:checked'); return r ? r.value : ''; }
@@ -548,13 +557,16 @@
   }
 
   /* Маска телефона +7 (XXX) XXX-XX-XX.
-     Ведущий 7 или 8 считаем кодом страны/«8» только когда это однозначно:
-     - значение уже начинается с «+7» (наша же маска или вставка);
-     - иначе «7» — всегда код; «8» — код, если за ним не «0» (8-800… вводится как 8 800… и как 800…). */
+     Национальные цифры = то, что идёт после кода страны. Первая цифра 8 может быть кодом региона (812, 843, 861),
+     поэтому её отрезаем как «трункальный префикс» только когда она однозначно лишняя:
+     - значение начинается с «+» (наша маска или вставка с +7): отрезаем код страны;
+     - без «+» первая «7» — всегда код страны (кодов региона на 7 нет);
+     - и если после этого набралось 11 цифр и первая 7 или 8 — это 8XXXXXXXXXX (отрезаем её). */
   function nationalDigits(str) {
     var raw = String(str), d = raw.replace(/\D/g, '');
-    if (d[0] === '7' && (/^\s*\+/.test(raw) || d.length > 0)) d = d.slice(1);
-    if (d[0] === '8' && d.length > 1 && d[1] !== '0') d = d.slice(1);   // «8» как междугородний префикс
+    if (/^\s*\+/.test(raw)) { if (d[0] === '7') d = d.slice(1); }
+    else if (d[0] === '7') d = d.slice(1);
+    if (d.length >= 11 && /^[78]/.test(d)) d = d.slice(1);
     return d.slice(0, 10);
   }
   function maskPhone(d) {
@@ -630,7 +642,7 @@
 
   function showSuccess(form, kind) {
     var nameEl = form.elements.name, name = nameEl && nameEl.value ? nameEl.value.trim() : '';
-    var tpl = M.success[kind] || M.success.order;
+    var tpl = fill(M.success[kind] || M.success.order);
     var text = name ? tpl.replace('{name}', name) : tpl.replace('Спасибо, {name}! ', '').replace('{name}', '');
     var box = document.createElement('div');
     box.className = 'form-success'; box.setAttribute('role', 'status'); box.tabIndex = -1;
@@ -647,22 +659,21 @@
 
   /* ---------- sticky-панель, FAB, обратный звонок ---------- */
   function initFloating() {
-    var cta = $('#sticky-cta'), hero = $('.hero'), calcEl = $('#calc'), fab = $('#fab');
+    var cta = $('#sticky-cta'), hero = $('.hero'), calcEl = $('#calc'), fab = $('#fab'), cb = $('#callback');
     var heroGone = false, inCalc = false;
+    function setCb(open) { cb.hidden = !open; fab.setAttribute('aria-expanded', open ? 'true' : 'false'); if (open) { var f = cb.querySelector('input'); if (f) f.focus(); } }
     function sync() {
       cta.dataset.visible = (heroGone && !inCalc) ? 'true' : 'false';     // внутри калькулятора работает мини-итог, панель не нужна
       document.body.classList.toggle('in-calc', inCalc);
       fab.classList.toggle('is-away', inCalc);                           // FAB не перекрывает карточку результата
+      if (inCalc && !cb.hidden) setCb(false);                            // и открытое окно не закрывает сумму
     }
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (es) { var e = es[0]; heroGone = !e.isIntersecting && e.boundingClientRect.bottom <= 0; sync(); }).observe(hero);
-      new IntersectionObserver(function (es) { inCalc = es[0].isIntersecting; sync(); }, { rootMargin: '-10% 0px -10% 0px' }).observe(calcEl);
+      new IntersectionObserver(function (es) { inCalc = es[0].isIntersecting; sync(); }, { rootMargin: '-20% 0px -20% 0px' }).observe(calcEl);
     } else { heroGone = true; sync(); }
     document.addEventListener('focusin', function (e) { if (e.target.matches('input, select, textarea')) document.body.classList.add('keyboard-open'); });
     document.addEventListener('focusout', function () { document.body.classList.remove('keyboard-open'); });
-
-    var cb = $('#callback');
-    function setCb(open) { cb.hidden = !open; fab.setAttribute('aria-expanded', open ? 'true' : 'false'); if (open) { var f = cb.querySelector('input'); if (f) f.focus(); } }
     fab.addEventListener('click', function () { setCb(cb.hidden); });
     $('#callback-close').addEventListener('click', function () { setCb(false); fab.focus(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !cb.hidden) { setCb(false); fab.focus(); } });

@@ -19,18 +19,16 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="preload" href="fonts/unbounded-main.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/onest-main.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Шрифты Unbounded и Onest (лицензия SIL OFL 1.1) лежат в /fonts, внешних запросов нет -->
-  <link rel="preload" href="fonts/unbounded-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/unbounded-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/onest-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
   <script>document.documentElement.classList.add('js');</script>
 
   <!-- JSON-LD собирается в js/main.js из content.js; tools/prerender.mjs копирует готовый текст сюда для краулеров без JS -->
-  <script type="application/ld+json" id="ld-business">{"@context":"https://schema.org","@type":"LocalBusiness","name":"ЭКО СЕРВИС НОВОСИБИРСК","url":"https://example.ru/","description":"Аренда и продажа биотуалетов и туалетных кабин в Новосибирске и области.","telephone":"+73830000000","email":"info@example.ru","address":{"@type":"PostalAddress","streetAddress":"ул. Примерная, 1","addressLocality":"Новосибирск","addressCountry":"RU"},"areaServed":"Новосибирск и Новосибирская область","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["https://schema.org/Monday","https://schema.org/Tuesday","https://schema.org/Wednesday","https://schema.org/Thursday","https://schema.org/Friday","https://schema.org/Saturday","https://schema.org/Sunday"],"opens":"08:00","closes":"21:00"}}</script>
+  <script type="application/ld+json" id="ld-business">{"@context":"https://schema.org","@type":"LocalBusiness","name":"ЭКО СЕРВИС НОВОСИБИРСК","url":"https://example.ru/","description":"Аренда и продажа биотуалетов и туалетных кабин в Новосибирске и области.","telephone":"+73830000000","email":"info@example.ru","address":{"@type":"PostalAddress","streetAddress":"ул. Примерная, 1","addressLocality":"Новосибирск","addressCountry":"RU"},"image":"https://example.ru/assets/og.png","areaServed":"Новосибирск и Новосибирская область","openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["https://schema.org/Monday","https://schema.org/Tuesday","https://schema.org/Wednesday","https://schema.org/Thursday","https://schema.org/Friday","https://schema.org/Saturday","https://schema.org/Sunday"],"opens":"08:00","closes":"21:00"}}</script>
   <script type="application/ld+json" id="ld-faq">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Нужна ли предоплата?","acceptedAnswer":{"@type":"Answer","text":"Для частных лиц — предоплата 50% при заказе, остаток по факту доставки. Для организаций по договору — предоплата или постоплата, в зависимости от условий."}},{"@type":"Question","name":"Как быстро вы привозите?","acceptedAnswer":{"@type":"Answer","text":"По Новосибирску — в день заявки (если позвонили до 14:00). Ближняя зона — в течение суток. Дальняя область — 1–2 суток. Для мероприятий лучше заказывать за 3–5 дней."}},{"@type":"Question","name":"Нужно ли быть на месте при доставке?","acceptedAnswer":{"@type":"Answer","text":"Не обязательно. Достаточно сказать, где поставить, и оставить доступ. Позвоним за 30 минут до приезда."}},{"@type":"Question","name":"Можно ли купить кабину?","acceptedAnswer":{"@type":"Answer","text":"Туалетные кабины — да, по запросу (цена от 45 000 ₽). Торфяные туалеты для дачи — всегда в наличии, цена в каталоге."}},{"@type":"Question","name":"Какие документы нужны юрлицам?","acceptedAnswer":{"@type":"Answer","text":"Договор, счёт, акты и УПД. Нужны только реквизиты вашей компании. Ещё можем работать через ЭДО."}},{"@type":"Question","name":"Сколько кабин нужно на мероприятие?","acceptedAnswer":{"@type":"Answer","text":"Правило: 1 кабина на 50 гостей при мероприятии до 4 часов; на 40 при 4–8 часах; на 30, если дольше. При алкоголе — на треть больше. На 200+ человек добавьте кабину для маломобильных. Или воспользуйтесь расчётом выше."}},{"@type":"Question","name":"Что будет, если кабину повредят?","acceptedAnswer":{"@type":"Answer","text":"Бывает. Обычный износ — наша забота. Если кабину сломали или испачкали сверх нормы, стоимость ремонта или чистки оценим по акту и согласуем с вами. Для мероприятий можно оформить страховой залог (3 000 ₽)."}},{"@type":"Question","name":"Как часто нужно чистить кабину?","acceptedAnswer":{"@type":"Answer","text":"Зависит от количества людей. На стройке из 10–15 человек — 1–2 раза в неделю. На даче с редкими гостями — раз в 1–2 недели. На мероприятии — перед началом и после (при длительных — в течение). Подскажем график под вашу ситуацию."}},{"@type":"Question","name":"Зимой не замерзает?","acceptedAnswer":{"@type":"Answer","text":"Зимой заправляем бак незамерзающим составом, а утеплённые кабины рассчитаны на работу при −35 °C. Дверь у них утеплённая, не примерзает."}},{"@type":"Question","name":"Куда вы сливаете отходы?","acceptedAnswer":{"@type":"Answer","text":"Вывозим в специально предусмотренные для этого места и работаем по договору. Детали расскажем при заказе."}}]}</script>
-  <script type="application/ld+json" id="ld-products">{"@context":"https://schema.org","@graph":[{"@type":"Product","name":"Стандартная кабина «База»","description":"Классика для стройки, дачи и мероприятий. Просто работает.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"600","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Кабина с рукомойником «Чистые руки»","description":"Та же кабина, но с раковиной. Для мероприятий и мест, где важна гигиена.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"850","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Кабина для маломобильных людей «Без барьеров»","description":"Просторная, с пандусом и поручнями. Для мероприятий, где нужны все.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"1800","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Утеплённая кабина «Зима не страшна»","description":"Для холодного сезона. Работает при −35 °C, дверь не примерзает.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"900","availability":"https://schema.org/InStock"}},{"@type":"Product","name":"Торфяной туалет для дачи «Дачник»","description":"Не нужны вода и канализация. Просто засыпьте торф — и забудьте.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"8900","availability":"https://schema.org/InStock"}}]}</script>
+  <script type="application/ld+json" id="ld-products">{"@context":"https://schema.org","@graph":[{"@type":"Product","name":"Стандартная кабина «База»","description":"Классика для стройки, дачи и мероприятий. Просто работает.","offers":{"@type":"Offer","availability":"https://schema.org/InStock","priceSpecification":{"@type":"UnitPriceSpecification","priceCurrency":"RUB","price":"600","unitCode":"DAY"}}},{"@type":"Product","name":"Кабина с рукомойником «Чистые руки»","description":"Та же кабина, но с раковиной. Для мероприятий и мест, где важна гигиена.","offers":{"@type":"Offer","availability":"https://schema.org/InStock","priceSpecification":{"@type":"UnitPriceSpecification","priceCurrency":"RUB","price":"850","unitCode":"DAY"}}},{"@type":"Product","name":"Кабина для маломобильных людей «Без барьеров»","description":"Просторная, с пандусом и поручнями. Для мероприятий, где нужны все.","offers":{"@type":"Offer","availability":"https://schema.org/InStock","priceSpecification":{"@type":"UnitPriceSpecification","priceCurrency":"RUB","price":"1800","unitCode":"DAY"}}},{"@type":"Product","name":"Утеплённая кабина «Зима не страшна»","description":"Для холодного сезона. Работает при −35 °C, дверь не примерзает.","offers":{"@type":"Offer","availability":"https://schema.org/InStock","priceSpecification":{"@type":"UnitPriceSpecification","priceCurrency":"RUB","price":"900","unitCode":"DAY"}}},{"@type":"Product","name":"Торфяной туалет для дачи «Дачник»","description":"Не нужны вода и канализация. Просто засыпьте торф — и забудьте.","offers":{"@type":"Offer","priceCurrency":"RUB","price":"8900","availability":"https://schema.org/InStock"}}]}</script>
 </head>
 <body>
 
@@ -166,6 +164,7 @@
   </div>
 </header>
 
+<div class="menu-backdrop" id="menu-backdrop" hidden></div>
 <div class="menu on-dark" id="menu" hidden>
   <nav class="menu__nav" aria-label="Мобильное меню" id="menu-nav"><a href="#catalog">Каталог</a><a href="#calc">Калькулятор</a><a href="#how">Как работаем</a><a href="#zones">Доставка</a><a href="#reviews">Отзывы</a><a href="#faq">Вопросы</a><a href="#contacts">Контакты</a></nav>
   <div class="menu__foot">
@@ -186,6 +185,7 @@
 
         <div class="form-card" id="hero-form-card">
           <p class="form-card__title">Оставьте заявку — перезвоним за <span data-copy="reply">15 минут</span></p>
+          <noscript><p class="noscript-note">Форма работает только с включённым JavaScript. Позвоните нам: <a href="tel:+73830000000">+7 (383) 000-00-00</a> или напишите в <a href="https://t.me/eco_service_nsk">Telegram</a>.</p></noscript>
           <form class="form" data-form="hero" novalidate>
             <div class="field">
               <label class="field__label" for="h-name">Имя</label>
@@ -246,7 +246,7 @@
           </g>
         </svg>
         <div class="blob blob--yellow hero__blob">
-          <p class="blob__num price price--xl">15<small>мин</small></p>
+          <p class="blob__num price price--xl"><span data-copy="replyNum">15</span><small data-copy="replyUnit">мин</small></p>
           <p class="blob__text">Столько уходит, чтобы перезвонить и назвать цену</p>
         </div>
       </div>
@@ -291,7 +291,7 @@
         <div class="aud__pluses">
           <h4>Что вы получите</h4>
           <ul class="list-check">
-            <li>Аренда от 1 суток, без договора на 20 страниц</li>
+            <li>Аренда <span data-copy="minTerm">от 1 суток</span>, без договора на 20 страниц</li>
             <li>Привезём и поставим там, где вам удобно</li>
             <li>Можно оплатить картой или переводом</li>
             <li>Для дачи — продаём торфяные туалеты и объясним, как с ними жить</li>
@@ -353,6 +353,7 @@
       <p class="lead">Укажите, что нужно, и увидите примерную сумму. Точную — подтвердим по телефону.</p>
     </div>
 
+    <noscript><p class="noscript-note">Калькулятор работает только с включённым JavaScript. Позвоните нам — назовём цену за минуту: <a href="tel:+73830000000">+7 (383) 000-00-00</a>.</p></noscript>
     <div class="calc">
       <form class="calc__form" id="calc-form" novalidate autocomplete="off">
         <div class="calc__card">
@@ -377,7 +378,7 @@
                 <input type="radio" name="unit" id="u-m" value="m"><label for="u-m">Месяцы</label>
               </fieldset>
             </div>
-            <p class="field__hint" id="term-hint">Минимум — 1 сутки. 1 месяц = <span data-calc="daysInMonth">30</span> дней.</p>
+            <p class="field__hint" id="term-hint"><span data-copy="minTermHint">Минимум — 1 сутки.</span> 1 месяц = <span data-calc="daysInMonth">30</span> дней.</p>
             <p class="field__msg" id="term-msg"></p>
           </div>
 
@@ -417,7 +418,7 @@
           <div class="field" data-fld="guests">
             <label class="field__label" for="guests">Количество гостей</label>
             <input class="input" id="guests" name="guests" type="number" inputmode="numeric" min="1" placeholder="Например, 120" aria-describedby="guests-msg">
-            <p class="field__msg" id="guests-msg"></p>
+            <p class="field__msg" id="guests-msg" role="alert"></p>
           </div>
           <fieldset class="field fieldset">
             <legend class="field__label">Длительность</legend>
@@ -455,7 +456,7 @@
           <div class="breakdown__discount" id="b-disc-row" hidden><dt id="b-disc-label">Скидка за количество</dt><dd id="b-disc"></dd></div>
           <div class="breakdown__total"><dt>Итого</dt><dd id="b-total"></dd></div>
         </dl>
-        <p class="small calc-result__min" id="res-min" hidden>Минимальный заказ — 1&nbsp;500&nbsp;₽, поэтому итог округлён до него.</p>
+        <p class="small calc-result__min" id="res-min" hidden></p>
         <div class="discount" id="discount">
           <p class="discount__text" id="disc-t"></p>
           <div class="discount__bar" role="progressbar" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" aria-labelledby="disc-t" id="disc-bar">
@@ -590,6 +591,7 @@
       </div>
       <div class="col-full reveal">
         <div class="zone-form">
+          <noscript><p class="noscript-note">Форма работает только с включённым JavaScript. Позвоните нам: <a href="tel:+73830000000">+7 (383) 000-00-00</a> или напишите в <a href="https://t.me/eco_service_nsk">Telegram</a>.</p></noscript>
           <form class="form zone-form__form" data-form="zone" novalidate>
             <div class="field">
               <label class="field__label" for="z-place">Название населённого пункта</label>
@@ -643,7 +645,7 @@
     </div>
     <p class="field__label faq-ask" id="faq-ask">Что вас интересует?</p>
     <fieldset class="chips faq-groups" id="faq-groups"><legend class="visually-hidden">Группа вопросов</legend><span class="chip chip--private"><input type="radio" name="fg" id="fg-private" value="private" checked=""><label for="fg-private">Частным</label></span><span class="chip chip--org"><input type="radio" name="fg" id="fg-org" value="org"><label for="fg-org">Организациям</label></span><span class="chip chip--service"><input type="radio" name="fg" id="fg-service" value="service"><label for="fg-service">Обслуживание и зима</label></span></fieldset>
-    <div class="faq-list" id="faq-list" aria-live="polite"><details class="faq" name="faq-private" data-g="private" open=""><summary><span class="faq__q" role="heading" aria-level="3">Нужна ли предоплата?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Для частных лиц — предоплата 50% при заказе, остаток по факту доставки. Для организаций по договору — предоплата или постоплата, в зависимости от условий.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Как быстро вы привозите?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>По Новосибирску — в день заявки (если позвонили до 14:00). Ближняя зона — в течение суток. Дальняя область — 1–2 суток. Для мероприятий лучше заказывать за 3–5 дней.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Нужно ли быть на месте при доставке?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Не обязательно. Достаточно сказать, где поставить, и оставить доступ. Позвоним за 30 минут до приезда.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Можно ли купить кабину?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Туалетные кабины — да, по запросу (цена от 45 000 ₽). Торфяные туалеты для дачи — всегда в наличии, цена в каталоге.</p></div></details><details class="faq" name="faq-org" data-g="org" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Какие документы нужны юрлицам?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Договор, счёт, акты и УПД. Нужны только реквизиты вашей компании. Ещё можем работать через ЭДО.</p></div></details><details class="faq" name="faq-org" data-g="org" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Сколько кабин нужно на мероприятие?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Правило: 1 кабина на 50 гостей при мероприятии до 4 часов; на 40 при 4–8 часах; на 30, если дольше. При алкоголе — на треть больше. На 200+ человек добавьте кабину для маломобильных. Или воспользуйтесь расчётом выше.</p></div></details><details class="faq" name="faq-org" data-g="org" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Что будет, если кабину повредят?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Бывает. Обычный износ — наша забота. Если кабину сломали или испачкали сверх нормы, стоимость ремонта или чистки оценим по акту и согласуем с вами. Для мероприятий можно оформить страховой залог (3 000 ₽).</p></div></details><details class="faq" name="faq-service" data-g="service" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Как часто нужно чистить кабину?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Зависит от количества людей. На стройке из 10–15 человек — 1–2 раза в неделю. На даче с редкими гостями — раз в 1–2 недели. На мероприятии — перед началом и после (при длительных — в течение). Подскажем график под вашу ситуацию.</p></div></details><details class="faq" name="faq-service" data-g="service" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Зимой не замерзает?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Зимой заправляем бак незамерзающим составом, а утеплённые кабины рассчитаны на работу при −35 °C. Дверь у них утеплённая, не примерзает.</p></div></details><details class="faq" name="faq-service" data-g="service" hidden=""><summary><span class="faq__q" role="heading" aria-level="3">Куда вы сливаете отходы?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Вывозим в специально предусмотренные для этого места и работаем по договору. Детали расскажем при заказе.</p></div></details></div>
+    <div class="faq-list" id="faq-list" aria-live="polite"><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Нужна ли предоплата?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Для частных лиц — предоплата 50% при заказе, остаток по факту доставки. Для организаций по договору — предоплата или постоплата, в зависимости от условий.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Как быстро вы привозите?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>По Новосибирску — в день заявки (если позвонили до 14:00). Ближняя зона — в течение суток. Дальняя область — 1–2 суток. Для мероприятий лучше заказывать за 3–5 дней.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Нужно ли быть на месте при доставке?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Не обязательно. Достаточно сказать, где поставить, и оставить доступ. Позвоним за 30 минут до приезда.</p></div></details><details class="faq" name="faq-private" data-g="private"><summary><span class="faq__q" role="heading" aria-level="3">Можно ли купить кабину?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Туалетные кабины — да, по запросу (цена от 45 000 ₽). Торфяные туалеты для дачи — всегда в наличии, цена в каталоге.</p></div></details><details class="faq" name="faq-org" data-g="org"><summary><span class="faq__q" role="heading" aria-level="3">Какие документы нужны юрлицам?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Договор, счёт, акты и УПД. Нужны только реквизиты вашей компании. Ещё можем работать через ЭДО.</p></div></details><details class="faq" name="faq-org" data-g="org"><summary><span class="faq__q" role="heading" aria-level="3">Сколько кабин нужно на мероприятие?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Правило: 1 кабина на 50 гостей при мероприятии до 4 часов; на 40 при 4–8 часах; на 30, если дольше. При алкоголе — на треть больше. На 200+ человек добавьте кабину для маломобильных. Или воспользуйтесь расчётом выше.</p></div></details><details class="faq" name="faq-org" data-g="org"><summary><span class="faq__q" role="heading" aria-level="3">Что будет, если кабину повредят?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Бывает. Обычный износ — наша забота. Если кабину сломали или испачкали сверх нормы, стоимость ремонта или чистки оценим по акту и согласуем с вами. Для мероприятий можно оформить страховой залог (3 000 ₽).</p></div></details><details class="faq" name="faq-service" data-g="service"><summary><span class="faq__q" role="heading" aria-level="3">Как часто нужно чистить кабину?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Зависит от количества людей. На стройке из 10–15 человек — 1–2 раза в неделю. На даче с редкими гостями — раз в 1–2 недели. На мероприятии — перед началом и после (при длительных — в течение). Подскажем график под вашу ситуацию.</p></div></details><details class="faq" name="faq-service" data-g="service"><summary><span class="faq__q" role="heading" aria-level="3">Зимой не замерзает?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Зимой заправляем бак незамерзающим составом, а утеплённые кабины рассчитаны на работу при −35 °C. Дверь у них утеплённая, не примерзает.</p></div></details><details class="faq" name="faq-service" data-g="service"><summary><span class="faq__q" role="heading" aria-level="3">Куда вы сливаете отходы?</span><span class="faq__icon" aria-hidden="true"></span></summary><div class="faq__a"><p>Вывозим в специально предусмотренные для этого места и работаем по договору. Детали расскажем при заказе.</p></div></details></div>
     <p class="faq-more">Не нашли ответ? <a href="tel:+73830000000" data-bind-href="phoneHref">Позвоните</a> — ответим сразу.</p>
   </div>
 </section>
@@ -663,6 +665,7 @@
       <div class="col-full lg-7 reveal" id="order">
         <div class="form-card form-card--order">
           <h3 class="form-card__title form-card__title--lg">Не откладывайте на «потом»</h3>
+          <noscript><p class="noscript-note">Форма работает только с включённым JavaScript. Позвоните нам: <a href="tel:+73830000000">+7 (383) 000-00-00</a> или напишите в <a href="https://t.me/eco_service_nsk">Telegram</a>.</p></noscript>
           <form class="form" data-form="order" id="order-form" novalidate>
             <div class="form__grid">
               <div class="field">
