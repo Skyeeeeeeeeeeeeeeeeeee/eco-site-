@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ЭКО СЕРВИС Новосибирск: аренда туалетных кабин от 350 ₽/сутки</title>
+<meta name="description" content="Аренда и продажа туалетных кабин в Новосибирске и области. От 350 ₽/сутки, по городу привезём в день заявки, если позвонили до 14:00.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Onest:wght@400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
+<style>
+:root{
+  --bg:#000;--s1:#0b0b0b;--s2:#161616;--s3:#1f1f1f;--line:#2b2b2b;--mute:#9a9a9a;--txt:#fff;
+  --head:"Manrope","Segoe UI",Arial,sans-serif;--body:"Onest","Segoe UI",Arial,sans-serif;
+  --pad:clamp(20px,5vw,72px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--txt);font:400 16px/1.6 var(--body);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.wrap{max-width:1360px;margin:0 auto;padding-inline:var(--pad)}
+.cap{font:600 11px/1.4 var(--body);letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+h1,h2,h3,.hd{font-family:var(--head);font-weight:800;line-height:1.05;letter-spacing:.01em}
+h2{font-size:clamp(30px,5.2vw,68px);text-transform:uppercase}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 26px;border:1px solid #fff;border-radius:999px;font:700 12px/1 var(--head);letter-spacing:.16em;text-transform:uppercase;transition:background .2s,color .2s}
+.pill:hover{background:#fff;color:#000}
+.pill.solid{background:#fff;color:#000}
+.pill.solid:hover{background:#000;color:#fff}
+section{position:relative}
+.sec{padding-block:clamp(72px,11vw,160px)}
+.rule{border:0;border-top:1px solid var(--line)}
+
+/* header */
+.hdr{position:absolute;inset:0 0 auto 0;z-index:20;height:84px}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:16px}
+.logo{font:800 17px/1 var(--head);letter-spacing:.34em;white-space:nowrap}
+.nav{display:flex;gap:clamp(18px,3vw,44px)}
+.nav a{font:600 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;padding:10px 0;border-bottom:1px solid transparent}
+.nav a:hover{border-color:#fff}
+.hdr-r{display:flex;align-items:center;gap:22px}
+.tel{font:600 13px/1 var(--body);letter-spacing:.06em;white-space:nowrap}
+.hdr .pill{min-height:38px;padding:0 22px;font-size:11px}
+.menu-btn{display:none}
+@media(max-width:1020px){.tel{display:none}}
+@media(max-width:860px){
+  .nav{position:absolute;top:84px;left:0;right:0;flex-direction:column;gap:0;background:#000;border-block:1px solid var(--line);padding:8px var(--pad);display:none}
+  .nav.open{display:flex}
+  .nav a{padding:16px 0;border-bottom:1px solid var(--line)}
+  .nav a:last-child{border:0}
+  .menu-btn{display:inline-flex;min-height:38px;padding:0 18px;border:1px solid var(--line);border-radius:999px;font:700 11px/1 var(--head);letter-spacing:.16em;text-transform:uppercase;align-items:center}
+  .hdr .pill{display:none}
+  .logo{letter-spacing:.26em}
+}
+
+/* hero */
+.hero{position:relative;height:clamp(660px,100svh,980px);overflow:hidden;background:#000}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%}
+.wm{position:absolute;left:var(--pad);right:var(--pad);top:clamp(128px,19vh,190px);z-index:1}
+.wm svg{display:block;width:100%;height:auto;overflow:visible}
+.wm text{font-family:var(--head);font-weight:800;fill:#fff;stroke:#fff;stroke-width:5;stroke-linejoin:round}
+.tag{position:absolute;left:var(--pad);top:calc(clamp(128px,19vh,190px) + clamp(42px,8.6vw,124px));z-index:3;font:700 14px/1.3 var(--head);letter-spacing:.04em;margin-top:26px}
+.stage{position:absolute;left:50%;transform:translateX(-50%);z-index:2;top:clamp(96px,14vh,150px);height:calc(100% - clamp(96px,14vh,150px) + 40px);aspect-ratio:460/760;max-width:100%}
+.stage svg{display:block;width:100%;height:100%}
+.hero-foot{position:absolute;left:0;right:0;bottom:0;z-index:4;padding-bottom:clamp(24px,4vh,44px)}
+.hero-foot .wrap{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:20px}
+.offer .big{font:800 clamp(26px,3.2vw,40px)/1 var(--head);margin-bottom:10px}
+.offer p{font-size:14px;color:#cfcfcf;max-width:290px;line-height:1.5}
+.soc{justify-self:end;display:flex;gap:22px}
+.soc a{font:800 12px/1 var(--head);letter-spacing:.18em;padding:12px 0;border-bottom:1px solid transparent}
+.soc a:hover{border-color:#fff}
+.chev{width:56px;min-height:30px;padding:0;border-radius:999px;justify-self:center}
+.chev svg{width:14px;height:14px}
+@media(max-width:700px){
+  .hero{height:max(640px,100svh)}
+  .hero-foot .wrap{grid-template-columns:1fr;gap:16px;justify-items:start}
+  .chev{display:none}
+  .soc{justify-self:start}
+  .stage{top:150px;height:calc(100% - 150px - 140px)}
+  .offer p{max-width:260px}
+  .tag{font-size:13px}
+}
+
+/* about */
+.center{text-align:center}
+.center .cap{margin-top:18px}
+.cols{display:grid;grid-template-columns:1fr 1px 1fr;gap:clamp(24px,5vw,64px);max-width:1100px;margin:clamp(40px,6vw,80px) auto 0;font-size:15px;color:#d6d6d6;line-height:1.85}
+.cols .l{text-align:right}
+.cols .v{background:#fff}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);max-width:1100px;margin:clamp(40px,6vw,72px) auto 0;border-block:1px solid var(--line)}
+.facts div{padding:24px 12px;text-align:center}
+.facts div+div{border-left:1px solid var(--line)}
+.facts b{display:block;font:800 clamp(24px,3.4vw,44px)/1.1 var(--head)}
+.facts span{font-size:12px;color:var(--mute);letter-spacing:.04em}
+.photos{display:grid;grid-template-columns:1.05fr 1.6fr 1.2fr;gap:clamp(12px,2.2vw,30px);margin-top:clamp(40px,6vw,72px)}
+.ph{position:relative;height:clamp(150px,19vw,270px);background:var(--s2);border:1px solid #262626;overflow:hidden}
+.ph svg{position:absolute;inset:0;width:100%;height:100%}
+.ph i{position:absolute;left:14px;bottom:12px;font:500 11px/1.3 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-style:normal}
+@media(max-width:700px){
+  .cols{grid-template-columns:1fr;gap:20px}
+  .cols .v{display:none}
+  .cols .l{text-align:left}
+  .photos{grid-template-columns:1fr 1fr}
+  .photos .ph:nth-child(2){grid-column:1/-1;order:-1}
+}
+
+/* audience */
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,64px)}
+.aud{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.aud article{padding:32px clamp(0px,2vw,32px) 8px 0}
+.aud article+article{padding-left:clamp(20px,3vw,40px);border-left:1px solid var(--line)}
+.aud h3{font-size:clamp(22px,2.4vw,30px);margin:14px 0 14px;text-transform:uppercase}
+.aud p{color:#cfcfcf;font-size:15px;margin-bottom:18px}
+.aud ul{list-style:none;border-top:1px solid var(--line)}
+.aud li{padding:12px 0;border-bottom:1px solid var(--line);font-size:14px;display:flex;justify-content:space-between;gap:12px}
+.aud li span{color:var(--mute)}
+@media(max-width:860px){.aud{grid-template-columns:1fr}.aud article+article{border-left:0;padding-left:0;border-top:1px solid var(--line);margin-top:32px}}
+
+/* catalog */
+.cat{background:#000;padding-block:clamp(72px,9vw,130px) clamp(56px,7vw,100px);overflow:hidden}
+.cat-head{text-align:center;margin-bottom:clamp(8px,2vw,24px)}
+.car{position:relative;outline:none}
+.track{display:grid;grid-template-columns:minmax(120px,23%) 1fr minmax(120px,23%);align-items:center;min-height:clamp(380px,50vw,640px)}
+.capsule{position:relative;height:clamp(150px,19vw,260px);background:var(--s2);display:flex;align-items:center;gap:clamp(8px,1.6vw,22px);padding-inline:clamp(10px,2vw,28px)}
+.capsule.l{border-radius:0 999px 999px 0;justify-content:flex-start;margin-left:calc(var(--pad) * -1)}
+.capsule.r{border-radius:999px 0 0 999px;justify-content:flex-end;margin-right:calc(var(--pad) * -1)}
+.capsule.l{padding-left:calc(var(--pad) + 10px)}
+.capsule.r{padding-right:calc(var(--pad) + 10px)}
+.capsule .mini{height:78%;width:auto;aspect-ratio:1/1.5;flex:none}
+.capsule .mini svg{width:100%;height:100%;display:block}
+.ctl{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--body);letter-spacing:.1em;min-height:44px;padding:0 4px;color:#fff;white-space:nowrap}
+.ctl:hover{text-decoration:underline;text-underline-offset:6px}
+.ctl svg{width:16px;height:16px}
+.capsule.l{flex-direction:row}
+.mainc{display:flex;justify-content:center;align-items:center;padding-inline:8px}
+.main{height:clamp(320px,44vw,590px);aspect-ratio:1/1.55;transition:opacity .35s,transform .35s}
+.main svg{width:100%;height:100%;display:block}
+.main.swap{opacity:0;transform:translateY(10px) scale(.98)}
+.cat-bot{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,80px);margin-top:clamp(24px,4vw,56px);align-items:start}
+.cat-bot h2{font-size:clamp(32px,4.4vw,58px)}
+.pager{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.pager button{font:800 13px/1 var(--head);color:var(--mute);min-height:44px;display:inline-flex;align-items:center;gap:12px;padding:0 2px}
+.pager button[aria-current=true]{color:#fff}
+.pager .ln{display:block;height:1px;width:0;background:#fff;transition:width .5s}
+.pager button[aria-current=true] .ln{width:clamp(70px,12vw,160px)}
+.info{border-top:1px solid var(--line);padding-top:24px;display:grid;grid-template-columns:1fr auto;gap:18px 24px;align-items:end}
+.info h3{font-size:clamp(22px,2.4vw,30px);margin:6px 0 12px}
+.info ul{list-style:none;color:#cfcfcf;font-size:14px}
+.info li{padding:3px 0}
+.info li:before{content:"— ";color:var(--mute)}
+.price{text-align:right}
+.price b{display:block;font:800 clamp(28px,3.4vw,44px)/1 var(--head);white-space:nowrap}
+.price span{font-size:12px;color:var(--mute)}
+.info .pill{grid-column:1/-1;justify-self:start}
+.keys{margin-top:14px;font-size:12px;color:var(--mute)}
+@media(max-width:700px){
+  .track{grid-template-columns:64px 1fr 64px;min-height:300px}
+  .capsule{height:140px;padding:0 6px!important;margin:0!important;border-radius:999px!important;justify-content:center!important;flex-direction:column}
+  .capsule .mini{display:none}
+  .capsule .ctl span{display:none}
+  .capsule.l{margin-left:-20px!important;border-radius:0 999px 999px 0!important}
+  .capsule.r{margin-right:-20px!important;border-radius:999px 0 0 999px!important}
+  .main{height:320px}
+  .cat-bot{grid-template-columns:1fr}
+  .keys{display:none}
+}
+
+/* pricing */
+.pr{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px)}
+.tbl{width:100%;border-collapse:collapse;margin-top:8px}
+.tbl th,.tbl td{padding:18px 0;border-bottom:1px solid var(--line);text-align:left;font-weight:500}
+.tbl th{font:600 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--mute);padding-top:0}
+.tbl td:last-child,.tbl th:last-child{text-align:right}
+.tbl td:last-child{font:800 22px/1 var(--head)}
+.tbl tr:last-child td:first-child{color:#fff}
+.notes{list-style:none;margin-top:24px;font-size:14px;color:#cfcfcf}
+.notes li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px}
+.notes li b{font-family:var(--head);white-space:nowrap}
+.calc{background:var(--s1);border:1px solid var(--line);padding:clamp(22px,3vw,40px)}
+.calc h3{font-size:22px;text-transform:uppercase;margin:8px 0 22px}
+.fld{display:block;margin-bottom:16px}
+.fld span{display:block;margin-bottom:6px}
+.fld input,.fld select{width:100%;min-height:46px;background:#000;border:1px solid #3a3a3a;border-radius:0;padding:0 14px;font-size:16px;appearance:none;-webkit-appearance:none}
+.fld select{background-image:linear-gradient(45deg,transparent 50%,#fff 50%),linear-gradient(135deg,#fff 50%,transparent 50%);background-position:calc(100% - 20px) 20px,calc(100% - 14px) 20px;background-size:6px 6px;background-repeat:no-repeat}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:#cfcfcf;line-height:1.45;margin-bottom:16px;cursor:pointer}
+.chk input{appearance:none;-webkit-appearance:none;flex:none;width:20px;height:20px;border:1px solid #fff;margin-top:1px;display:grid;place-content:center;background:#000}
+.chk input:checked:after{content:"";width:10px;height:10px;background:#fff}
+.sum{border-top:1px solid #fff;margin-top:8px;padding-top:6px}
+.sum div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;color:#cfcfcf}
+.sum .tot{border:0;color:#fff;font:800 clamp(24px,3vw,34px)/1.1 var(--head);padding-top:18px}
+.ex{margin-top:22px;font-size:13px;color:var(--mute)}
+.ex b{color:#fff;font-weight:600}
+@media(max-width:860px){.pr{grid-template-columns:1fr}}
+
+/* how */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.steps li{list-style:none;padding:28px 24px 8px 0}
+.steps li+li{padding-left:24px;border-left:1px solid var(--line)}
+.steps .n{font:800 clamp(48px,6vw,88px)/1 var(--head);color:#fff;display:block;margin-bottom:20px}
+.steps h3{font-size:18px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.steps p{font-size:14px;color:#bdbdbd}
+@media(max-width:860px){.steps{grid-template-columns:1fr 1fr}.steps li{border-bottom:1px solid var(--line);padding:24px 16px 24px 0}.steps li+li{border-left:0;padding-left:0}.steps li:nth-child(even){padding-left:16px;border-left:1px solid var(--line)}}
+@media(max-width:480px){.steps{grid-template-columns:1fr}.steps li:nth-child(even){padding-left:0;border-left:0}}
+
+/* zones */
+.zn{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.zn svg{width:100%;max-width:520px;height:auto;justify-self:center}
+.zn svg text{font-family:var(--body);font-size:11px;letter-spacing:.14em;fill:#9a9a9a;text-transform:uppercase}
+.zrow{padding:22px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:6px 20px}
+.zrow:first-of-type{border-top:1px solid var(--line)}
+.zrow h3{font-size:20px}
+.zrow b{font:800 20px/1.2 var(--head);text-align:right}
+.zrow p{grid-column:1/-1;font-size:13px;color:var(--mute)}
+@media(max-width:860px){.zn{grid-template-columns:1fr}}
+
+/* reviews */
+.rev{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.rev figure{padding:32px clamp(0px,2vw,32px) 8px 0;display:flex;flex-direction:column;gap:24px;justify-content:space-between}
+.rev figure+figure{padding-left:clamp(20px,3vw,40px);border-left:1px solid var(--line)}
+.rev blockquote{font-size:16px;line-height:1.7;color:#e6e6e6}
+.rev blockquote:before{content:"\201C";display:block;font:800 64px/.6 var(--head);margin-bottom:14px}
+.rev figcaption b{display:block;font:800 15px/1.3 var(--head);margin-bottom:4px}
+.rev figcaption span{font-size:12px;color:var(--mute)}
+@media(max-width:860px){.rev{grid-template-columns:1fr}.rev figure{padding:28px 0}.rev figure+figure{border-left:0;padding-left:0;border-top:1px solid var(--line)}}
+
+/* faq */
+.faq{max-width:960px;margin-inline:auto;border-top:1px solid var(--line)}
+.faq h3{font-size:inherit;font-family:inherit;text-transform:none;letter-spacing:0}
+.faq button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:left;padding:24px 0;min-height:64px;font:700 clamp(16px,1.8vw,21px)/1.3 var(--head)}
+.faq .pm{position:relative;flex:none;width:34px;height:34px;border:1px solid #fff;border-radius:50%}
+.faq .pm:before,.faq .pm:after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1px;background:#fff;transform:translate(-50%,-50%);transition:transform .25s}
+.faq .pm:after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq [aria-expanded=true] .pm:after{transform:translate(-50%,-50%) rotate(0)}
+.faq .it{border-bottom:1px solid var(--line)}
+.faq .ans{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s}
+.faq .ans>div{overflow:hidden}
+.faq .ans p{padding:0 54px 26px 0;color:#cfcfcf;font-size:15px}
+.faq .open .ans{grid-template-rows:1fr}
+
+/* final */
+.fin{background:var(--s1);border-top:1px solid var(--line)}
+.fin-g{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(32px,6vw,96px);align-items:start}
+.fin h2{font-size:clamp(34px,6vw,84px)}
+.fin p.lead{margin-top:24px;color:#cfcfcf;max-width:440px}
+.fin .contacts{margin-top:32px;border-top:1px solid var(--line)}
+.fin .contacts div{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px}
+.fin .contacts span{color:var(--mute)}
+.form .fld input{background:transparent}
+.form .pill{width:100%;min-height:54px;margin-top:6px}
+.ok{display:none;margin-top:16px;padding:16px;border:1px solid #fff;font-size:14px}
+.ok.show{display:block}
+.err{color:#fff;font-size:12px;margin:-8px 0 12px;display:none}
+.err.show{display:block}
+@media(max-width:860px){.fin-g{grid-template-columns:1fr}}
+
+/* footer */
+.ft{padding-block:48px 36px;border-top:1px solid var(--line)}
+.ft-g{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+.ft .logo{display:block;margin-bottom:14px}
+.ft p,.ft li{font-size:13px;color:var(--mute);line-height:1.8;list-style:none}
+.ft a:hover{color:#fff;text-decoration:underline}
+.ft .cap{margin-bottom:12px}
+.ft-b{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute)}
+@media(max-width:860px){.ft-g{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.ft-g{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="ЭКО СЕРВИС, на главную">ЭКО СЕРВИС</a>
+    <nav class="nav" id="nav" aria-label="Основное меню">
+      <a href="#catalog">Кабины</a>
+      <a href="#price">Цены</a>
+      <a href="#audience">Для кого</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#order">Контакты</a>
+    </nav>
+    <div class="hdr-r">
+      <a class="tel" href="tel:+73830000000">+7 (383) 000-00-00</a>
+      <a class="pill" href="#order">Заказать</a>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav">Меню</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" aria-label="Первый экран">
+  <svg class="hero-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="1440" height="900" fill="#050505"/>
+    <path d="M0 120 C260 40 420 220 700 140 S1200 20 1440 120 V330 C1180 250 960 400 700 330 S240 220 0 330Z" fill="#0b0b0b"/>
+    <path d="M0 360 C300 280 480 470 760 390 S1220 300 1440 400 V560 C1200 480 980 620 720 560 S260 450 0 560Z" fill="#080808"/>
+    <path d="M0 0 H520 C400 120 220 150 0 260Z" fill="#0e0e0e"/>
+    <path d="M1440 0 V300 C1280 240 1180 120 1240 0Z" fill="#0d0d0d"/>
+  </svg>
+  <div class="wm">
+    <svg viewBox="0 0 1000 108" role="img" aria-label="ЭКО СЕРВИС"><text x="0" y="96" font-size="124" textLength="988" lengthAdjust="spacing">ЭКО СЕРВИС</text></svg>
+  </div>
+  <p class="tag">Чистота на выезде.</p>
+  <div class="stage" id="heroStage" aria-hidden="true"></div>
+  <div class="hero-foot">
+    <div class="wrap">
+      <div class="offer">
+        <div class="big">от 350 ₽/сутки</div>
+        <p>Привезём сегодня, если позвонили до 14:00. Новосибирск и область до 300 км.</p>
+      </div>
+      <a class="pill chev" href="#about" aria-label="Листать вниз"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg></a>
+      <div class="soc"><a href="#order">TG</a><a href="#order">WA</a><a href="#order">VK</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="about" aria-labelledby="aboutH">
+  <div class="wrap">
+    <div class="center">
+      <h2 id="aboutH">О нас</h2>
+      <p class="cap">Кабины, которые приезжают чистыми</p>
+    </div>
+    <div class="cols">
+      <p class="l">Мы сдаём в аренду и продаём туалетные кабины в Новосибирске и области. С 2018 года выдали больше 1 200 кабин: на дачи, стройки, свадьбы, забеги и городские праздники.</p>
+      <div class="v" aria-hidden="true"></div>
+      <p>Каждую кабину моем и дезинфицируем перед выдачей. Для юридических лиц заключаем договор и присылаем закрывающие документы. Работаем в радиусе 300 км от города, ежедневно с 8:00 до 21:00.</p>
+    </div>
+    <div class="facts">
+      <div><b>1 200+</b><span>кабин выдано с 2018 года</span></div>
+      <div><b>300 км</b><span>радиус работы</span></div>
+      <div><b>15 минут</b><span>перезваниваем в рабочее время</span></div>
+    </div>
+    <div class="photos">
+      <div class="ph"><svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><rect y="38" width="100" height="22" fill="#101010"/><rect x="30" y="12" width="14" height="26" fill="#2a2a2a"/><rect x="44" y="12" width="9" height="26" fill="#1f1f1f"/></svg><i>Фото: склад кабин</i></div>
+      <div class="ph"><svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><rect y="40" width="100" height="20" fill="#101010"/><rect x="14" y="14" width="10" height="26" fill="#2a2a2a"/><rect x="24" y="14" width="6" height="26" fill="#1f1f1f"/><rect x="60" y="14" width="10" height="26" fill="#2a2a2a"/><rect x="70" y="14" width="6" height="26" fill="#1f1f1f"/><rect x="82" y="20" width="9" height="20" fill="#242424"/></svg><i>Фото: кабины на стройплощадке</i></div>
+      <div class="ph"><svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><rect y="42" width="100" height="18" fill="#101010"/><rect x="40" y="12" width="12" height="30" fill="#2a2a2a"/><rect x="52" y="12" width="7" height="30" fill="#1f1f1f"/></svg><i>Фото: мойка перед выдачей</i></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="audience" aria-labelledby="audH" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="audH">Для кого</h2><p class="cap">Три типовых случая</p></div>
+    <div class="aud">
+      <article>
+        <p class="cap">01</p><h3>Частным лицам</h3>
+        <p>Дача, стройка дома, свадьба на участке, день рождения. Одна кабина на несколько суток или торфяной туалет в собственность.</p>
+        <ul><li>Кабина<span>от 350 ₽/сутки</span></li><li>Торфяной туалет<span>8 900 ₽</span></li><li>По городу<span>привезём в день заявки</span></li></ul>
+      </article>
+      <article>
+        <p class="cap">02</p><h3>Организациям</h3>
+        <p>Стройплощадки, базы, долгосрочная аренда. Договор и закрывающие документы, обслуживание по графику.</p>
+        <ul><li>Обслуживание<span>400 ₽ за выезд</span></li><li>От 5 кабин<span>скидка 5%</span></li><li>От 10 кабин<span>скидка 10%</span></li></ul>
+      </article>
+      <article>
+        <p class="cap">03</p><h3>Мероприятиям</h3>
+        <p>Забеги, фестивали, ярмарки, корпоративы. Поставим до начала, заберём после. Кабины для маломобильных гостей есть в наличии.</p>
+        <ul><li>Ориентир<span>1 кабина на 40–50 гостей</span></li><li>Время<span>4–8 часов</span></li><li>С алкоголем<span>кабин больше</span></li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cat" id="catalog" aria-labelledby="catH">
+  <div class="wrap">
+    <div class="cat-head"><p class="cap">Каталог</p><h2 class="sr" id="catH" style="position:absolute;left:-9999px">Кабины в аренду</h2></div>
+    <div class="car" id="car" tabindex="0" role="group" aria-roledescription="карусель" aria-label="Модели кабин">
+      <div class="track">
+        <div class="capsule l">
+          <button class="ctl" id="prev" type="button" aria-label="Предыдущая модель"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2L4 8l6 6"/></svg><span>Влево</span></button>
+          <div class="mini" id="miniL" aria-hidden="true"></div>
+        </div>
+        <div class="mainc"><div class="main" id="main" aria-hidden="true"></div></div>
+        <div class="capsule r">
+          <div class="mini" id="miniR" aria-hidden="true"></div>
+          <button class="ctl" id="next" type="button" aria-label="Следующая модель"><span>Вправо</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2l6 6-6 6"/></svg></button>
+        </div>
+      </div>
+      <div class="cat-bot">
+        <h2>Кабины<br>в аренду</h2>
+        <div>
+          <div class="pager" id="pager" role="group" aria-label="Выбор модели"></div>
+          <div class="info" aria-live="polite">
+            <div><p class="cap" id="mTag"></p><h3 id="mName"></h3><ul id="mSpecs"></ul></div>
+            <div class="price"><b id="mPrice"></b><span id="mNote"></span></div>
+            <a class="pill" href="#order" id="mCta">Заказать</a>
+          </div>
+          <p class="keys">Переключение: стрелки влево и вправо на клавиатуре.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="price" aria-labelledby="prH">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="prH">Сколько стоит</h2><p class="cap">Стандартная кабина ЭС-01</p></div>
+    <div class="pr">
+      <div>
+        <table class="tbl">
+          <thead><tr><th scope="col">Срок аренды</th><th scope="col">Цена за сутки</th></tr></thead>
+          <tbody>
+            <tr><td>1–3 суток</td><td>700 ₽</td></tr>
+            <tr><td>4–14 суток</td><td>550 ₽</td></tr>
+            <tr><td>15–30 суток</td><td>450 ₽</td></tr>
+            <tr><td>от 31 суток</td><td>350 ₽</td></tr>
+          </tbody>
+        </table>
+        <ul class="notes">
+          <li>Обслуживание: откачка, мойка, расходники<b>400 ₽ за кабину за выезд</b></li>
+          <li>Скидка на аренду от 5 кабин<b>5%</b></li>
+          <li>Скидка на аренду от 10 кабин<b>10%</b></li>
+          <li>Минимальный заказ<b>1 500 ₽</b></li>
+        </ul>
+        <p class="ex"><b>Пример.</b> Дача: 2 кабины × 10 суток × 550 ₽ = 11 000 ₽ + чистка раз в неделю 1 600 ₽ + доставка 800 ₽ = <b>13 400 ₽</b>.</p>
+      </div>
+      <form class="calc" id="calc" onsubmit="return false">
+        <p class="cap">Мини-калькулятор</p>
+        <h3>Прикиньте свой заказ</h3>
+        <div class="row2">
+          <label class="fld"><span class="cap">Кабин</span><input type="number" id="cN" min="1" max="100" value="2" inputmode="numeric"></label>
+          <label class="fld"><span class="cap">Суток</span><input type="number" id="cD" min="1" max="365" value="10" inputmode="numeric"></label>
+        </div>
+        <label class="fld"><span class="cap">Куда везти</span>
+          <select id="cZ"><option value="city">По Новосибирску, 800 ₽ за рейс</option><option value="near">До 30 км, 1 500 ₽</option><option value="far">Область 30–300 км</option></select>
+        </label>
+        <label class="fld" id="kmW" hidden><span class="cap">Расстояние, км</span><input type="number" id="cK" min="31" max="300" value="100" inputmode="numeric"></label>
+        <label class="chk"><input type="checkbox" id="cS" checked><span>Чистка раз в неделю, 400 ₽ за кабину за выезд</span></label>
+        <div class="sum" aria-live="polite">
+          <div><span id="lR">Аренда</span><b id="vR"></b></div>
+          <div><span>Чистка</span><b id="vS"></b></div>
+          <div><span id="lD">Доставка</span><b id="vD"></b></div>
+          <div class="tot"><span>Итого</span><b id="vT"></b></div>
+        </div>
+        <p class="ex">Предварительный расчёт. Точную сумму назовём по телефону.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="how" aria-labelledby="howH" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="howH">Как это работает</h2><p class="cap">Четыре шага</p></div>
+    <ol class="steps">
+      <li><span class="n">01</span><h3>Заявка</h3><p>Звоните или оставляйте форму. Перезваниваем за 15 минут в рабочее время, 8:00–21:00.</p></li>
+      <li><span class="n">02</span><h3>Доставка</h3><p>По городу привезём в день заявки, если позвонили до 14:00. Ставим там, где покажете.</p></li>
+      <li><span class="n">03</span><h3>Обслуживание</h3><p>Выезжаем на откачку, мойку и пополнение расходников. 400 ₽ за кабину за выезд.</p></li>
+      <li><span class="n">04</span><h3>Вывоз</h3><p>Забираем кабины в оговоренный день. Для юрлиц закрывающие документы.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="delivery" aria-labelledby="dlH" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="dlH">Доставка</h2><p class="cap">Новосибирск и область до 300 км</p></div>
+    <div class="zn">
+      <svg viewBox="0 0 520 520" role="img" aria-label="Схема зон доставки: город, до 30 км, до 300 км">
+        <circle cx="260" cy="260" r="250" fill="#0b0b0b" stroke="#3a3a3a"/>
+        <circle cx="260" cy="260" r="160" fill="#121212" stroke="#3a3a3a"/>
+        <circle cx="260" cy="260" r="70" fill="#1f1f1f" stroke="#fff"/>
+        <circle cx="260" cy="260" r="4" fill="#fff"/>
+        <text x="260" y="360" text-anchor="middle" fill="#9a9a9a">до 30 км</text>
+        <text x="260" y="38" text-anchor="middle">до 300 км</text>
+        <text x="260" y="292" text-anchor="middle" style="fill:#fff">город</text>
+      </svg>
+      <div>
+        <div class="zrow"><h3>По Новосибирску</h3><b>800 ₽</b><p>За рейс. В машину помещается 4 кабины. Привезём в день заявки, если позвонили до 14:00.</p></div>
+        <div class="zrow"><h3>Ближняя зона до 30 км</h3><b>1 500 ₽</b><p>Фиксированная цена.</p></div>
+        <div class="zrow"><h3>Область 30–300 км</h3><b>1 500 ₽ + 45 ₽/км</b><p>45 ₽ за каждый километр свыше 30. Например, 100 км: 1 500 + 70 × 45 = 4 650 ₽.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="reviews" aria-labelledby="rvH" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h"><h2 id="rvH">Отзывы</h2><p class="cap">Свадьба, стройка, забег</p></div>
+    <div class="rev">
+      <figure><blockquote>Заказали две кабины на 80 гостей, одну с рукомойником. Привезли утром, вечером кабины были в порядке. Просили поставить подальше от беседки: водитель поставил ровно там, где показали.</blockquote><figcaption><b>Анна, Бердск</b><span>Свадьба на участке, 80 гостей</span></figcaption></figure>
+      <figure><blockquote>Три кабины на объекте полгода. Присылают отчёты о визитах, закрывающие документы приходят вовремя. У бухгалтерии вопросов нет.</blockquote><figcaption><b>Дмитрий, прораб</b><span>ООО «СтройГрад», стройплощадка</span></figcaption></figure>
+      <figure><blockquote>Взяли 20 кабин, две для маломобильных. Поставили до старта, забрали на следующее утро.</blockquote><figcaption><b>Елена</b><span>Организатор забега на 800 участников</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="faq" aria-labelledby="fqH" style="padding-top:0">
+  <div class="wrap">
+    <div class="center" style="margin-bottom:clamp(36px,5vw,64px)"><h2 id="fqH">Вопросы</h2><p class="cap">Коротко и с цифрами</p></div>
+    <div class="faq" id="faqL">
+      <div class="it"><h3><button type="button" aria-expanded="false" aria-controls="a1" id="q1">Какой минимальный заказ?<span class="pm"></span></button></h3><div class="ans" id="a1" role="region" aria-labelledby="q1"><div><p>1 500 ₽. Для одной кабины на 3 суток по тарифу 700 ₽ это уже больше минимума.</p></div></div></div>
+      <div class="it"><h3><button type="button" aria-expanded="false" aria-controls="a2" id="q2">Сколько кабин нужно на мероприятие?<span class="pm"></span></button></h3><div class="ans" id="a2" role="region" aria-labelledby="q2"><div><p>Ориентир: 1 кабина на 40–50 гостей на 4–8 часов. Если будет алкоголь, берите больше. Для 80 гостей на свадьбе хватило двух кабин, одной с рукомойником.</p></div></div></div>
+      <div class="it"><h3><button type="button" aria-expanded="false" aria-controls="a3" id="q3">Что делать зимой?<span class="pm"></span></button></h3><div class="ans" id="a3" role="region" aria-labelledby="q3"><div><p>Берите ЭС-04 «Утеплённая»: работает до −35 °C, стенки утеплены, есть подогрев. От 525 ₽ в сутки при аренде от 31 суток.</p></div></div></div>
+      <div class="it"><h3><button type="button" aria-expanded="false" aria-controls="a4" id="q4">Что входит в обслуживание?<span class="pm"></span></button></h3><div class="ans" id="a4" role="region" aria-labelledby="q4"><div><p>Откачка, мойка и расходники. Стоит 400 ₽ за кабину за выезд. Перед выдачей каждую кабину моем и дезинфицируем.</p></div></div></div>
+      <div class="it"><h3><button type="button" aria-expanded="false" aria-controls="a5" id="q5">Работаете с юридическими лицами?<span class="pm"></span></button></h3><div class="ans" id="a5" role="region" aria-labelledby="q5"><div><p>Да. Заключаем договор и присылаем закрывающие документы. От 5 кабин скидка на аренду 5%, от 10 кабин 10%.</p></div></div></div>
+      <div class="it"><h3><button type="button" aria-expanded="false" aria-controls="a6" id="q6">Когда привезёте?<span class="pm"></span></button></h3><div class="ans" id="a6" role="region" aria-labelledby="q6"><div><p>По Новосибирску привезём в день заявки, если позвонили до 14:00. Перезваниваем за 15 минут в рабочее время, 8:00–21:00. Сроки по области назовём при звонке.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec fin" id="order" aria-labelledby="finH">
+  <div class="wrap fin-g">
+    <div>
+      <p class="cap">Заявка</p>
+      <h2 id="finH" style="margin-top:14px">Привезём<br>сегодня</h2>
+      <p class="lead">Оставьте имя и телефон. Перезвоним за 15 минут в рабочее время и назовём точную сумму. Позвонили до 14:00, по городу привезём в тот же день.</p>
+      <div class="contacts">
+        <div><span>Телефон</span><a href="tel:+73830000000">+7 (383) 000-00-00</a></div>
+        <div><span>Часы работы</span>ежедневно 8:00–21:00</div>
+        <div><span>Адрес</span>Новосибирск, ул. Примерная, 1</div>
+        <div><span>Мессенджеры</span><span style="color:#fff"><a href="#order">Telegram</a> / <a href="#order">WhatsApp</a></span></div>
+      </div>
+    </div>
+    <form class="form" id="form" novalidate>
+      <label class="fld"><span class="cap">Имя</span><input type="text" id="fN" name="name" autocomplete="name" required></label>
+      <label class="fld"><span class="cap">Телефон</span><input type="tel" id="fP" name="phone" autocomplete="tel" inputmode="tel" placeholder="+7" required></label>
+      <p class="err" id="fE" role="alert"></p>
+      <label class="chk"><input type="checkbox" id="fC" required><span>Согласен на обработку персональных данных</span></label>
+      <button class="pill solid" type="submit">Заказать звонок</button>
+      <p class="ok" id="fOk" role="status">Заявка принята. Перезвоним за 15 минут в рабочее время.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-g">
+      <div><a class="logo" href="#top">ЭКО СЕРВИС</a><p>Аренда и продажа туалетных кабин. Новосибирск и область до 300 км.</p></div>
+      <div><p class="cap">Разделы</p><ul><li><a href="#catalog">Кабины</a></li><li><a href="#price">Цены</a></li><li><a href="#audience">Для кого</a></li><li><a href="#delivery">Доставка</a></li></ul></div>
+      <div><p class="cap">Контакты</p><ul><li><a href="tel:+73830000000">+7 (383) 000-00-00</a></li><li>Ежедневно 8:00–21:00</li><li>Новосибирск, ул. Примерная, 1</li></ul></div>
+      <div><p class="cap">Мессенджеры</p><ul><li><a href="#order">TG Telegram</a></li><li><a href="#order">WA WhatsApp</a></li><li><a href="#order">VK ВКонтакте</a></li></ul></div>
+    </div>
+    <div class="ft-b"><span>© 2018–2026 ЭКО СЕРВИС Новосибирск</span><span>Концепт A: монохром</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var P={a:'#e6e6e6',b:'#a8a8a8',c:'#6e6e6e',d:'#484848',e:'#2c2c2c',f:'#1a1a1a'};
+  function R(x,y,w,h,f,x2){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+f+'"/>'}
+  function Pg(pts,f){return '<polygon points="'+pts+'" fill="'+f+'"/>'}
+  /* cabin: kind 1..5. Returns inner markup, plinth bottom at y=330 (kind3 ramp lower), front body x 30..30+W */
+  function cabinInner(k){
+    var s='',W=(k===3)?150:110,x1=30,x2=30+W,i;
+    if(k===5){
+      s+=R(40,296,140,8,P.f);
+      s+=Pg('150,306 185,294 185,200 150,212',P.d);
+      s+=R(50,212,100,94,P.c);
+      for(i=0;i<4;i++)s+=R(50+i*25+12,212,2,94,P.d);
+      s+=Pg('50,212 150,212 185,200 85,200',P.a);
+      s+=Pg('58,170 142,170 142,200 58,200',P.b);
+      s+=Pg('142,170 172,160 172,190 142,200',P.c);
+      s+='<ellipse cx="100" cy="212" rx="30" ry="6" fill="'+P.e+'"/>';
+      s+=R(86,184,28,6,P.a);
+      s+=R(70,244,60,28,P.e)+R(76,250,48,4,P.c)+R(76,258,48,4,P.c);
+      s+=R(112,150,4,0,P.a);
+      s+=Pg('0,300 38,294 52,300 52,306 0,306',P.b)+Pg('4,276 34,272 44,294 6,300',P.c);
+      return s;
+    }
+    s+=R(x1,316,W,14,P.f)+Pg((x2)+',316 '+(x2+35)+',304 '+(x2+35)+',318 '+x2+',330',P.e);
+    s+=R(x1,44,W,272,P.c);
+    for(i=1;i<Math.round(W/22);i++)s+=R(x1+i*22-1,44,2,272,P.d);
+    s+=Pg(x2+',44 '+(x2+35)+',32 '+(x2+35)+',304 '+x2+',316',P.d);
+    for(i=0;i<3;i++)s+=R(x2+8+i*9,40-i*3+2,1.5,260,P.e);
+    var dx=(k===3)?x1+26:x1+16, dw=(k===3)?96:78, dh=(k===3)?228:216, dy=316-dh-12;
+    s+=R(dx,dy,dw,dh,P.e)+R(dx+6,dy+6,dw-12,dh-12,P.d);
+    for(i=0;i<6;i++)s+=R(dx+14,dy+16+i*8,dw-28,3,P.c);
+    var hx=dx+dw-20;
+    s+=R(hx,dy+dh/2-8,8,36,P.a)+R(hx-2,dy+dh/2-24,12,8,P.b);
+    s+=R(dx-2,dy+22,4,14,P.b)+R(dx-2,dy+dh/2,4,14,P.b)+R(dx-2,dy+dh-34,4,14,P.b);
+    s+=R(dx+dw/2-18,dy+dh/2-36,30,12,P.a)+R(dx+dw/2-14,dy+dh/2-33,12,6,P.e);
+    s+=R(x1+W/2-30,56,60,18,P.e);for(i=0;i<3;i++)s+=R(x1+W/2-26,60+i*5,52,2,P.c);
+    /* roof cap */
+    s+=R(x1-6,28,W+12,16,P.b)+Pg((x1-6)+',28 '+(x2+6)+',28 '+(x2+41)+',16 '+(x1+29)+',16',P.a)+Pg((x2+6)+',28 '+(x2+41)+',16 '+(x2+41)+',32 '+(x2+6)+',44',P.c);
+    /* vent */
+    var vx=x1+W/2+14;
+    s+=R(vx-8,2,16,16,P.c)+'<ellipse cx="'+vx+'" cy="18" rx="8" ry="2.5" fill="'+P.d+'"/><ellipse cx="'+vx+'" cy="2" rx="12" ry="3.5" fill="'+P.b+'"/><ellipse cx="'+vx+'" cy="1" rx="8" ry="2" fill="'+P.a+'"/>';
+    if(k===2){
+      var bx=x2+35;
+      s+=Pg(x2+',212 '+bx+',202 '+bx+',268 '+x2+',280',P.b)+Pg(x2+',212 '+bx+',202 '+(bx+10)+',206 '+(x2+10)+',216',P.a)+Pg(x2+',212 '+(x2+10)+',216 '+(x2+10)+',282 '+x2+',280',P.d);
+      s+=R(bx-10,180,5,22,P.a)+R(bx-10,180,14,4,P.a)+R(bx-26,222,12,10,P.e);
+      s+=R(bx-18,150,16,0,P.a);
+    }
+    if(k===3){
+      s+=Pg(x1+',330 '+x2+',330 '+(x2+20)+',350 '+(x1-14)+',350',P.b)+R(x1-14,350,W+34,5,P.d)+Pg((x1-14)+',350 '+x1+',330 '+x1+',334 '+(x1-14)+',354',P.c);
+      s+=R(x1+4,236,5,80,P.a)+R(x1+4,236,20,5,P.a);
+      s+=R(x2-14,236,5,80,P.a)+R(x2-14,236,0,5,P.a);
+      s+=R(x1+W/2-14,70,28,28,P.e)+'<circle cx="'+(x1+W/2)+'" cy="78" r="3" fill="'+P.a+'"/><path d="M'+(x1+W/2)+' 82 v6 h6 M'+(x1+W/2-6)+' 86 a6 6 0 1 0 6 6" fill="none" stroke="'+P.a+'" stroke-width="2"/>';
+    }
+    if(k===4){
+      s+=Pg(x1-6+','+28+' '+(x2+6)+',28 '+(x2+41)+',16 '+(x1+29)+',16',P.a);
+      s+=Pg((x1+20)+',16 '+(x1+110)+',16 '+(x1+110)+',22 '+(x1+90)+',26 '+(x1+70)+',20 '+(x1+50)+',27 '+(x1+30)+',22',P.a);
+      s+=R(x2+14,10,6,40,P.b)+R(x2+11,6,12,6,P.a);
+      s+=R(x1+14,246,34,14,P.e)+R(x1+18,250,26,6,P.c);
+      for(i=0;i<3;i++)s+=R(x1,120+i*70,W,2,P.e);
+      s+=R(x1+6,58,16,8,P.b);
+    }
+    return s;
+  }
+  function cabinSVG(k,label){
+    var w=(k===3)?236:220,h=(k===3)?360:350;
+    return '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision"><g transform="translate(0,6)">'+cabinInner(k)+'</g></svg>';
+  }
+  /* hero stage */
+  function pedestal(){
+    var s='<path d="M80 560 V760 H380 V560Z" fill="#1c1c1c"/>';
+    s+='<rect x="80" y="560" width="70" height="200" fill="#242424"/><rect x="290" y="560" width="90" height="200" fill="#131313"/><rect x="345" y="560" width="35" height="200" fill="#0d0d0d"/>';
+    s+='<ellipse cx="230" cy="560" rx="150" ry="34" fill="#2e2e2e"/><ellipse cx="230" cy="560" rx="138" ry="29" fill="#262626"/>';
+    s+='<ellipse cx="230" cy="563" rx="100" ry="14" fill="#161616"/>';
+    return s;
+  }
+  var hs=document.getElementById('heroStage');
+  hs.innerHTML='<svg viewBox="0 0 460 760" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">'+pedestal()+'<g transform="translate(82,73) scale(1.45)">'+cabinInner(1)+'</g></svg>';
+
+  /* carousel */
+  var M=[
+   {t:'Аренда',n:'ЭС-01 Стандартная',p:'от 350 ₽',u:'/ сутки, при аренде от 31 суток',s:['Бак 250 л','Размеры 110×110×230 см','Вес 75 кг']},
+   {t:'Аренда',n:'ЭС-02 С рукомойником',p:'от 490 ₽',u:'/ сутки, при аренде от 31 суток',s:['Бак для воды 20 л','Дозатор мыла']},
+   {t:'Аренда',n:'ЭС-03 Для маломобильных посетителей',p:'от 1 050 ₽',u:'/ сутки, при аренде от 31 суток',s:['Пандус и поручни','Широкая дверь 90 см','Размеры 220×165×230 см']},
+   {t:'Аренда',n:'ЭС-04 Утеплённая',p:'от 525 ₽',u:'/ сутки, при аренде от 31 суток',s:['Работает до −35 °C','Утеплённые стенки','Подогрев']},
+   {t:'Продажа',n:'Торфяной туалет для дачи',p:'8 900 ₽',u:'цена за штуку',s:['Для дачи и участка','Продаём, не сдаём в аренду']}
+  ];
+  var cur=0,main=document.getElementById('main'),mL=document.getElementById('miniL'),mR=document.getElementById('miniR'),pg=document.getElementById('pager'),n=M.length,busy=null;
+  M.forEach(function(m,i){
+    var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Модель '+(i+1)+': '+m.n);
+    b.innerHTML='<span>0'+(i+1)+'</span><span class="ln"></span>';
+    b.addEventListener('click',function(){go(i)});pg.appendChild(b);
+  });
+  function ids(){return[(cur+n-1)%n,(cur+1)%n]}
+  function render(){
+    var m=M[cur],c=ids();
+    main.innerHTML=cabinSVG(cur+1);
+    mL.innerHTML=cabinSVG(c[0]+1);mR.innerHTML=cabinSVG(c[1]+1);
+    document.getElementById('mTag').textContent=m.t;
+    document.getElementById('mName').textContent=m.n;
+    document.getElementById('mPrice').textContent=m.p;
+    document.getElementById('mNote').textContent=m.u;
+    document.getElementById('mSpecs').innerHTML=m.s.map(function(x){return '<li>'+x+'</li>'}).join('');
+    document.getElementById('mCta').textContent=cur===4?'Купить':'Заказать';
+    document.getElementById('prev').setAttribute('aria-label','Предыдущая модель: '+M[c[0]].n);
+    document.getElementById('next').setAttribute('aria-label','Следующая модель: '+M[c[1]].n);
+    Array.prototype.forEach.call(pg.children,function(b,i){if(i===cur)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
+  }
+  function go(i){
+    i=(i+n)%n;if(i===cur)return;cur=i;
+    main.classList.add('swap');clearTimeout(busy);
+    busy=setTimeout(function(){render();main.classList.remove('swap')},180);
+    /* update text immediately for responsiveness */
+    var m=M[cur];document.getElementById('mName').textContent=m.n;document.getElementById('mPrice').textContent=m.p;
+    Array.prototype.forEach.call(pg.children,function(b,j){if(j===cur)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
+  }
+  document.getElementById('prev').addEventListener('click',function(){go(cur-1)});
+  document.getElementById('next').addEventListener('click',function(){go(cur+1)});
+  var car=document.getElementById('car'),vis=false;
+  new IntersectionObserver(function(e){vis=e[0].isIntersecting},{threshold:0.1}).observe(car);
+  document.addEventListener('keydown',function(e){
+    var t=e.target&&e.target.tagName;if(t==='INPUT'||t==='SELECT'||t==='TEXTAREA')return;
+    if(!vis&&!car.contains(e.target))return;
+    if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1)}
+    else if(e.key==='ArrowRight'){e.preventDefault();go(cur+1)}
+  });
+  var ts=null;car.addEventListener('touchstart',function(e){ts=e.touches[0].clientX},{passive:true});
+  car.addEventListener('touchend',function(e){if(ts===null)return;var d=e.changedTouches[0].clientX-ts;if(Math.abs(d)>50)go(cur+(d<0?1:-1));ts=null});
+  render();
+
+  /* nav */
+  var mb=document.getElementById('menuBtn'),nv=document.getElementById('nav');
+  mb.addEventListener('click',function(){var o=nv.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
+  nv.addEventListener('click',function(e){if(e.target.tagName==='A'){nv.classList.remove('open');mb.setAttribute('aria-expanded','false')}});
+
+  /* calc */
+  var $=function(i){return document.getElementById(i)};
+  function rub(v){return Math.round(v).toLocaleString('ru-RU').replace(/ /g,' ')+' ₽'}
+  function calc(){
+    var N=Math.max(1,Math.min(100,+$('cN').value||1)),D=Math.max(1,Math.min(365,+$('cD').value||1)),z=$('cZ').value,K=Math.max(31,Math.min(300,+$('cK').value||31));
+    $('kmW').hidden=z!=='far';
+    var rate=D<=3?700:D<=14?550:D<=30?450:350,rent=N*D*rate,disc=N>=10?.1:N>=5?.05:0;
+    var rentD=rent*(1-disc),visits=Math.ceil(D/7),svc=$('cS').checked?N*visits*400:0;
+    var trips=Math.ceil(N/4),per=z==='city'?800:z==='near'?1500:1500+45*(K-30),dl=trips*per;
+    var tot=rentD+svc+dl;
+    $('lR').textContent='Аренда: '+N+' × '+D+' сут × '+rate+' ₽'+(disc?' (скидка '+disc*100+'%)':'');
+    $('vR').textContent=rub(rentD);$('vS').textContent=svc?rub(svc):'не нужна';
+    $('lD').textContent='Доставка: '+trips+' '+(trips===1?'рейс':trips<5?'рейса':'рейсов');$('vD').textContent=rub(dl);
+    $('vT').textContent=rub(Math.max(1500,tot));
+  }
+  ['cN','cD','cZ','cK','cS'].forEach(function(i){$(i).addEventListener('input',calc);$(i).addEventListener('change',calc)});
+  calc();
+
+  /* faq */
+  Array.prototype.forEach.call(document.querySelectorAll('#faqL button'),function(b){
+    b.addEventListener('click',function(){
+      var it=b.closest('.it'),o=it.classList.toggle('open');b.setAttribute('aria-expanded',o);
+    });
+  });
+
+  /* form */
+  $('form').addEventListener('submit',function(e){
+    e.preventDefault();var er=$('fE'),ok=$('fOk');ok.classList.remove('show');er.classList.remove('show');
+    var ph=$('fP').value.replace(/\D/g,'');
+    if(!$('fN').value.trim()){er.textContent='Укажите имя.';er.classList.add('show');$('fN').focus();return}
+    if(ph.length<10){er.textContent='Укажите телефон полностью, 10 цифр.';er.classList.add('show');$('fP').focus();return}
+    if(!$('fC').checked){er.textContent='Нужно согласие на обработку персональных данных.';er.classList.add('show');$('fC').focus();return}
+    ok.classList.add('show');
+  });
+})();
+</script>
+</body>
+</html>
