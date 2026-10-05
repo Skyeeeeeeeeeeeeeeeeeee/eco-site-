@@ -1,0 +1,78 @@
+/* ТЕМЫ. Два набора токенов на <html data-theme="e|f">. Вся вёрстка в main.css берёт цвета только отсюда.
+   Палитры взяты из макетов designs/05-blue/e-svetlo-goluboy.html и f-vozdushnyy.html.
+   Принцип: в теме E «тёмные блоки» (карточки, расчёт, отзывы, подвал, бегущая строка) тёмно-синие; в теме F те же блоки светлые.
+   Общие токены (не зависят от темы) лежат в начале main.css. */
+
+/* ---------- Тема E «светло-голубой» ---------- */
+[data-theme="e"] {
+  --ink: #0C1B2A; --mute: #4E6278; --label: #4E6278; --tail: #4E6278; --line: #D6E3F0; --paper: #F2F7FC;
+  --focus: #0C1B2A; --focus-halo: #fff; --dfocus: #9CC9F5; --dfocus-halo: #0C1B2A;
+  /* кнопки */
+  --btn-bg: #0C1B2A; --btn-fg: #fff; --btn-bd: #0C1B2A; --btn-hover: #1B3047;
+  --bo-bg: transparent; --bo-hover-bg: #0C1B2A; --bo-hover-fg: #fff;
+  --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #9CC9F5; --dbtn-hover: #B9D7F4;
+  /* шапка */
+  --hdr-bg: #CFE4F8; --hdr-bd: transparent; --hdr-link: #1B3047; --hdr-hover: #B9D7F4; --mnav-bg: #CFE4F8; --mnav-line: #A9CFF3;
+  --dd-bd: #D6E3F0; --dd-sh: none; --dd-hover: #F2F7FC; --burger-bd: #0C1B2A;
+  --logo-tile: #0C1B2A; --logo-fg: #9CC9F5; --logo-bg: #0C1B2A;
+  /* герой */
+  --hero-bg: #CFE4F8; --hero-tail: #3E5A78; --hero-sub: #2B4660; --hero-mute: #3E5A78; --hero-line: #9CC9F5;
+  --stage-bg: #B9D7F4; --stage-bd: #A9CFF3; --stage-bar-bg: #DCEBFA; --stage-bar-fg: #3E5A78;
+  --stage-lt1: #DCEBFA; --stage-lt2: #CFE4F8; --stage-floor: #A3C8EE; --stage-tile: #9CC9F5;
+  --facts-bg: #B9D7F4; --facts-bd: #A9CFF3; --facts-fg: #2B4660;
+  /* бегущая строка */
+  --mq-bg: #0C1B2A; --mq-fg: #DCEBFA; --mq-bd: #1F3A55; --mq-dot: #9CC9F5;
+  /* светлые панели, плитки, таблицы */
+  --panel-bg: #F2F7FC; --panel2-bg: #fff; --panel-bd: #D6E3F0; --panel-sh: none;
+  --tile-bg: #E6F1FC; --tile-bd: transparent; --tile-hover: #D6E8F8; --tbl-line: #D6E3F0;
+  --chip-bg: #DCEBFA; --chip-fg: #0C1B2A; --chip-bd: #A9CFF3; --input-bd: #6B86A2;
+  --num-bd: #B7CDE3; --num-fg: #4E6278; --num-bg: transparent; --row-alt: #F2F7FC;
+  /* тёмные блоки */
+  --d-fg: #fff; --d-fg2: #DCEBFA; --d-mute: #9FB3C8; --d-accent: #9CC9F5; --d-line: #2A4560; --d-line2: #3A5470;
+  --card-bg: #13263A; --card-in: #1B3047; --card-in2: #254160; --card-bd: transparent; --card-sh: none;
+  --sc-bg: #13263A; --sc-floor: #0C1B2A; --sc-lt: #1B3047;
+  --calc-bg: #0C1B2A; --calc-bd: transparent; --calc-line: #2A4560; --calc-line2: #3A5470;
+  --rev-bg: #0C1B2A; --slide-bg: #13263A; --slide-bd: #1F3A55; --slide-sh: none; --arr-bd: #3A5470; --arr-bg: transparent; --arr-fg: #9CC9F5; --arr-hover: #9CC9F5;
+  --ftr-bg: #0C1B2A; --ftr-bd: transparent; --ftr-h: #9CC9F5; --ftr-link: #9FB3C8; --ftr-hover: #fff; --ftr-fg: #fff; --ftr-line: #1F3A55; --ftr-soc: #3A5470;
+  --sticky-bg: #CFE4F8; --sticky-bd: #A9CFF3;
+  /* иллюстрации */
+  --ph-bg: #E6F1FC; --ph-floor: #CFE4F8; --ph-ink: #5E95CC; --ph-soft: #A9CFF3; --ph-btn: #4A7FB6; --ph-lt: #DCEBFA; --ph-tank: #A9CFF3; --ph-cap: #7FB2E5; --ph-bar: #A9CFF3;
+  /* плоская кабина */
+  --front: #7FB2E5; --side: #5E95CC; --roof: #A9CFF3; --roof2: #93C0EC; --rim: #DCEBFA; --rim2: #4F86BF; --door: #4A7FB6; --facet: #9CC9F5; --detail: #2F5F8F;
+}
+
+/* ---------- Тема F «воздушный» ---------- */
+[data-theme="f"] {
+  --ink: #0C1B2A; --mute: #4E6278; --label: #2F6FAE; --tail: #2F6FAE; --line: #D3E4F4; --paper: #F4F9FE;
+  --focus: #0C1B2A; --focus-halo: #fff; --dfocus: #0C1B2A; --dfocus-halo: #fff;
+  --btn-bg: #9CC9F5; --btn-fg: #0C1B2A; --btn-bd: #6FA6DB; --btn-hover: #B8D8F5;
+  --bo-bg: #fff; --bo-hover-bg: #F4F9FE; --bo-hover-fg: #0C1B2A;
+  --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #6FA6DB; --dbtn-hover: #B8D8F5;
+  --hdr-bg: #fff; --hdr-bd: #D3E4F4; --hdr-link: #0C1B2A; --hdr-hover: #EAF3FC; --mnav-bg: #fff; --mnav-line: #D3E4F4;
+  --dd-bd: #D3E4F4; --dd-sh: 0 4px 16px rgba(12, 27, 42, .06); --dd-hover: #EAF3FC; --burger-bd: #0C1B2A;
+  --logo-tile: #9CC9F5; --logo-fg: #0C1B2A; --logo-bg: #9CC9F5;
+  --hero-bg: #F4F9FE; --hero-tail: #2F6FAE; --hero-sub: #4E6278; --hero-mute: #4E6278; --hero-line: #D3E4F4;
+  --stage-bg: #DDEDFB; --stage-bd: #D3E4F4; --stage-bar-bg: #fff; --stage-bar-fg: #4E6278;
+  --stage-lt1: #fff; --stage-lt2: #F4F9FE; --stage-floor: #CBE3F8; --stage-tile: #DDEDFB;
+  --facts-bg: #fff; --facts-bd: #D3E4F4; --facts-fg: #4E6278;
+  --mq-bg: #fff; --mq-fg: #0C1B2A; --mq-bd: #D3E4F4; --mq-dot: #6AA2DA;
+  --panel-bg: #fff; --panel2-bg: #fff; --panel-bd: #D3E4F4; --panel-sh: 0 4px 16px rgba(12, 27, 42, .06);
+  --tile-bg: #F4F9FE; --tile-bd: #D3E4F4; --tile-hover: #DDEDFB; --tbl-line: #CBE3F8;
+  --chip-bg: #DDEDFB; --chip-fg: #0C1B2A; --chip-bd: #6FA6DB; --input-bd: #4F86BF;
+  --num-bd: #6FA6DB; --num-fg: #2F6FAE; --num-bg: #fff; --row-alt: #F4F9FE;
+  --d-fg: #0C1B2A; --d-fg2: #0C1B2A; --d-mute: #4E6278; --d-accent: #2F6FAE; --d-line: #D3E4F4; --d-line2: #6FA6DB;
+  --card-bg: #fff; --card-in: #F4F9FE; --card-in2: #DDEDFB; --card-bd: #D3E4F4; --card-sh: 0 4px 16px rgba(12, 27, 42, .06);
+  --sc-bg: #DDEDFB; --sc-floor: #CBE3F8; --sc-lt: #fff;
+  --calc-bg: #DDEDFB; --calc-bd: #CBE3F8; --calc-line: #B8D8F5; --calc-line2: #6FA6DB;
+  --rev-bg: #F4F9FE; --slide-bg: #fff; --slide-bd: #D3E4F4; --slide-sh: 0 4px 16px rgba(12, 27, 42, .06); --arr-bd: #0C1B2A; --arr-bg: #fff; --arr-fg: #0C1B2A; --arr-hover: #DDEDFB;
+  --ftr-bg: #EAF3FC; --ftr-bd: #D3E4F4; --ftr-h: #0C1B2A; --ftr-link: #4E6278; --ftr-hover: #0C1B2A; --ftr-fg: #0C1B2A; --ftr-line: #CBE3F8; --ftr-soc: #6FA6DB;
+  --sticky-bg: #fff; --sticky-bd: #D3E4F4;
+  --ph-bg: #DDEDFB; --ph-floor: #CBE3F8; --ph-ink: #5A90C8; --ph-soft: #CBE3F8; --ph-btn: #9CC9F5; --ph-lt: #fff; --ph-tank: #6AA2DA; --ph-cap: #CBE3F8; --ph-bar: #8DBCEB;
+  --front: #8DBCEB; --side: #6AA2DA; --roof: #B8D8F5; --roof2: #A9CFF3; --rim: #4F86BF; --rim2: #4F86BF; --door: #5A90C8; --facet: #A9CFF3; --detail: #2F5F8F;
+}
+
+/* ---------- Малые отличия, которые нельзя выразить токенами ---------- */
+/* F: у светлых «карточных» блоков тонкая рамка и мягкая тень (токены --card-bd, --card-sh); у отзывов и расчёта то же.
+   E: подвал и отзывы тёмные, поэтому фокус в них светлый (--dfocus). */
+[data-theme="f"] .calc .quote .btn--outline { background: #fff; }
+[data-theme="e"] .stage-bar b, [data-theme="e"] .hero-meta dd { color: #0C1B2A; }
