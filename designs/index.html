@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Варианты дизайна · ЭКО СЕРВИС</title>
+<style>
+  :root { --bg: #F4F3EF; --ink: #16181A; --mute: #5E6366; --line: #D9D7D0; --card: #fff; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 40px 16px 64px; }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: -.02em; }
+  .lead { color: var(--mute); margin-top: 10px; max-width: 70ch; }
+  h2 { font-size: 20px; margin: 48px 0 6px; padding-top: 20px; border-top: 1px solid var(--line); }
+  h2 small { color: var(--mute); font-weight: 400; font-size: 15px; margin-left: 8px; }
+  .note { color: var(--mute); font-size: 14px; margin-bottom: 18px; max-width: 80ch; }
+  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+  a.card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; color: inherit; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+  a.card:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-bottom: 1px solid var(--line); }
+  .card div { padding: 14px 16px 16px; }
+  .card b { display: block; font-size: 17px; }
+  .card span { color: var(--mute); font-size: 14px; }
+  code { font-size: 13px; background: #E9E7E0; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Варианты дизайна «ЭКО СЕРВИС НОВОСИБИРСК»</h1>
+  <p class="lead">Все готовые варианты в одном месте. Нажмите на карточку, чтобы открыть живую страницу. Цены, контакты и отзывы — заглушки.</p>
+
+  <h2>1. Сайты целиком</h2>
+  <p class="note">Полноценные рабочие версии. Второй сайт многостраничный, его ссылки рассчитаны на запуск через локальный сервер из корня репозитория (см. README.md).</p>
+  <div class="grid">
+    <a class="card" href="01-site-siren-mandarin/index.html"><img src="previews/01-site.jpg" alt="Первый экран сайта «Сирень и мандарин»"><div><b>Сайт 1 — «Сирень и мандарин»</b><span>Одностраничник, яркий, с юмором. Калькулятор, формы, FAQ.</span></div></a>
+    <a class="card" href="02-site-grafit-laym/"><img src="previews/02-site.jpg" alt="Главная страница сайта «Графит и сигнальный лайм»"><div><b>Сайт 2 — «Графит и сигнальный лайм»</b><span>Многостраничный, строгий, деловой. 20 страниц, каталог, калькулятор.</span></div></a>
+  </div>
+
+  <h2>2. Первые экраны <small>без референсов</small></h2>
+  <p class="note">Три концепции первого экрана: одна смелая идея, 2–3 плоских цвета, крупный заголовок.</p>
+  <div class="grid">
+    <a class="card" href="03-first-screens/v1-obyavlenie.html"><img src="previews/03-v1.jpg" alt="Первый экран «Объявление»"><div><b>«Объявление на столбе»</b><span>Узкий жирный заголовок, отрывные листочки с телефоном.</span></div></a>
+    <a class="card" href="03-first-screens/v2-cena-krupno.html"><img src="previews/03-v2.jpg" alt="Первый экран «Цена крупно»"><div><b>«Цена крупно»</b><span>Гигантские 350 ₽ на красном и чек с расчётом.</span></div></a>
+    <a class="card" href="03-first-screens/v3-svobodno.html"><img src="previews/03-v3.jpg" alt="Первый экран «Свободно»"><div><b>«Свободно»</b><span>Защёлка двери с индикатором, переключается кликом.</span></div></a>
+  </div>
+
+  <h2>3. Главные страницы по референсам</h2>
+  <p class="note">Полные главные страницы в стилистике присланных референсов. Взяты только приёмы, тексты и изображения свои.</p>
+  <div class="grid">
+    <a class="card" href="04-home-pages/a-monochrome-devialet.html"><img src="previews/04-a.jpg" alt="Главная «Монохром»"><div><b>A — монохром</b><span>По Devialet: чёрный, огромный логотип, кабина на постаменте, карусель моделей.</span></div></a>
+    <a class="card" href="04-home-pages/b-grafit-laym-marketpartners.html"><img src="previews/04-b.jpg" alt="Главная «Графит и лайм»"><div><b>B — графит и лайм</b><span>По marketpartners.org: заголовок капслоком, форма в тёмной карточке, тарифы.</span></div></a>
+    <a class="card" href="04-home-pages/c-cherno-belyy-luxorr.html"><img src="previews/04-c.jpg" alt="Главная «Чёрно-белый»"><div><b>C — чёрно-белый</b><span>По luxorr.io: тёмный первый экран, светлые секции, мозаика карточек.</span></div></a>
+  </div>
+</div>
+</body>
+</html>
