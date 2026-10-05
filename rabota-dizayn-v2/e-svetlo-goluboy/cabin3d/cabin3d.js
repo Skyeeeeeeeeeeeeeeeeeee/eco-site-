@@ -882,7 +882,7 @@
     }
     var i;
     for (i = count - 1; i >= 0; i--) {
-      cabins[i] = build(i, i === 0 ? Q : (hi ? QFAR : Q));
+      cabins[i] = build(i, i === 0 ? Q : QFAR);
     }
     var BUDGET = 86000;
     function total() { var n = 0; cabins.forEach(function (c) { n += countTris(c.group); }); return n; }
@@ -903,7 +903,7 @@
     if (!outdoor) {
       // земля: прозрачная, принимает мягкую тень + контактная тень
       var ground = new T.Mesh(new T.PlaneGeometry(16, 16), new T.ShadowMaterial({ opacity: soft ? 0.09 : 0.22 }));
-      ground.rotation.x = -PI / 2; ground.position.y = GROUND_Y; ground.receiveShadow = true; scene.add(ground);
+      ground.rotation.x = -PI / 2; ground.position.y = GROUND_Y; ground.receiveShadow = true; if (!soft) scene.add(ground); // soft: только контактная тень
       var blob;
       if (model === 'standart') { blob = makeBlob(soft ? 2.9 : 2.3, soft ? 2.9 : 2.3, soft ? 0.8 : 0.55); blob.position.y = GROUND_Y + 0.002; scene.add(blob); }
       else cabins.forEach(function (c) { var b = makeBlob(prof.blob[0] * (soft ? 1.25 : 1), prof.blob[1] * (soft ? 1.25 : 1), soft ? 0.8 : 0.55); b.position.set(prof.blob[2], GROUND_Y + 0.002, prof.blob[3]); c.group.add(b); });

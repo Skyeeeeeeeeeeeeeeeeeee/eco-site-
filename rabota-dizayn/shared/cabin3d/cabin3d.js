@@ -882,7 +882,7 @@
     }
     var i;
     for (i = count - 1; i >= 0; i--) {
-      cabins[i] = build(i, i === 0 ? Q : (hi ? QFAR : Q));
+      cabins[i] = build(i, i === 0 ? Q : QFAR);
     }
     var BUDGET = 86000;
     function total() { var n = 0; cabins.forEach(function (c) { n += countTris(c.group); }); return n; }
