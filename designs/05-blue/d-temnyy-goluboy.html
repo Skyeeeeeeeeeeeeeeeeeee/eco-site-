@@ -10,10 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
 <style>
 :root{
-  --k:#000;--k2:#0C0C0C;--g1:#141414;--g2:#1c1c1c;--g3:#262626;--line-d:#2a2a2a;
-  --l1:#F5F5F5;--l2:#E6E6E6;--tx:#0C0C0C;--mute:#8c8c8c;--mute-d:#6f6f6f;
-  /* cabin palette (flat deep greys) */
-  --front:#232323;--side:#141414;--roof:#303030;--roof2:#1d1d1d;--rim:#6a6a6a;--rim2:#3a3a3a;--door:#191919;--facet:#2b2b2b;--detail:#4a4a4a;
+  --k:#0B1724;--k2:#0F1E2E;--g1:#142638;--g2:#1A2F45;--g3:#24384F;--line-d:#24384F;--ac:#9CC9F5;--ac-h:#CFE4F8;--ac-d:#6FA6DB;--navy:#0C1B2A;
+  --l1:#F3F7FB;--l2:#D9E4EF;--tx:#0C1B2A;--mute:#4E6278;--mute-d:#8FA3B8;
+  /* cabin palette (flat navy-blue facets) */
+  --front:#1D3550;--side:#142A42;--roof:#2A4866;--roof2:#183049;--rim:#5C7FA3;--rim2:#3B5A7C;--door:#6FA6DB;--facet:#84B6E9;--detail:#3B5A7C;
   --font:'Onest','Golos Text','Manrope','Helvetica Neue',Arial,sans-serif;
   --pad:16px;
 }
@@ -24,8 +24,8 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 ul{list-style:none}
 svg{display:block}
-:focus-visible{outline:2px solid #fff;outline-offset:3px;box-shadow:0 0 0 4px #000}
-.lt :focus-visible{outline-color:#000;box-shadow:0 0 0 4px #fff}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px;box-shadow:0 0 0 4px #0B1724}
+.lt :focus-visible{outline-color:var(--navy);box-shadow:0 0 0 4px var(--ac)}
 .wrap{width:min(1280px,100% - 2*var(--pad));margin-inline:auto}
 @media(min-width:768px){:root{--pad:32px}}
 h1,h2,h3{font-weight:500;letter-spacing:-.035em;line-height:1.08}
@@ -34,78 +34,78 @@ h1,h2,h3{font-weight:500;letter-spacing:-.035em;line-height:1.08}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 22px;border-radius:999px;font-size:14px;font-weight:500;letter-spacing:-.01em;border:1px solid transparent;transition:background .2s,color .2s,border-color .2s;white-space:nowrap}
-.btn-w{background:#fff;color:#000}.btn-w:hover{background:#d9d9d9}
-.btn-k{background:#000;color:#fff}.btn-k:hover{background:#333}
-.btn-o{border-color:#555;color:#fff}.btn-o:hover{border-color:#fff}
-.btn-ok{border-color:#bdbdbd;color:#000}.btn-ok:hover{border-color:#000}
+.btn-w{background:var(--ac);color:var(--navy)}.btn-w:hover{background:var(--ac-h)}
+.btn-k{background:var(--ac);color:var(--navy);border-color:var(--ac-d)}.btn-k:hover{background:var(--ac-h)}
+.btn-o{border-color:#3B5A7C;color:#fff}.btn-o:hover{border-color:var(--ac)}
+.btn-ok{border-color:#B9CBDD;color:var(--navy)}.btn-ok:hover{border-color:var(--navy)}
 .btn-sm{height:36px;padding:0 18px;font-size:13px}
 
 /* header */
-.hdr{background:#000;color:#fff;position:relative;z-index:20}
+.hdr{background:#0B1724;color:#fff;position:relative;z-index:20}
 .hdr .wrap{display:flex;align-items:center;height:68px;gap:24px}
 .logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:19px;letter-spacing:-.04em}
 .logo i{width:26px;height:26px;border-radius:7px;background:#fff;display:grid;place-items:center}
 .nav{display:none;margin-left:28px;gap:2px}
 .nav>li{position:relative}
-.nav>li>a{display:flex;align-items:center;gap:5px;padding:8px 12px;font-size:13px;color:#e8e8e8;border-radius:8px}
-.nav>li>a:hover{color:#fff;background:#161616}
+.nav>li>a{display:flex;align-items:center;gap:5px;padding:8px 12px;font-size:13px;color:#E4EDF6;border-radius:8px}
+.nav>li>a:hover{color:#fff;background:#142638}
 .nav svg{width:9px;height:9px;opacity:.6}
-.dd{position:absolute;top:100%;left:0;min-width:210px;background:#0e0e0e;border:1px solid var(--line-d);border-radius:12px;padding:6px;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s}
+.dd{position:absolute;top:100%;left:0;min-width:210px;background:#0F1E2E;border:1px solid var(--line-d);border-radius:12px;padding:6px;opacity:0;visibility:hidden;transform:translateY(4px);transition:opacity .15s,transform .15s}
 .nav>li:hover .dd,.nav>li:focus-within .dd{opacity:1;visibility:visible;transform:none}
-.dd a{display:block;padding:9px 12px;font-size:13px;color:#cfcfcf;border-radius:8px}
-.dd a:hover{background:#1a1a1a;color:#fff}
+.dd a{display:block;padding:9px 12px;font-size:13px;color:#C5D3E2;border-radius:8px}
+.dd a:hover{background:#1A2F45;color:#fff}
 .hdr-r{margin-left:auto;display:flex;align-items:center;gap:18px}
-.hdr-r .tel{display:none;font-size:13px;color:#cfcfcf}
+.hdr-r .tel{display:none;font-size:13px;color:#C5D3E2}
 .hdr-r .tel:hover{color:#fff}
-.burger{width:40px;height:40px;border:1px solid #444;border-radius:50%;display:grid;place-items:center}
+.burger{width:40px;height:40px;border:1px solid #3B5A7C;border-radius:50%;display:grid;place-items:center}
 .burger span{display:block;width:16px;height:1.5px;background:#fff;box-shadow:0 5px 0 #fff,0 -5px 0 #fff}
-.mnav{display:none;background:#000;border-top:1px solid var(--line-d)}
+.mnav{display:none;background:#0B1724;border-top:1px solid var(--line-d)}
 .mnav.open{display:block}
 .mnav a{display:block;padding:15px 0;border-bottom:1px solid var(--line-d);font-size:17px;letter-spacing:-.02em}
-.mnav .tel{color:#9a9a9a}
+.mnav .tel{color:#9DB1C5}
 @media(min-width:1100px){.nav{display:flex}.burger,.mnav{display:none!important}.hdr-r .tel{display:inline}}
 @media(max-width:480px){.hdr-r .btn{display:none}}
 
 /* hero */
-.hero{background:#000;color:#fff;padding:56px 0 0}
+.hero{background:#0B1724;color:#fff;padding:56px 0 0}
 .hero-top{display:grid;gap:28px}
 .hero h1{font-size:clamp(34px,5.6vw,72px);max-width:13em}
-.hero h1 span{color:#8c8c8c}
-.hero .sub{margin-top:20px;font-size:clamp(16px,1.6vw,19px);color:#a8a8a8;max-width:34em}
+.hero h1 span{color:var(--ac)}
+.hero .sub{margin-top:20px;font-size:clamp(16px,1.6vw,19px);color:#A9BCCF;max-width:34em}
 .hero .btn{margin-top:30px;height:50px;padding:0 30px;font-size:15px}
-.hero-meta{display:grid;gap:14px;align-content:end;font-size:13px;color:#8c8c8c;border-top:1px solid var(--line-d);padding-top:16px}
+.hero-meta{display:grid;gap:14px;align-content:end;font-size:13px;color:#8FA3B8;border-top:1px solid var(--line-d);padding-top:16px}
 .hero-meta b{display:block;color:#fff;font-weight:500;font-size:28px;letter-spacing:-.04em;line-height:1.1}
 .hero-meta div{display:flex;gap:14px;align-items:baseline}
 .hero-meta div b{min-width:130px}
 @media(min-width:900px){.hero{padding-top:92px}.hero-top{grid-template-columns:1.6fr .8fr;align-items:end;gap:60px}.hero-meta{margin-bottom:6px}}
-.stage{margin-top:48px;background:var(--k2);border:1px solid #1a1a1a;border-radius:20px;overflow:hidden}
+.stage{margin-top:48px;background:var(--k2);border:1px solid #1A2F45;border-radius:20px;overflow:hidden}
 .stage svg{width:100%;aspect-ratio:4/3;height:auto}
 @media(min-width:700px){.stage svg{aspect-ratio:2.35/1}}
-.stage-bar{display:grid;grid-template-columns:1fr;border-top:1px solid #1a1a1a}
-.stage-bar div{padding:16px 20px;font-size:13px;color:#8c8c8c;border-bottom:1px solid #1a1a1a}
+.stage-bar{display:grid;grid-template-columns:1fr;border-top:1px solid #1A2F45}
+.stage-bar div{padding:16px 20px;font-size:13px;color:#8FA3B8;border-bottom:1px solid #1A2F45}
 .stage-bar div:last-child{border-bottom:0}
 .stage-bar b{display:block;color:#fff;font-weight:500;font-size:15px;letter-spacing:-.02em}
-@media(min-width:700px){.stage-bar{grid-template-columns:repeat(3,1fr)}.stage-bar div{border-bottom:0;border-right:1px solid #1a1a1a}.stage-bar div:last-child{border-right:0}}
+@media(min-width:700px){.stage-bar{grid-template-columns:repeat(3,1fr)}.stage-bar div{border-bottom:0;border-right:1px solid #1A2F45}.stage-bar div:last-child{border-right:0}}
 .hero-end{height:56px}
 
 /* marquee */
-.mq{background:#000;color:#fff;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;overflow:hidden;padding:26px 0}
+.mq{background:#0B1724;color:#fff;border-top:1px solid #1A2F45;border-bottom:1px solid #1A2F45;overflow:hidden;padding:26px 0}
 .mq-t{display:flex;width:max-content;animation:mq 50s linear infinite}
 .mq:hover .mq-t{animation-play-state:paused}
 .mq ul{display:flex;align-items:center;flex-shrink:0}
-.mq li{display:flex;align-items:center;font-size:clamp(18px,2.2vw,26px);letter-spacing:-.03em;color:#cfcfcf;white-space:nowrap}
-.mq li::after{content:"";width:6px;height:6px;background:#444;margin:0 36px}
+.mq li{display:flex;align-items:center;font-size:clamp(18px,2.2vw,26px);letter-spacing:-.03em;color:#C5D3E2;white-space:nowrap}
+.mq li::after{content:"";width:6px;height:6px;background:var(--ac);margin:0 36px}
 @keyframes mq{to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.mq-t{animation:none}.mq{overflow-x:auto}html{scroll-behavior:auto}}
 
 /* sections */
 .sec{padding:72px 0}
 @media(min-width:900px){.sec{padding:112px 0}}
-.label{font-size:13px;color:#555;letter-spacing:-.01em}
+.label{font-size:13px;color:#4E6278;letter-spacing:-.01em}
 .lead{font-size:clamp(24px,3.1vw,42px);letter-spacing:-.04em;line-height:1.14;font-weight:500;max-width:22em}
-.lead .g,.g{color:#a3a3a3}
+.lead .g,.g{color:#546C86}
 .what-head{display:grid;gap:28px;margin-top:20px}
-.what-head p.side{font-size:14px;color:#6b6b6b;max-width:26em}
+.what-head p.side{font-size:14px;color:#4E6278;max-width:26em}
 @media(min-width:900px){.what-head{grid-template-columns:1.7fr .6fr;align-items:end;gap:80px}}
 
 /* bento */
@@ -117,21 +117,21 @@ h1,h2,h3{font-weight:500;letter-spacing:-.035em;line-height:1.08}
 .card .scene svg{position:absolute;inset:0;width:100%;height:100%}
 .cap{padding:18px 20px 22px;background:var(--g1)}
 .cap h3{font-size:17px;letter-spacing:-.025em}
-.cap p{font-size:13px;color:#8c8c8c;margin-top:6px;line-height:1.45}
+.cap p{font-size:13px;color:#8FA3B8;margin-top:6px;line-height:1.45}
 .visits{padding:20px;flex:1;display:flex;flex-direction:column}
-.visits h4{font-size:13px;font-weight:500;color:#cfcfcf;margin-bottom:14px}
+.visits h4{font-size:13px;font-weight:500;color:#C5D3E2;margin-bottom:14px}
 .visit{display:flex;align-items:center;gap:12px;padding:12px;background:var(--g2);border-radius:12px;margin-bottom:8px}
-.visit i{width:34px;height:34px;border-radius:8px;background:var(--g3);flex-shrink:0;display:grid;place-items:center;font-style:normal;font-size:11px;color:#9a9a9a}
+.visit i{width:34px;height:34px;border-radius:8px;background:var(--g3);flex-shrink:0;display:grid;place-items:center;font-style:normal;font-size:11px;color:#9DB1C5}
 .visit div{flex:1;min-width:0;font-size:12px;line-height:1.35}
 .visit b{display:block;font-weight:500;font-size:13px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.visit span{color:#8c8c8c}
-.visit em{font-style:normal;font-size:11px;color:#cfcfcf;border:1px solid #3a3a3a;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.visit span{color:#8FA3B8}
+.visit em{font-style:normal;font-size:11px;color:#C5D3E2;border:1px solid #3B5A7C;border-radius:999px;padding:3px 9px;white-space:nowrap}
 .card-wide{grid-column:1/-1;min-height:0;flex-direction:column}
 .card-wide .scene{min-height:200px}
 .wide-in{display:grid}
 .wide-text{padding:28px 24px;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;background:var(--g1)}
 .wide-text h3{font-size:clamp(24px,3vw,38px)}
-.wide-text p{font-size:14px;color:#9a9a9a;max-width:30em}
+.wide-text p{font-size:14px;color:#9DB1C5;max-width:30em}
 .wide-text .btn{align-self:flex-start;margin-top:6px}
 @media(min-width:800px){.wide-in{grid-template-columns:1fr 1.25fr;min-height:360px}.wide-text{padding:40px}.card-wide .scene{min-height:0}.wide-in .scene{order:2}}
 
@@ -139,10 +139,10 @@ h1,h2,h3{font-weight:500;letter-spacing:-.035em;line-height:1.08}
 .who{margin-top:72px;display:grid;gap:0;grid-template-columns:1fr}
 .who>div{padding:26px 0 30px;border-top:1px solid var(--l2)}
 .who h3{font-size:22px}
-.who p{font-size:15px;color:#6b6b6b;margin-top:10px;max-width:24em}
+.who p{font-size:15px;color:#4E6278;margin-top:10px;max-width:24em}
 .who ul{margin-top:14px;font-size:14px}
 .who li{padding:7px 0;border-top:1px solid var(--l2);display:flex;justify-content:space-between;gap:12px}
-.who li span{color:#8c8c8c}
+.who li span{color:#4E6278}
 @media(min-width:900px){.who{grid-template-columns:repeat(3,1fr);gap:32px}}
 
 /* process */
@@ -152,14 +152,14 @@ h1,h2,h3{font-weight:500;letter-spacing:-.035em;line-height:1.08}
 .row{padding:36px 0}
 .row:nth-child(odd){background:var(--l1)}
 .row .wrap{display:grid;gap:22px;align-items:center}
-.num{width:34px;height:34px;border:1px solid #bbb;border-radius:50%;display:grid;place-items:center;font-size:13px;color:#555;flex-shrink:0}
+.num{width:34px;height:34px;border:1px solid #B9CBDD;border-radius:50%;display:grid;place-items:center;font-size:13px;color:#4E6278;flex-shrink:0}
 .row-l{display:flex;gap:18px;align-items:flex-start}
 .row-l h3{font-size:22px}
-.row-l p{font-size:14px;color:#6b6b6b;margin-top:6px}
-.row .para{font-size:14px;color:#555;max-width:28em}
+.row-l p{font-size:14px;color:#4E6278;margin-top:6px}
+.row .para{font-size:14px;color:#4E6278;max-width:28em}
 .ph{position:relative;background:var(--g1);border-radius:14px;overflow:hidden;aspect-ratio:1}
 .ph svg{position:absolute;inset:0;width:100%;height:100%}
-.ph small{position:absolute;left:12px;bottom:10px;font-size:11px;color:#7d7d7d;letter-spacing:0}
+.ph small{position:absolute;left:12px;bottom:10px;font-size:11px;color:#8FA3B8;letter-spacing:0}
 .row .ph{width:160px}
 @media(min-width:900px){.row{padding:44px 0}.row .wrap{grid-template-columns:1.2fr 190px 1fr;gap:56px}.row .ph{width:190px;justify-self:center}}
 
@@ -175,60 +175,60 @@ h1,h2,h3{font-weight:500;letter-spacing:-.035em;line-height:1.08}
 .sq svg{width:100%;height:100%}
 .tile:hover .sq{background:var(--l2)}
 .tile h3{font-size:15px;margin-top:14px;letter-spacing:-.02em;line-height:1.25}
-.tile p{font-size:14px;color:#8c8c8c;margin-top:3px}
-.tile p b{color:#0C0C0C;font-weight:500}
-.tile small{display:block;font-size:12px;color:#8c8c8c;margin-top:6px;line-height:1.4}
+.tile p{font-size:14px;color:#4E6278;margin-top:3px}
+.tile p b{color:#0C1B2A;font-weight:500}
+.tile small{display:block;font-size:12px;color:#4E6278;margin-top:6px;line-height:1.4}
 
 /* pricing */
 .price{background:var(--l1)}
 .price-g{display:grid;gap:40px;margin-top:20px}
 @media(min-width:900px){.price-g{grid-template-columns:1fr 1fr;gap:64px;align-items:start}}
 .tbl{width:100%;border-collapse:collapse;font-size:15px}
-.tbl th{font-weight:400;text-align:left;color:#8c8c8c;font-size:13px;padding:0 0 10px}
-.tbl td{padding:15px 0;border-top:1px solid #d8d8d8;vertical-align:top}
+.tbl th{font-weight:400;text-align:left;color:#4E6278;font-size:13px;padding:0 0 10px}
+.tbl td{padding:15px 0;border-top:1px solid #D9E4EF;vertical-align:top}
 .tbl td:last-child,.tbl th:last-child{text-align:right;white-space:nowrap}
-.tbl td small{display:block;color:#8c8c8c;font-size:13px}
-.notes{margin-top:22px;font-size:14px;color:#6b6b6b;display:grid;gap:6px}
-.calc{background:#000;color:#fff;border-radius:20px;padding:28px 22px}
+.tbl td small{display:block;color:#4E6278;font-size:13px}
+.notes{margin-top:22px;font-size:14px;color:#4E6278;display:grid;gap:6px}
+.calc{background:#0B1724;color:#fff;border-radius:20px;padding:28px 22px}
 @media(min-width:600px){.calc{padding:36px}}
 .calc h3{font-size:22px}
-.calc p.t{color:#8c8c8c;font-size:14px;margin-top:6px}
+.calc p.t{color:#8FA3B8;font-size:14px;margin-top:6px}
 .calc dl{margin-top:22px}
 .calc dl div{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid var(--line-d);font-size:15px}
-.calc dt{color:#cfcfcf}.calc dt small{display:block;color:#7d7d7d;font-size:12px}
+.calc dt{color:#C5D3E2}.calc dt small{display:block;color:#8FA3B8;font-size:12px}
 .calc dd{white-space:nowrap}
-.calc .tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #555;padding-top:18px;margin-top:4px}
-.calc .tot b{font-size:clamp(34px,5vw,48px);font-weight:500;letter-spacing:-.045em}
+.calc .tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #3B5A7C;padding-top:18px;margin-top:4px}
+.calc .tot b{color:var(--ac);font-size:clamp(34px,5vw,48px);font-weight:500;letter-spacing:-.045em}
 
 /* delivery */
 .dl-g{display:grid;gap:40px;margin-top:20px}
 @media(min-width:900px){.dl-g{grid-template-columns:.9fr 1.1fr;gap:80px}}
-.zones{border-top:1px solid #0C0C0C}
+.zones{border-top:1px solid #0C1B2A}
 .zone{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding:20px 0;border-bottom:1px solid var(--l2)}
 .zone h3{font-size:19px}
-.zone p{font-size:14px;color:#6b6b6b;grid-column:1}
+.zone p{font-size:14px;color:#4E6278;grid-column:1}
 .zone b{font-weight:500;font-size:19px;letter-spacing:-.03em;grid-row:1;grid-column:2;text-align:right}
-.zone .sm{grid-column:2;grid-row:2;font-size:13px;color:#8c8c8c;text-align:right}
-.zone-note{margin-top:20px;font-size:14px;color:#6b6b6b}
+.zone .sm{grid-column:2;grid-row:2;font-size:13px;color:#4E6278;text-align:right}
+.zone-note{margin-top:20px;font-size:14px;color:#4E6278}
 
 /* reviews */
-.rev{background:#000;color:#fff;padding:72px 0 80px}
+.rev{background:#0B1724;color:#fff;padding:72px 0 80px}
 @media(min-width:900px){.rev{padding:104px 0 112px}}
 .rev-h{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
-.rev-h .label{color:#777}
+.rev-h .label{color:#8FA3B8}
 .rev-h h2{font-size:clamp(22px,2.6vw,34px);margin-top:12px;max-width:16em}
 .arrows{display:flex;gap:8px}
-.arr{width:44px;height:44px;border:1px solid #444;border-radius:50%;display:grid;place-items:center;transition:border-color .2s,opacity .2s}
-.arr:hover:not(:disabled){border-color:#fff}
+.arr{width:44px;height:44px;border:1px solid #3B5A7C;border-radius:50%;display:grid;place-items:center;transition:border-color .2s,opacity .2s}
+.arr:hover:not(:disabled){border-color:var(--ac)}
 .arr:disabled{opacity:.3;cursor:default}
 .track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:36px;padding-left:max(var(--pad),calc((100% - 1280px)/2 + var(--pad)));padding-right:var(--pad);scrollbar-width:none;scroll-padding-left:max(var(--pad),calc((100% - 1280px)/2 + var(--pad)))}
 .track::-webkit-scrollbar{display:none}
-.slide{flex:0 0 min(1020px,90%);scroll-snap-align:start;background:var(--k2);border:1px solid #1d1d1d;border-radius:22px;padding:22px;display:grid;gap:22px}
+.slide{flex:0 0 min(1020px,90%);scroll-snap-align:start;background:var(--k2);border:1px solid #1A2F45;border-radius:22px;padding:22px;display:grid;gap:22px}
 .slide .tx{display:flex;flex-direction:column;justify-content:space-between;gap:28px;padding:6px 4px}
 .slide h3{font-size:clamp(34px,5vw,60px);letter-spacing:-.045em}
-.slide .who-s{font-size:13px;color:#8c8c8c;margin-top:12px}
-.slide blockquote{font-size:15px;line-height:1.6;color:#cfcfcf;max-width:34em}
-.slide .ph{aspect-ratio:4/3;background:#161616}
+.slide .who-s{font-size:13px;color:#8FA3B8;margin-top:12px}
+.slide blockquote{font-size:15px;line-height:1.6;color:#C5D3E2;max-width:34em}
+.slide .ph{aspect-ratio:4/3;background:#142638}
 @media(min-width:900px){.slide{grid-template-columns:1.05fr 1fr;padding:32px;gap:36px}.slide .ph{aspect-ratio:auto;min-height:340px}.slide .tx{padding:8px 8px 8px 12px}}
 
 /* faq */
@@ -239,42 +239,42 @@ details{border-top:1px solid var(--l2)}
 details:last-child{border-bottom:1px solid var(--l2)}
 summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-size:clamp(17px,1.8vw,21px);letter-spacing:-.025em;font-weight:500}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"";width:12px;height:12px;flex-shrink:0;background:linear-gradient(#000,#000) center/12px 1.5px no-repeat,linear-gradient(#000,#000) center/1.5px 12px no-repeat;transition:transform .2s}
+summary::after{content:"";width:12px;height:12px;flex-shrink:0;background:linear-gradient(#0C1B2A,#0C1B2A) center/12px 1.5px no-repeat,linear-gradient(#0C1B2A,#0C1B2A) center/1.5px 12px no-repeat;transition:transform .2s}
 details[open] summary::after{transform:rotate(45deg)}
-details p{padding:0 40px 24px 0;font-size:15px;color:#555;max-width:40em}
+details p{padding:0 40px 24px 0;font-size:15px;color:#4E6278;max-width:40em}
 
 /* cta */
 .cta{background:var(--l1)}
 .cta-g{display:grid;gap:36px}
 @media(min-width:900px){.cta-g{grid-template-columns:1fr 1fr;gap:80px;align-items:start}}
 .cta h2{font-size:clamp(30px,4.4vw,58px)}
-.cta h2 span{color:#a3a3a3}
-.cta .cont{margin-top:30px;display:grid;gap:4px;font-size:15px;color:#555}
-.cta .cont a.big{font-size:26px;letter-spacing:-.035em;color:#000;font-weight:500}
+.cta h2 span{color:#546C86}
+.cta .cont{margin-top:30px;display:grid;gap:4px;font-size:15px;color:#4E6278}
+.cta .cont a.big{font-size:26px;letter-spacing:-.035em;color:#0C1B2A;font-weight:500}
 form{background:#fff;border-radius:20px;padding:26px 22px;display:grid;gap:16px}
 @media(min-width:600px){form{padding:34px}}
-label.f{display:grid;gap:7px;font-size:13px;color:#6b6b6b}
-.f input[type=text],.f input[type=tel]{height:50px;border:1px solid #d0d0d0;border-radius:12px;padding:0 16px;font:inherit;font-size:16px;color:#000;background:#fff;width:100%}
-.f input:focus{outline:2px solid #000;outline-offset:1px;border-color:#000}
-.chk{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:#6b6b6b;line-height:1.45}
-.chk input{width:20px;height:20px;margin-top:1px;accent-color:#000;flex-shrink:0}
+label.f{display:grid;gap:7px;font-size:13px;color:#4E6278}
+.f input[type=text],.f input[type=tel]{height:50px;border:1px solid #A7BDD3;border-radius:12px;padding:0 16px;font:inherit;font-size:16px;color:var(--navy);background:#fff;width:100%}
+.f input:focus{outline:2px solid var(--navy);outline-offset:1px;border-color:var(--navy);box-shadow:0 0 0 4px var(--ac)}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:#4E6278;line-height:1.45}
+.chk input{width:20px;height:20px;margin-top:1px;accent-color:#0C1B2A;flex-shrink:0}
 form .btn{height:52px;width:100%;font-size:15px}
-.msg{font-size:14px;color:#000;min-height:0}
+.msg{font-size:14px;color:#0C1B2A;min-height:0}
 
 /* footer */
-.ftr{background:#000;color:#fff;padding:64px 0 28px}
+.ftr{background:#0B1724;color:#fff;padding:64px 0 28px}
 .ftr-g{display:grid;gap:36px;grid-template-columns:1fr 1fr}
 .ftr-g>div:first-child{grid-column:1/-1}
 @media(min-width:900px){.ftr-g{grid-template-columns:1.6fr 1fr 1fr 1fr 1fr}.ftr-g>div:first-child{grid-column:auto}}
-.ftr p.d{font-size:13px;color:#8c8c8c;margin-top:16px;max-width:22em}
+.ftr p.d{font-size:13px;color:#8FA3B8;margin-top:16px;max-width:22em}
 .ftr h4{font-size:13px;font-weight:500;color:#fff;margin-bottom:14px}
 .ftr li{margin-bottom:9px}
-.ftr li a{font-size:13px;color:#8c8c8c}
+.ftr li a{font-size:13px;color:#8FA3B8}
 .ftr li a:hover{color:#fff}
 .soc{display:flex;gap:8px;margin-top:6px}
-.soc a{width:36px;height:36px;border:1px solid #333;border-radius:10px;display:grid;place-items:center;font-size:11px;font-weight:600;color:#cfcfcf}
-.soc a:hover{border-color:#fff;color:#fff}
-.ftr-b{margin-top:56px;padding-top:20px;border-top:1px solid #1d1d1d;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px;font-size:12px;color:#6f6f6f}
+.soc a{width:36px;height:36px;border:1px solid #3B5A7C;border-radius:10px;display:grid;place-items:center;font-size:11px;font-weight:600;color:#C5D3E2}
+.soc a:hover{border-color:var(--ac);color:#fff}
+.ftr-b{margin-top:56px;padding-top:20px;border-top:1px solid #1A2F45;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 24px;font-size:12px;color:#8FA3B8}
 .ftr-b a:hover{color:#fff}
 </style>
 </head>
@@ -284,7 +284,7 @@ form .btn{height:52px;width:100%;font-size:15px}
   <defs>
     <!-- base cabin, 200x260, flat facets -->
     <g id="cabg">
-      <polygon points="12,246 196,246 204,254 2,254" fill="#000" opacity=".55"/>
+      <polygon points="12,246 196,246 204,254 2,254" fill="#0B1724" opacity=".55"/>
       <polygon points="120,42 180,56 180,232 120,244" fill="var(--side)"/>
       <rect x="20" y="42" width="100" height="202" fill="var(--front)"/>
       <rect x="14" y="30" width="112" height="14" fill="var(--roof)"/>
@@ -302,7 +302,7 @@ form .btn{height:52px;width:100%;font-size:15px}
       <rect x="40" y="224" width="60" height="2" fill="var(--rim2)"/>
       <polygon points="136,86 172,94 172,98 136,90" fill="var(--detail)"/>
       <polygon points="136,100 160,106 160,109 136,103" fill="var(--rim2)"/>
-      <rect x="20" y="244" width="100" height="3" fill="#000"/>
+      <rect x="20" y="244" width="100" height="3" fill="#0B1724"/>
     </g>
     <g id="m1"><use href="#cabg" x="40"/></g>
     <g id="m2">
@@ -317,7 +317,7 @@ form .btn{height:52px;width:100%;font-size:15px}
       <rect x="226" y="198" width="10" height="14" fill="var(--detail)"/>
     </g>
     <g id="m3">
-      <polygon points="8,246 262,246 270,254 0,254" fill="#000" opacity=".55"/>
+      <polygon points="8,246 262,246 270,254 0,254" fill="#0B1724" opacity=".55"/>
       <polygon points="150,42 232,58 232,232 150,244" fill="var(--side)"/>
       <rect x="20" y="42" width="130" height="202" fill="var(--front)"/>
       <rect x="14" y="30" width="142" height="14" fill="var(--roof)"/>
@@ -347,7 +347,7 @@ form .btn{height:52px;width:100%;font-size:15px}
       <rect x="46" y="204" width="48" height="3" fill="var(--rim)"/>
     </g>
     <g id="m5">
-      <polygon points="52,246 224,246 232,254 44,254" fill="#000" opacity=".55"/>
+      <polygon points="52,246 224,246 232,254 44,254" fill="#0B1724" opacity=".55"/>
       <polygon points="162,108 218,122 218,232 162,244" fill="var(--side)"/>
       <rect x="64" y="108" width="98" height="136" fill="var(--front)"/>
       <polygon points="56,112 168,88 224,104 224,122 162,108 56,124" fill="var(--roof)"/>
@@ -358,7 +358,7 @@ form .btn{height:52px;width:100%;font-size:15px}
       <polygon points="78,140 108,140 78,208" fill="var(--facet)"/>
       <rect x="138" y="184" width="5" height="14" fill="var(--detail)"/>
       <rect x="84" y="128" width="58" height="2" fill="var(--detail)"/>
-      <rect x="64" y="244" width="98" height="3" fill="#000"/>
+      <rect x="64" y="244" width="98" height="3" fill="#0B1724"/>
     </g>
   </defs>
 </svg>
@@ -366,7 +366,7 @@ form .btn{height:52px;width:100%;font-size:15px}
 <header class="hdr">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="эко сервис — на главную">
-      <i aria-hidden="true"><svg width="12" height="16" viewBox="0 0 12 16"><rect x="0" y="0" width="12" height="16" rx="1.5" fill="#000"/><rect x="2.5" y="4" width="7" height="10" fill="#fff"/></svg></i>
+      <i aria-hidden="true"><svg width="12" height="16" viewBox="0 0 12 16"><rect x="0" y="0" width="12" height="16" rx="1.5" fill="#0C1B2A"/><rect x="2.5" y="4" width="7" height="10" fill="#fff"/></svg></i>
       эко сервис
     </a>
     <ul class="nav">
@@ -410,13 +410,13 @@ form .btn{height:52px;width:100%;font-size:15px}
     </div>
     <div class="stage">
       <svg viewBox="0 0 1200 510" preserveAspectRatio="xMaxYMax slice" role="img" aria-label="Три кабины ЭС на тёмной площадке">
-        <rect width="1200" height="510" fill="#0C0C0C"/>
-        <polygon points="470,0 580,0 400,400 280,400" fill="#101010"/>
-        <polygon points="580,0 620,0 440,400 400,400" fill="#151515"/>
-        <polygon points="0,380 1200,380 1200,510 0,510" fill="#050505"/>
-        <polygon points="0,380 1200,380 1200,384 0,384" fill="#171717"/>
-        <polygon points="0,510 300,380 420,380 220,510" fill="#0a0a0a"/>
-        <polygon points="760,510 940,380 1010,380 900,510" fill="#0a0a0a"/>
+        <rect width="1200" height="510" fill="#0F1E2E"/>
+        <polygon points="470,0 580,0 400,400 280,400" fill="#0D1B2B"/>
+        <polygon points="580,0 620,0 440,400 400,400" fill="#122234"/>
+        <polygon points="0,380 1200,380 1200,510 0,510" fill="#08121D"/>
+        <polygon points="0,380 1200,380 1200,384 0,384" fill="#18304A"/>
+        <polygon points="0,510 300,380 420,380 220,510" fill="#0B1724"/>
+        <polygon points="760,510 940,380 1010,380 900,510" fill="#0B1724"/>
         <g transform="translate(1010 138) scale(.98)"><use href="#cabg"/></g>
         <g transform="translate(830 100) scale(1.22)"><use href="#cabg"/></g>
         <g transform="translate(560 18) scale(1.8)"><use href="#cabg"/></g>
@@ -453,8 +453,8 @@ form .btn{height:52px;width:100%;font-size:15px}
     <div class="bento">
       <article class="card">
         <div class="scene"><svg viewBox="0 0 300 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <rect width="300" height="330" fill="#161616"/><polygon points="0,230 300,230 300,330 0,330" fill="#0a0a0a"/>
-          <polygon points="0,150 90,60 160,60 40,230 0,230" fill="#1b1b1b"/>
+          <rect width="300" height="330" fill="#142638"/><polygon points="0,230 300,230 300,330 0,330" fill="#0B1724"/>
+          <polygon points="0,150 90,60 160,60 40,230 0,230" fill="#18304A"/>
           <g transform="translate(14 96) scale(.52)"><use href="#m1"/></g>
           <g transform="translate(108 76) scale(.6)"><use href="#m2"/></g>
           <g transform="translate(210 104) scale(.46)"><use href="#m4"/></g>
@@ -463,18 +463,18 @@ form .btn{height:52px;width:100%;font-size:15px}
       </article>
       <article class="card">
         <div class="scene"><svg viewBox="0 0 300 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <rect width="300" height="330" fill="#161616"/><polygon points="0,236 300,236 300,330 0,330" fill="#0a0a0a"/>
-          <polygon points="170,0 230,0 120,236 60,236" fill="#1a1a1a"/>
+          <rect width="300" height="330" fill="#142638"/><polygon points="0,236 300,236 300,330 0,330" fill="#0B1724"/>
+          <polygon points="170,0 230,0 120,236 60,236" fill="#1A2F45"/>
           <g transform="translate(36 78) scale(.5)"><use href="#cabg"/></g>
           <g transform="translate(128 78) scale(.5)"><use href="#cabg"/></g>
-          <rect x="20" y="206" width="210" height="12" fill="#2c2c2c"/>
-          <rect x="20" y="206" width="210" height="2" fill="#5a5a5a"/>
-          <polygon points="236,152 276,152 292,184 292,218 236,218" fill="#262626"/>
-          <polygon points="246,160 270,160 282,182 246,182" fill="#111"/>
-          <rect x="236" y="214" width="56" height="4" fill="#3a3a3a"/>
-          <circle cx="58" cy="226" r="12" fill="#050505" stroke="#444" stroke-width="3"/>
-          <circle cx="204" cy="226" r="12" fill="#050505" stroke="#444" stroke-width="3"/>
-          <circle cx="266" cy="226" r="12" fill="#050505" stroke="#444" stroke-width="3"/>
+          <rect x="20" y="206" width="210" height="12" fill="#24384F"/>
+          <rect x="20" y="206" width="210" height="2" fill="#3B5A7C"/>
+          <polygon points="236,152 276,152 292,184 292,218 236,218" fill="#24384F"/>
+          <polygon points="246,160 270,160 282,182 246,182" fill="#08121D"/>
+          <rect x="236" y="214" width="56" height="4" fill="#3B5A7C"/>
+          <circle cx="58" cy="226" r="12" fill="#08121D" stroke="#3B5A7C" stroke-width="3"/>
+          <circle cx="204" cy="226" r="12" fill="#08121D" stroke="#3B5A7C" stroke-width="3"/>
+          <circle cx="266" cy="226" r="12" fill="#08121D" stroke="#3B5A7C" stroke-width="3"/>
         </svg></div>
         <div class="cap"><h3>Доставка и установка</h3><p>По городу в день заявки при звонке до 14:00. В машину помещается 4 кабины.</p></div>
       </article>
@@ -490,13 +490,13 @@ form .btn{height:52px;width:100%;font-size:15px}
       </article>
       <article class="card">
         <div class="scene"><svg viewBox="0 0 300 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <rect width="300" height="330" fill="#161616"/><polygon points="0,240 300,240 300,330 0,330" fill="#0a0a0a"/>
-          <polygon points="0,0 70,0 0,150" fill="#1a1a1a"/>
-          <rect x="148" y="14" width="3" height="42" fill="#3a3a3a"/>
-          <polygon points="110,56 190,56 150,92" fill="#2c2c2c"/>
-          <polygon points="150,92 110,56 150,60" fill="#444"/>
+          <rect width="300" height="330" fill="#142638"/><polygon points="0,240 300,240 300,330 0,330" fill="#0B1724"/>
+          <polygon points="0,0 70,0 0,150" fill="#1A2F45"/>
+          <rect x="148" y="14" width="3" height="42" fill="#3B5A7C"/>
+          <polygon points="110,56 190,56 150,92" fill="#24384F"/>
+          <polygon points="150,92 110,56 150,60" fill="#3B5A7C"/>
           <g transform="translate(88 78) scale(.62)"><use href="#cabg"/></g>
-          <polygon points="236,180 276,180 276,196 292,170 276,144 276,160 236,160" fill="#2a2a2a" transform="translate(0 20)"/>
+          <polygon points="236,180 276,180 276,196 292,170 276,144 276,160 236,160" fill="#24384F" transform="translate(0 20)"/>
         </svg></div>
         <div class="cap"><h3>Вывоз</h3><p>Забираем в срок и закрываем документы. По городу рейс 800 ₽.</p></div>
       </article>
@@ -509,8 +509,8 @@ form .btn{height:52px;width:100%;font-size:15px}
             <a class="btn btn-w" href="#order">Связаться</a>
           </div>
           <div class="scene"><svg viewBox="0 0 800 340" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-            <rect width="800" height="340" fill="#161616"/><polygon points="0,250 800,250 800,340 0,340" fill="#0a0a0a"/>
-            <polygon points="300,0 380,0 200,250 120,250" fill="#1a1a1a"/>
+            <rect width="800" height="340" fill="#142638"/><polygon points="0,250 800,250 800,340 0,340" fill="#0B1724"/>
+            <polygon points="300,0 380,0 200,250 120,250" fill="#1A2F45"/>
             <g transform="translate(60 100) scale(.5)"><use href="#m1"/></g>
             <g transform="translate(180 100) scale(.5)"><use href="#m1"/></g>
             <g transform="translate(300 100) scale(.5)"><use href="#m2"/></g>
@@ -541,22 +541,22 @@ form .btn{height:52px;width:100%;font-size:15px}
   <div class="rows">
     <div class="row"><div class="wrap">
       <div class="row-l"><span class="num">1</span><div><h3>Заявка</h3><p>Звонок, Telegram или форма</p></div></div>
-      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#161616"/><polygon points="0,150 200,150 200,200 0,200" fill="#0a0a0a"/><rect x="40" y="52" width="120" height="76" rx="6" fill="#232323"/><rect x="52" y="66" width="60" height="6" fill="#444"/><rect x="52" y="80" width="92" height="4" fill="#333"/><rect x="52" y="90" width="76" height="4" fill="#333"/><rect x="52" y="104" width="34" height="12" rx="6" fill="#555"/></svg><small>Фото: приём заявки</small></div>
+      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#142638"/><polygon points="0,150 200,150 200,200 0,200" fill="#0B1724"/><rect x="40" y="52" width="120" height="76" rx="6" fill="#1D3550"/><rect x="52" y="66" width="60" height="6" fill="#3B5A7C"/><rect x="52" y="80" width="92" height="4" fill="#3B5A7C"/><rect x="52" y="90" width="76" height="4" fill="#3B5A7C"/><rect x="52" y="104" width="34" height="12" rx="6" fill="#4E6278"/></svg><small>Фото: приём заявки</small></div>
       <p class="para">Называете адрес, даты и число кабин. Перезваниваем за 15 минут в рабочее время и считаем стоимость до выезда.</p>
     </div></div>
     <div class="row"><div class="wrap">
       <div class="row-l"><span class="num">2</span><div><h3>Доставка</h3><p>В день заявки по городу</p></div></div>
-      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#161616"/><polygon points="0,150 200,150 200,200 0,200" fill="#0a0a0a"/><g transform="translate(58 38) scale(.5)"><use href="#cabg"/></g><polygon points="120,0 150,0 80,150 50,150" fill="#1b1b1b"/></svg><small>Фото: установка на участке</small></div>
+      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#142638"/><polygon points="0,150 200,150 200,200 0,200" fill="#0B1724"/><g transform="translate(58 38) scale(.5)"><use href="#cabg"/></g><polygon points="120,0 150,0 80,150 50,150" fill="#18304A"/></svg><small>Фото: установка на участке</small></div>
       <p class="para">Если позвонили до 14:00, привезём по Новосибирску в тот же день. Ставим там, где показали. В машину помещается 4 кабины.</p>
     </div></div>
     <div class="row"><div class="wrap">
       <div class="row-l"><span class="num">3</span><div><h3>Обслуживание</h3><p>400 ₽ за кабину за выезд</p></div></div>
-      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#161616"/><polygon points="0,150 200,150 200,200 0,200" fill="#0a0a0a"/><g transform="translate(20 46) scale(.46)"><use href="#cabg"/></g><rect x="118" y="88" width="56" height="62" rx="4" fill="#262626"/><rect x="128" y="70" width="36" height="20" fill="#333"/><rect x="170" y="100" width="22" height="4" fill="#444"/></svg><small>Фото: визит по графику</small></div>
+      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#142638"/><polygon points="0,150 200,150 200,200 0,200" fill="#0B1724"/><g transform="translate(20 46) scale(.46)"><use href="#cabg"/></g><rect x="118" y="88" width="56" height="62" rx="4" fill="#24384F"/><rect x="128" y="70" width="36" height="20" fill="#3B5A7C"/><rect x="170" y="100" width="22" height="4" fill="#3B5A7C"/></svg><small>Фото: визит по графику</small></div>
       <p class="para">Откачка, мойка, расходники. Приезжаем по графику и присылаем отчёт о визите.</p>
     </div></div>
     <div class="row"><div class="wrap">
       <div class="row-l"><span class="num">4</span><div><h3>Вывоз</h3><p>Забираем в срок</p></div></div>
-      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#161616"/><polygon points="0,150 200,150 200,200 0,200" fill="#0a0a0a"/><rect x="20" y="124" width="160" height="10" fill="#2c2c2c"/><g transform="translate(34 36) scale(.4)"><use href="#cabg"/></g><g transform="translate(94 36) scale(.4)"><use href="#cabg"/></g></svg><small>Фото: погрузка кабин</small></div>
+      <div class="ph"><svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="200" height="200" fill="#142638"/><polygon points="0,150 200,150 200,200 0,200" fill="#0B1724"/><rect x="20" y="124" width="160" height="10" fill="#24384F"/><g transform="translate(34 36) scale(.4)"><use href="#cabg"/></g><g transform="translate(94 36) scale(.4)"><use href="#cabg"/></g></svg><small>Фото: погрузка кабин</small></div>
       <p class="para">По окончании аренды вывозим кабины и закрываем документы. Для юрлиц: договор и закрывающие документы.</p>
     </div></div>
   </div>
@@ -576,7 +576,7 @@ form .btn{height:52px;width:100%;font-size:15px}
       <a class="tile" href="#order"><div class="sq"><svg viewBox="0 0 280 260" aria-hidden="true"><use href="#m4"/></svg></div><h3>ЭС-04 Утеплённая</h3><p><b>от 525 ₽</b>/сутки</p><small>Работает до −35 °C, подогрев</small></a>
       <a class="tile" href="#order"><div class="sq"><svg viewBox="0 0 280 260" aria-hidden="true"><use href="#m5"/></svg></div><h3>Торфяной туалет для дачи</h3><p><b>8 900 ₽</b> · продажа</p><small>Для участка без подключения к сетям</small></a>
     </div>
-    <p style="margin-top:22px;font-size:13px;color:#8c8c8c;text-align:center">Цены «от» при аренде от 31 суток. Ставки на короткие сроки ниже в разделе «Сколько стоит».</p>
+    <p style="margin-top:22px;font-size:13px;color:#4E6278;text-align:center">Цены «от» при аренде от 31 суток. Ставки на короткие сроки ниже в разделе «Сколько стоит».</p>
   </div>
 </section>
 
@@ -606,7 +606,7 @@ form .btn{height:52px;width:100%;font-size:15px}
           <div><dt>Чистка раз в неделю<small>4 выезда × 400 ₽</small></dt><dd>1 600 ₽</dd></div>
           <div><dt>Доставка<small>один рейс по городу</small></dt><dd>800 ₽</dd></div>
         </dl>
-        <div class="tot"><span style="color:#8c8c8c;font-size:14px">Итого</span><b>13 400 ₽</b></div>
+        <div class="tot"><span style="color:#8FA3B8;font-size:14px">Итого</span><b>13 400 ₽</b></div>
       </div>
     </div>
   </div>
@@ -638,17 +638,17 @@ form .btn{height:52px;width:100%;font-size:15px}
     <article class="slide">
       <div class="tx"><div><h3>Анна, Бердск</h3><p class="who-s">Свадьба на участке, 80 гостей</p></div>
         <blockquote>«Заказали две кабины на 80 гостей, одну с рукомойником. Привезли утром, вечером кабины были в порядке. Просили поставить подальше от беседки — водитель поставил ровно там, где показали.»</blockquote></div>
-      <div class="ph"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="300" fill="#161616"/><polygon points="0,220 400,220 400,300 0,300" fill="#0a0a0a"/><polygon points="240,0 300,0 180,220 120,220" fill="#1b1b1b"/><g transform="translate(70 66) scale(.58)"><use href="#m1"/></g><g transform="translate(200 66) scale(.58)"><use href="#m2"/></g></svg><small>Фото: две кабины у участка</small></div>
+      <div class="ph"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="300" fill="#142638"/><polygon points="0,220 400,220 400,300 0,300" fill="#0B1724"/><polygon points="240,0 300,0 180,220 120,220" fill="#18304A"/><g transform="translate(70 66) scale(.58)"><use href="#m1"/></g><g transform="translate(200 66) scale(.58)"><use href="#m2"/></g></svg><small>Фото: две кабины у участка</small></div>
     </article>
     <article class="slide">
       <div class="tx"><div><h3>Дмитрий, ООО «СтройГрад»</h3><p class="who-s">Прораб, стройплощадка</p></div>
         <blockquote>«Три кабины на объекте полгода. Присылают отчёты о визитах, закрывающие документы приходят вовремя. У бухгалтерии вопросов нет.»</blockquote></div>
-      <div class="ph"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="300" fill="#161616"/><polygon points="0,220 400,220 400,300 0,300" fill="#0a0a0a"/><polygon points="0,60 120,0 200,0 40,220 0,220" fill="#1b1b1b"/><g transform="translate(20 66) scale(.58)"><use href="#m1"/></g><g transform="translate(140 66) scale(.58)"><use href="#m1"/></g><g transform="translate(260 66) scale(.58)"><use href="#m1"/></g></svg><small>Фото: три кабины на объекте</small></div>
+      <div class="ph"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="300" fill="#142638"/><polygon points="0,220 400,220 400,300 0,300" fill="#0B1724"/><polygon points="0,60 120,0 200,0 40,220 0,220" fill="#18304A"/><g transform="translate(20 66) scale(.58)"><use href="#m1"/></g><g transform="translate(140 66) scale(.58)"><use href="#m1"/></g><g transform="translate(260 66) scale(.58)"><use href="#m1"/></g></svg><small>Фото: три кабины на объекте</small></div>
     </article>
     <article class="slide">
       <div class="tx"><div><h3>Елена</h3><p class="who-s">Организатор забега на 800 участников</p></div>
         <blockquote>«Взяли 20 кабин, две для маломобильных. Поставили до старта, забрали на следующее утро.»</blockquote></div>
-      <div class="ph"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="300" fill="#161616"/><polygon points="0,220 400,220 400,300 0,300" fill="#0a0a0a"/><polygon points="300,0 340,0 200,220 160,220" fill="#1b1b1b"/><g transform="translate(14 110) scale(.4)"><use href="#m1"/></g><g transform="translate(94 110) scale(.4)"><use href="#m1"/></g><g transform="translate(174 110) scale(.4)"><use href="#m3"/></g><g transform="translate(274 110) scale(.4)"><use href="#m1"/></g></svg><small>Фото: ряд кабин у старта</small></div>
+      <div class="ph"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect width="400" height="300" fill="#142638"/><polygon points="0,220 400,220 400,300 0,300" fill="#0B1724"/><polygon points="300,0 340,0 200,220 160,220" fill="#18304A"/><g transform="translate(14 110) scale(.4)"><use href="#m1"/></g><g transform="translate(94 110) scale(.4)"><use href="#m1"/></g><g transform="translate(174 110) scale(.4)"><use href="#m3"/></g><g transform="translate(274 110) scale(.4)"><use href="#m1"/></g></svg><small>Фото: ряд кабин у старта</small></div>
     </article>
   </div>
 </section>
@@ -693,7 +693,7 @@ form .btn{height:52px;width:100%;font-size:15px}
   <div class="wrap">
     <div class="ftr-g">
       <div>
-        <a class="logo" href="#top"><i aria-hidden="true"><svg width="12" height="16" viewBox="0 0 12 16"><rect width="12" height="16" rx="1.5" fill="#000"/><rect x="2.5" y="4" width="7" height="10" fill="#fff"/></svg></i>эко сервис</a>
+        <a class="logo" href="#top"><i aria-hidden="true"><svg width="12" height="16" viewBox="0 0 12 16"><rect width="12" height="16" rx="1.5" fill="#0C1B2A"/><rect x="2.5" y="4" width="7" height="10" fill="#fff"/></svg></i>эко сервис</a>
         <p class="d">Аренда и продажа туалетных кабин в Новосибирске и области. Новосибирск, ул. Примерная, 1.</p>
       </div>
       <div><h4>Кабины</h4><ul><li><a href="#models">ЭС-01 Стандартная</a></li><li><a href="#models">ЭС-02 С рукомойником</a></li><li><a href="#models">ЭС-03 Для маломобильных</a></li><li><a href="#models">ЭС-04 Утеплённая</a></li><li><a href="#models">Торфяной туалет</a></li></ul></div>
