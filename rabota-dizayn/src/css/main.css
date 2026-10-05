@@ -653,3 +653,5 @@ p { max-width: 68ch; }
 
 .small.note, p.note { margin-top: 14px; }
 .hero .small.note { margin-top: 14px; }
+.tel--xl { display: inline-flex; align-items: center; min-height: 44px; }
+.contact-dl dd a:not(.btn) { display: inline-flex; align-items: center; min-height: 44px; }

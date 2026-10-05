@@ -653,6 +653,8 @@ p { max-width: 68ch; }
 
 .small.note, p.note { margin-top: 14px; }
 .hero .small.note { margin-top: 14px; }
+.tel--xl { display: inline-flex; align-items: center; min-height: 44px; }
+.contact-dl dd a:not(.btn) { display: inline-flex; align-items: center; min-height: 44px; }
 
 /* ТЕМЫ. Два набора токенов на <html data-theme="e|f">. Вся вёрстка в main.css берёт цвета только отсюда.
    Палитры взяты из макетов designs/05-blue/e-svetlo-goluboy.html и f-vozdushnyy.html.
