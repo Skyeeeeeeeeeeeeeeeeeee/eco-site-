@@ -223,7 +223,7 @@
       dec.disabled = !(nv > 1); inc.disabled = nv >= S.rates.maxCabins;
       const link = q('[data-calc-full]'), qs = new URLSearchParams({ n: isNaN(st.n) ? '' : st.n, d: isNaN(st.d) ? '' : st.d, u: st.u, z: st.z, km: st.z === 'region' && !isNaN(st.km) ? st.km : 0 });
       if (full && first !== true) { qs.set('m', st.m); try { history.replaceState(null, '', '?' + qs.toString() + location.hash); } catch (x) { /* file:// */ } }
-      if (link) link.href = BASE + '/ceny/?' + qs.toString() + '#calc';
+      if (link) link.href = BASE + '/ceny/index.html?' + qs.toString() + '#calc';
       const model = S.modelById(st.m);
       const summ = r.ok ? ('Расчёт: ' + model.name + ', ' + st.n + ' шт., ' + st.d + ' сут., обслуживание: ' + (S.rates.serviceOptions.find((o) => o.id === st.u) || {}).label + ', доставка: ' + (st.z === 'city' ? 'Новосибирск' : 'область ' + st.km + ' км') + ', итого ≈ ' + r.total + ' ₽') : '';
       const tg = q('[data-calc-tg]'); if (tg) tg.href = S.contacts.telegramUrl + (summ ? '?text=' + encodeURIComponent(summ) : '');
@@ -262,7 +262,7 @@
       const f = fieldOf(g), m = document.getElementById(g.id + '-msg');
       if (!r.ok) { out.textContent = '—'; f.dataset.state = 'error'; m.textContent = 'Укажите количество гостей от 1 до ' + S.fmt(S.eventRules.maxGuests); g.setAttribute('aria-invalid', 'true'); return; }
       f.dataset.state = 'default'; m.textContent = ''; g.removeAttribute('aria-invalid');
-      out.textContent = r.text; link.href = BASE + '/ceny/?n=' + Math.min(r.total, S.rates.maxCabins) + '#calc';
+      out.textContent = r.text; link.href = BASE + '/ceny/index.html?n=' + Math.min(r.total, S.rates.maxCabins) + '#calc';
     }
     g.addEventListener('input', run); alc.addEventListener('change', run); durs.forEach((d) => d.addEventListener('change', run));
   });
