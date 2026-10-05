@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<title>Cabin3D render</title>
+<link rel="stylesheet" href="../cabin3d.css">
+<style>
+html,body{margin:0;padding:0;background:transparent}
+#s{width:1200px;height:1200px}
+.cabin3d{border-radius:0;outline:none}
+.cabin3d__hint{display:none!important}
+</style></head><body>
+<div id="s"></div>
+<script src="../vendor/three.min.js"></script>
+<script src="../cabin3d.js"></script>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  window.__errors = [];
+  window.addEventListener('error', function (e) { window.__errors.push(e.message); });
+  window.api = Cabin3D.mount(document.getElementById('s'), {
+    model: q.get('model') || 'standart',
+    colors: Cabin3D[q.get('palette') === 'F' ? 'PRESET_F' : 'PRESET_E'],
+    autoRotate: false, initialAngle: +(q.get('angle') || 35), elevation: +(q.get('elev') || 12),
+    quality: 'high', shadow: 'soft', static: true,
+    onReady: function () { window.READY = true; }
+  });
+})();
+</script></body></html>

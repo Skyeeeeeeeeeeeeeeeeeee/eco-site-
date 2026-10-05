@@ -4,7 +4,8 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 export const NB = ' ';
 
 // Контекст сборки: заполняется build.mjs. prefix: относительный путь до корня сайта ('./', '../', '../../').
-export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), theme: 'e' };
+export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), theme: 'e',
+  renders: {}, cabinModels: false, cabinScene: false };  // v2: renders: { 'standart-e': {w,h,has450} }, заполняет build.mjs
 
 // Ссылки page-relative и с явным index.html, чтобы сайт открывался двойным кликом (file://) без сервера.
 export const u = (path) => {
@@ -50,6 +51,62 @@ export function photo(id, o = {}) {
   return `<figure class="photo${o.cls ? ' ' + o.cls : ''}"><div class="photo__frame"${ar}><img src="${small}" srcset="${small} 640w, ${big} 1280w" sizes="${o.sizes || '(min-width:900px) 40vw, 100vw'}" width="${p.w}" height="${p.h}" alt="${esc(o.alt || p.alt)}" loading="${o.eager ? 'eager' : 'lazy'}" decoding="async"></div>${cap}</figure>`;
 }
 
+/* ---------- v2: реалистичные рендеры моделей (shared/renders/{model}-{e|f}.png и -450.png). Нет файла: плоская SVG ---------- */
+const RENDER_KEY = { standart: 'standart', 's-rukomojnikom': 'rukomojnik', 'dlya-malomobilnyh': 'malomobilnye', uteplennaya: 'uteplennaya', torfyanoj: 'torfyanoj' };
+export const modelKey = (slug) => RENDER_KEY[slug] || 'standart';
+export const renderOf = (slug) => ctx.renders[modelKey(slug) + '-' + ctx.theme] || null;
+export function renderImg(slug, { alt, sizes = '(min-width:900px) 50vw, 100vw', cls = 'render', eager = false } = {}) {
+  const r = renderOf(slug); if (!r) return '';
+  const k = modelKey(slug) + '-' + ctx.theme;
+  const big = u('/renders/' + k + '.png'), small = u('/renders/' + k + '-450.png');
+  const set = r.has450 ? ` srcset="${small} 450w, ${big} 900w" sizes="${sizes}"` : '';
+  return `<img class="${cls}" src="${r.has450 ? small : big}"${set} width="${r.w}" height="${r.h}" alt="${esc(alt || '')}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
+}
+
+/* ---------- v2: счётчик: число в тексте анимируется скриптом, без JS остаётся итоговое значение ---------- */
+export function countVal(v) {
+  const t = String(v), m = t.match(/^\D*(\d[\d\s  ]*)\D*$/);
+  if (!m) return esc(t);
+  const digits = m[1].replace(/\D/g, '');
+  if (digits.length === 4 && +digits >= 1900 && +digits <= 2100) return esc(t); // год не считаем
+  return `<span class="cnt" data-count>${esc(t)}</span>`;
+}
+
+/* ---------- v2: виджет «успеваем сегодня». Текст подставляет life.js из SITE.copy; без JS статичная строка ---------- */
+export function liveWidget(cls = '') {
+  const C = ctx.S.copy;
+  return `<div class="live${cls ? ' ' + cls : ''}" data-live><span class="live__dot" aria-hidden="true"></span><p class="live__t" data-live-text aria-live="polite">${esc(C.liveStatic)}</p>${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</div>`;
+}
+
+/* ---------- v2: схема зон доставки (не карта): круги, Обь полосой, грузовик по пунктирному маршруту ---------- */
+const ROUTE = 'M222 282 C 292 296, 330 326, 400 374';
+export function deliveryMap() {
+  const S = ctx.S, Z = S.zones, L = S.copy.mapZoneLabels, D = S.rates.delivery;
+  const price = [S.rub(D.cityPerTrip), S.rub(D.nearPerTrip), S.rub(D.nearPerTrip) + ' и далее по километражу'];
+  const lab = (i, chipX, chipY, tx, ty, anchor) => `<circle class="zmap__chip" cx="${chipX}" cy="${chipY}" r="13"/><text class="zmap__ch" x="${chipX}" y="${chipY + 5}" text-anchor="middle">${Z[i].chip}</text><text class="zmap__t" x="${tx}" y="${ty}" text-anchor="${anchor}">${esc(L[Z[i].id])}</text>`;
+  const z = (i, r, labels) => `<g class="zmap__z" data-z="${Z[i].id}" tabindex="0" role="img" aria-label="Зона ${Z[i].chip}: ${esc(Z[i].name)}, ${esc(price[i])} за рейс"><circle class="zmap__c zmap__c--${Z[i].chip.toLowerCase()}" cx="250" cy="250" r="${r}"/>${labels}</g>`;
+  return `<figure class="zmap" data-zmap><svg class="zmap__svg" viewBox="0 0 500 500" role="group" aria-label="Схема зон доставки вокруг Новосибирска. Не карта." focusable="false">
+${z(2, 226, lab(2, 197, 48, 218, 54, 'start'))}${z(1, 152, lab(1, 202, 122, 223, 128, 'start'))}${z(0, 84, lab(0, 250, 196, 250, 238, 'middle'))}
+<path class="zmap__ob" d="M366 -10 C 342 80, 376 172, 326 252 S 236 410, 292 510"/><text class="zmap__river" x="396" y="96" transform="rotate(-76 396 96)">р. Обь</text>
+<path class="zmap__route" d="${ROUTE}"/><circle class="zmap__dest" cx="400" cy="374" r="7"/>
+<rect class="zmap__base" x="215" y="275" width="14" height="14" rx="3"/><text class="zmap__bt" x="222" y="314" text-anchor="middle">${esc(S.copy.mapBase)}</text>
+<g class="zmap__truck" style="offset-path:path('${ROUTE}')" aria-hidden="true"><g transform="scale(1.45)"><rect x="-16" y="-9" width="20" height="13" rx="2"/><path d="M4 -5h6l4 5v4H4z"/><circle cx="-8" cy="5" r="3.4"/><circle cx="8.5" cy="5" r="3.4"/></g></g>
+</svg><figcaption class="zmap__cap">${esc(S.copy.mapCaption)}${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</figcaption></figure>`;
+}
+
+/* ---------- v2: галерея «Кабины в работе»: все фото, scroll-snap, стрелки, drag ---------- */
+export function workGallery({ id = 'rabota', title = 'Кабины в работе', tag = 'Фотографии' } = {}) {
+  const ids = Object.keys(ctx.S.photos);
+  ctx.secN += 1;
+  return `<section class="section section--paper gal" id="${id}" aria-labelledby="${id}-h" data-carousel><div class="container gal__h"><header class="sec-head"><p class="label">${tag}</p><h2 id="${id}-h">${title}</h2></header>
+<div class="arrows js-only"><button class="arr" type="button" data-prev aria-label="Предыдущее фото">${chev('M10 3 5 8l5 5')}</button><button class="arr" type="button" data-next aria-label="Следующее фото">${chev('m6 3 5 5-5 5')}</button></div></div>
+<div class="track track--gal" data-track data-drag tabindex="0" role="group" aria-label="Фотографии кабин, листайте вбок или стрелками клавиатуры">${ids.map((p) => photo(p, { cls: 'photo--gal', ar: '4/3', sizes: '(min-width:900px) 520px, 70vw' })).join('')}</div>
+<div class="container gal__f">${ctx.production ? '' : dev('Фотографии иллюстративные, стоковые. Заменить снимками компании.')}</div></section>`;
+}
+export function photoPair(a1, a2, alts = []) {
+  return `<div class="container photo-pair">${[a1, a2].map((id, i) => photo(id, { cls: 'photo--card3', ar: '3/2', sizes: '(min-width:900px) 45vw, 100vw', alt: alts[i] })).join('')}</div>`;
+}
+
 export function a(href, text, cls = '', extra = '') {
   return `<a${cls ? ` class="${cls}"` : ''} href="${esc(u(href))}"${extra ? ' ' + extra : ''}>${text}</a>`;
 }
@@ -88,14 +145,14 @@ export function section(o, inner) {
 
 /* ---------- таблицы ---------- */
 // head: ['Модель', ...]; rows: [[th, td, ...]]; numFrom: индекс первой числовой колонки
-export function table({ caption, head, rows, numFrom = 99, cls = '', hideCaption = false, stack = true }) {
+export function table({ caption, head, rows, numFrom = 99, cls = '', hideCaption = false, stack = true, rowAttrs = [] }) {
   const th = head.map((h, i) => `<th scope="col" role="columnheader"${i >= numFrom ? ' class="num"' : ''}>${h}</th>`).join('');
-  const body = rows.map((r) => {
+  const body = rows.map((r, ri) => {
     const cells = r.map((c, i) => {
       if (i === 0) return `<th scope="row" role="rowheader">${c}</th>`;
       return `<td role="cell" data-label="${esc(head[i].replace(/<[^>]+>/g, ''))}"${i >= numFrom ? ' class="num"' : ''}>${c}</td>`;
     }).join('');
-    return `<tr role="row">${cells}</tr>`;
+    return `<tr role="row"${rowAttrs[ri] ? ' ' + rowAttrs[ri] : ''}>${cells}</tr>`;
   }).join('');
   return `<table class="tbl ${stack ? 'tbl--stack' : ''} ${cls}" role="table"><caption${hideCaption ? ' class="visually-hidden"' : ''}>${caption}</caption><thead role="rowgroup"><tr role="row">${th}</tr></thead><tbody role="rowgroup">${body}</tbody></table>`;
 }
@@ -127,7 +184,7 @@ export function modelCard(m, { headingLevel = 3, cta = false } = {}) {
     : `<span class="price">${rub(S.terms.peatPrice)}</span>`;
   const note = m.kind === 'rent' ? `<span class="small note">при аренде от ${S.rates.rentPerDay[S.rates.rentPerDay.length - 1].from}${NB}суток</span>` : '<span class="small note">в продаже</span>';
   return `<article class="model-card" data-filters="${m.filters.join(' ')}">
-<div class="sq">${illus(m.slug, m.name + ': плоская иллюстрация')}</div>
+<div class="sq${renderOf(m.slug) ? ' sq--r' : ''}">${renderImg(m.slug, { alt: `${m.sku} ${m.name}: 3D-визуализация`, sizes: '(min-width:1100px) 20vw, (min-width:700px) 33vw, 50vw' }) || illus(m.slug, m.name + ': плоская иллюстрация')}</div>
 <div class="model-card__body"><div class="model-card__top"><span class="label">${m.sku}</span><span class="tag${m.kind === 'sale' ? ' tag--sale' : ''}">${m.kind === 'sale' ? 'Продажа' : 'Аренда'}</span></div>
 <${h} class="model-card__title">${a('/katalog/' + m.slug + '/', esc(m.name), 'stretched')}</${h}>
 <p class="small">${esc(m.short)}</p>
@@ -146,7 +203,7 @@ export function steps(items, o = {}) {
     if (x.startsWith('ill:')) return `<div class="ph">${illScene(x.slice(4))}</div>`;
     return photo(x, { cls: 'photo--sq', ar: '1/1', sizes: '(min-width:900px) 190px, 160px' });
   };
-  return `<ol class="rows">${items.map((s, i) => `<li class="row"><div class="container row__in"><div class="row__l"><span class="num" aria-hidden="true">${i + 1}</span><h3>${s.t}</h3></div><div class="row__m">${m(media[i])}</div><p class="row__p">${s.text}</p></div></li>`).join('')}</ol>`;
+  return `<ol class="rows" data-timeline>${items.map((s, i) => `<li class="row"><div class="container row__in"><div class="row__l"><span class="num" aria-hidden="true">${i + 1}</span><h3>${s.t}</h3></div><div class="row__m">${m(media[i])}</div><p class="row__p">${s.text}</p></div></li>`).join('')}</ol>`;
 }
 export const processSteps = () => steps(ctx.S.steps, { media: ['ill:form', 'ill:doc', 'stroyka-sinyaya', 'meropriyatie-pole'] });
 

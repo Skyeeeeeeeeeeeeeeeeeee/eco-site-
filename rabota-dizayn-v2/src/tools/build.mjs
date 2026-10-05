@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 // Генератор двух сайтов «ЭКО СЕРВИС НОВОСИБИРСК» из одного исходника (темы E и F). Только Node 18+, без зависимостей.
 //
-//   node rabota-dizayn/src/tools/build.mjs                 собрать оба сайта и страницу выбора (rabota-dizayn/index.html)
-//   node rabota-dizayn/src/tools/build.mjs --theme=e       только одну тему (e | f)
-//   node rabota-dizayn/src/tools/build.mjs --production    падает, пока в content.js остались «ЗАГЛУШКА»; метки не выводятся
+//   node rabota-dizayn-v2/src/tools/build.mjs                 собрать оба сайта и страницу выбора (rabota-dizayn-v2/index.html)
+//   node rabota-dizayn-v2/src/tools/build.mjs --theme=e       только одну тему (e | f)
+//   node rabota-dizayn-v2/src/tools/build.mjs --production    падает, пока в content.js остались «ЗАГЛУШКА»; метки не выводятся
+// Версия 2: общие ресурсы (3D, фото, рендеры) лежат в ../rabota-dizayn/shared/ и копируются в каждый сайт при сборке.
+// Рендеры shared/renders/{model}-{e|f}.png (+ -450.png) подхватываются автоматически; нет файла: плоская SVG и предупреждение.
 //
 // Каждый сайт самодостаточен и открывается двойным кликом (file://): ссылки page-relative и с явным index.html,
 // SVG-спрайт встроен в страницу, нет preload шрифтов с crossorigin, нет ES-модулей, нет fetch/XHR.
@@ -15,8 +17,9 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ROOT = path.resolve(SRC, '..');           // rabota-dizayn/
-const SHARED = path.join(ROOT, 'shared');
+const ROOT = path.resolve(SRC, '..');           // rabota-dizayn-v2/
+const SHARED = process.env.ECO_SHARED ? path.resolve(process.env.ECO_SHARED) : path.resolve(ROOT, '../rabota-dizayn/shared'); // общие ресурсы v1, только чтение (ECO_SHARED: для проверок)
+const OUTROOT = process.env.ECO_OUT ? path.resolve(process.env.ECO_OUT) : ROOT;
 const args = process.argv.slice(2);
 const PROD = args.includes('--production') || process.env.NODE_ENV === 'production';
 const only = (args.find((x) => x.startsWith('--theme=')) || '').slice(8);
@@ -37,7 +40,28 @@ function loadData() {
   const contentSrc = fs.readFileSync(path.join(SRC, 'js/content.js'), 'utf8');
   vm.runInContext(contentSrc, sandbox, { filename: 'content.js' });
   vm.runInContext(fs.readFileSync(path.join(SRC, 'js/calc.js'), 'utf8'), sandbox, { filename: 'calc.js' });
-  return { SITE: sandbox.SITE, CALC: sandbox.SITE_CALC, contentSrc };
+  // v2: возможности 3D-компонента определяем по его исходнику (новые опции обратно совместимы, старая версия их игнорирует)
+  const c3 = fs.readFileSync(path.join(SHARED, 'cabin3d/cabin3d.js'), 'utf8');
+  const cabinModels = /torfyanoj/.test(c3) && /rukomojnik/.test(c3), cabinScene = /outdoor/.test(c3) && /drift/.test(c3);
+  if (cabinModels) { // у каждой модели своя 3D-версия: 3D показываем на всех страницах моделей
+    sandbox.SITE.models.forEach((m) => { m.view3d = true; const pg = sandbox.SITE.pages['/katalog/' + m.slug + '/']; if (pg) pg.uses3d = true; });
+  }
+  return { SITE: sandbox.SITE, CALC: sandbox.SITE_CALC, contentSrc, cabinModels, cabinScene };
+}
+
+/* ---------- PNG: размеры из IHDR ---------- */
+function pngSize(file) { const b = fs.readFileSync(file); return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) }; }
+const MODEL_KEYS = ['standart', 'rukomojnik', 'malomobilnye', 'uteplennaya', 'torfyanoj'];
+function scanRenders(themeId, warns) {
+  const found = {};
+  for (const k of MODEL_KEYS) {
+    const big = path.join(SHARED, 'renders', `${k}-${themeId}.png`), small = path.join(SHARED, 'renders', `${k}-${themeId}-450.png`);
+    if (!fs.existsSync(big)) { warns.push(`нет рендера ${k}-${themeId}.png: показана плоская SVG (shared/renders/)`); continue; }
+    const sz = pngSize(big), has450 = fs.existsSync(small);
+    if (!has450) warns.push(`нет ${k}-${themeId}-450.png: srcset без малого размера`);
+    found[`${k}-${themeId}`] = { w: sz.w, h: sz.h, has450 };
+  }
+  return found;
 }
 
 /* ---------- JPEG: размеры из заголовка ---------- */
@@ -65,10 +89,12 @@ const cp = (a, b) => { fs.mkdirSync(path.dirname(b), { recursive: true }); fs.co
 
 function buildTheme(theme, data) {
   const { SITE, CALC, contentSrc } = data;
-  const OUT = path.join(ROOT, theme.dir);
+  const OUT = path.join(OUTROOT, theme.dir);
   const errors = [], warns = [];
   const err = (m) => errors.push(`[${theme.id}] ${m}`);
-  Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id });
+  Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id, renders: scanRenders(theme.id, warns), cabinModels: data.cabinModels, cabinScene: data.cabinScene });
+  if (!data.cabinModels) warns.push('cabin3d.js без опции model: на страницах моделей 3D-кабина типовая');
+  if (!data.cabinScene) warns.push('cabin3d.js без scene/drift: в герое одна кабина в студии');
   const sprite = makeSprite();
 
   // 1. рендер
@@ -87,7 +113,7 @@ function buildTheme(theme, data) {
   const urls = pages.filter((p) => p.index !== false).map((p) => p.path);
   out.set('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((p) => `  <url><loc>${SITE.site.domain}${p}</loc><lastmod>${SITE.site.lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   out.set('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE.site.domain}/sitemap.xml\n`);
-  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Не правьте файлы здесь: они создаются командой \`node rabota-dizayn/src/tools/build.mjs\` из \`rabota-dizayn/src/\`.\n\nФотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования: страница «О компании», раздел «Источники фото».\n`);
+  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и общих ресурсов \`rabota-dizayn/shared/\`.\n\nФотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования: страница «О компании», раздел «Источники фото».\n`);
 
   // 2. запись
   rmrf(OUT);
@@ -95,10 +121,12 @@ function buildTheme(theme, data) {
   const css = fs.readFileSync(path.join(SRC, 'css/main.css'), 'utf8') + '\n' + fs.readFileSync(path.join(SRC, 'css/themes.css'), 'utf8');
   fs.mkdirSync(path.join(OUT, 'css'), { recursive: true });
   fs.writeFileSync(path.join(OUT, 'css/main.css'), css);
-  for (const f of ['content.js', 'calc.js', 'main.js', 'cabin-init.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
+  for (const f of ['content.js', 'calc.js', 'main.js', 'life.js', 'cabin-init.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
   for (const f of fs.readdirSync(path.join(SRC, 'fonts'))) cp(path.join(SRC, 'fonts', f), path.join(OUT, 'fonts', f));
   for (const f of ['favicon.svg', 'og.svg']) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
   for (const f of fs.readdirSync(path.join(SHARED, 'photos'))) cp(path.join(SHARED, 'photos', f), path.join(OUT, 'photos', f));
+  const rdir = path.join(SHARED, 'renders');
+  if (fs.existsSync(rdir)) for (const f of fs.readdirSync(rdir)) if (/\.png$/.test(f) && new RegExp(`-${theme.id}(-450)?\\.png$`).test(f)) cp(path.join(rdir, f), path.join(OUT, 'renders', f));
   for (const f of ['cabin3d.js', 'cabin3d.css']) cp(path.join(SHARED, 'cabin3d', f), path.join(OUT, 'cabin3d', f));
   cp(path.join(SHARED, 'cabin3d/vendor/three.min.js'), path.join(OUT, 'cabin3d/vendor/three.min.js'));
   cp(path.join(SHARED, 'cabin3d/vendor/LICENSE'), path.join(OUT, 'cabin3d/vendor/LICENSE'));
@@ -140,6 +168,25 @@ function buildTheme(theme, data) {
     const thumbCount = (html.match(/class="credits__th"/g) || []).length;
     if (imgCount - thumbCount !== figs.length) err(`${page.path}: <img> с фото (${imgCount - thumbCount}) не равно числу подписанных figure (${figs.length})`);
   }
+  // v2: проверки «живых» блоков
+  const nPhotos = Object.keys(SITE.photos).length;
+  for (const { page, html } of meta) {
+    const p = page.path;
+    if (['/', '/dostavka/'].includes(p)) {
+      if (!/data-live[\s>]/.test(html) || !/aria-live="polite"/.test(html)) err(`${p}: нет виджета приёма заявок с aria-live`);
+      if (!/data-zmap/.test(html) || (html.match(/data-zrow="/g) || []).length < 3) err(`${p}: нет схемы зон или строк data-zrow`);
+    } else if (/data-live[\s>]/.test(html)) err(`${p}: виджет не должен быть на этой странице`);
+    if (['/', '/o-kompanii/'].includes(p) && (html.match(/class="photo photo--gal"/g) || []).length !== nPhotos) err(`${p}: в галерее не все ${nPhotos} фото`);
+    if (p === '/' && !/data-scene="outdoor" data-count="3" data-drift="1" data-scroll-rotate="1"/.test(html)) err('/: нет параметров 3D-сцены героя');
+    if (p === '/' && !/3D-модель\. Покрутите/.test(html)) err('/: нет подписи к 3D-сцене');
+    if (['/', '/o-kompanii/'].includes(p) && !/data-count/.test(html)) err(`${p}: нет счётчиков`);
+    if (!/<html[^>]*>[\s\S]*?<script>document\.documentElement\.className\+=" js"<\/script>/.test(html)) err(`${p}: нет класса .js в head`);
+    if (/data-timeline/.test(html) && (html.match(/<li class="row">/g) || []).length < 3) err(`${p}: таймлайн без шагов`);
+    if (p.startsWith('/katalog/') && page.template === 'model') {
+      const key = { standart: 'standart', 's-rukomojnikom': 'rukomojnik', 'dlya-malomobilnyh': 'malomobilnye', uteplennaya: 'uteplennaya', torfyanoj: 'torfyanoj' }[page.model.replace(/^.*$/, (x) => SITE.modelById(x).slug)];
+      if (data.cabinModels && !new RegExp(`data-cabin3d data-model="${key}"`).test(html)) err(`${p}: 3D-контейнер не с моделью ${key}`);
+    }
+  }
   // размеры фото соответствуют файлам
   for (const [id, p] of Object.entries(SITE.photos)) {
     const sz = jpegSize(path.join(SHARED, 'photos', id + '.jpg'));
@@ -180,7 +227,7 @@ function chooser(data) {
   const T = [{ id: 'e', dir: 'e-svetlo-goluboy', name: 'Е «Светло-голубой»', note: 'Голубая шапка и герой, тёмно-синие блоки: карточки, расчёт, отзывы, подвал.' }, { id: 'f', dir: 'f-vozdushnyy', name: 'F «Воздушный»', note: 'Всё светлое: белый и бледно-голубой, без тёмных блоков.' }];
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${S.company.name}: две темы одного сайта</title>
+<title>${S.company.name}: две темы одного сайта, версия 2</title>
 <meta name="robots" content="noindex">
 <style>
 @font-face{font-family:Onest;font-weight:400 600;font-display:swap;src:url(e-svetlo-goluboy/fonts/onest-cyrillic.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
@@ -206,7 +253,7 @@ h1 span{color:#4E6278}
 .card--f .card__go{background:#9CC9F5;color:#0C1B2A;border:1px solid #6FA6DB}
 .note{margin-top:32px;font-size:14px;color:#4E6278;max-width:46em}
 </style></head><body><main class="w">
-<p style="font-size:13px;color:#4E6278">Выбор оформления</p>
+<p style="font-size:13px;color:#4E6278">Версия 2: реалистичнее и живее. Выбор оформления</p>
 <h1>${S.company.name}: <span>две цветовые темы одного дизайна</span></h1>
 <p class="lead">Структура, тексты, калькулятор и формы одинаковые. Различаются только палитра и несколько блоков: в теме Е тёмно-синие панели, в теме F всё светлое. Оба сайта открываются двойным кликом, без сервера.</p>
 <div class="grid">${card(T[0], ['#CFE4F8', '#B9D7F4', '#13263A', '#0C1B2A', '#9CC9F5'])}${card(T[1], ['#FFFFFF', '#F4F9FE', '#DDEDFB', '#9CC9F5', '#2F6FAE'])}</div>
@@ -219,6 +266,6 @@ h1 span{color:#4E6278}
 const data = loadData();
 const allErrors = [];
 for (const t of THEMES) allErrors.push(...buildTheme(t, data));
-if (!only) { fs.writeFileSync(path.join(ROOT, 'index.html'), chooser(data)); console.log('Страница выбора: rabota-dizayn/index.html'); }
+if (!only) { fs.writeFileSync(path.join(OUTROOT, 'index.html'), chooser(data)); console.log('Страница выбора: rabota-dizayn-v2/index.html'); }
 if (allErrors.length) { allErrors.forEach((e) => console.error('ОШИБКА: ' + e)); console.error(`\nСборка завершена с ошибками: ${allErrors.length}`); process.exit(1); }
 console.log('OK: проверки пройдены.');

@@ -12,6 +12,7 @@
   --bo-bg: transparent; --bo-hover-bg: #0C1B2A; --bo-hover-fg: #fff;
   --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #9CC9F5; --dbtn-hover: #B9D7F4;
   /* шапка */
+  --hdr-bds: #A9CFF3; --map-river: #7FB2E5; --tl-fill: #0C1B2A;
   --hdr-bg: #CFE4F8; --hdr-bd: transparent; --hdr-link: #1B3047; --hdr-hover: #B9D7F4; --mnav-bg: #CFE4F8; --mnav-line: #A9CFF3;
   --dd-bd: #D6E3F0; --dd-sh: none; --dd-hover: #F2F7FC; --burger-bd: #0C1B2A;
   --logo-tile: #0C1B2A; --logo-fg: #9CC9F5; --logo-bg: #0C1B2A;
@@ -48,6 +49,7 @@
   --btn-bg: #9CC9F5; --btn-fg: #0C1B2A; --btn-bd: #6FA6DB; --btn-hover: #B8D8F5;
   --bo-bg: #fff; --bo-hover-bg: #F4F9FE; --bo-hover-fg: #0C1B2A;
   --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #6FA6DB; --dbtn-hover: #B8D8F5;
+  --hdr-bds: #D3E4F4; --map-river: #8DBCEB; --tl-fill: #6FA6DB;
   --hdr-bg: #fff; --hdr-bd: #D3E4F4; --hdr-link: #0C1B2A; --hdr-hover: #EAF3FC; --mnav-bg: #fff; --mnav-line: #D3E4F4;
   --dd-bd: #D3E4F4; --dd-sh: 0 4px 16px rgba(12, 27, 42, .06); --dd-hover: #EAF3FC; --burger-bd: #0C1B2A;
   --logo-tile: #9CC9F5; --logo-fg: #0C1B2A; --logo-bg: #9CC9F5;

@@ -1,6 +1,7 @@
 // Шаблоны страниц. Каждый возвращает HTML содержимого <main>. Тексты берутся из structure.md, числа из content.js.
 import { ctx, esc, u, a, btn, tel, ic, illus, illScene, photo, apx, section, table, specTable, kvTable, priceTable, priceNote, modelCard, steps, processSteps,
-  faqBlock, faqItem, reviewCard, reviewsBlock, form, ctaBlock, calc, checkList, dev, devTag, rub, tailText, lead, NB } from './lib.mjs';
+  faqBlock, faqItem, reviewCard, reviewsBlock, form, ctaBlock, calc, checkList, dev, devTag, rub, tailText, lead, NB,
+  renderImg, renderOf, modelKey, countVal, liveWidget, deliveryMap, workGallery, photoPair } from './lib.mjs';
 
 const S = () => ctx.S;
 
@@ -14,8 +15,8 @@ export const crumbItems = (page) => [['/', 'Главная']].concat(page.crumbs
 function facts(rows, cls = '') {
   return `<dl class="hero-meta${cls ? ' ' + cls : ''}">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
 }
-function heroInner(page, { eyebrow, lead: ld, actions = '', side = '', note = '', tail, factsRow = '', noCrumbs = false }) {
-  return `<header class="hero hero--inner" data-hero><div class="container">${noCrumbs ? '' : crumbs(page)}<div class="hero__grid${side ? ' hero__grid--side' : ''}"><div class="hero__main"><p class="label">${eyebrow}</p><h1>${tailText(esc(page.h1), tail)}</h1>${ld ? `<p class="sub">${ld}</p>` : ''}${actions ? `<div class="hero__actions">${actions}</div>` : ''}${note ? `<p class="small note">${note}</p>` : ''}</div>${side ? `<div class="hero__side">${side}</div>` : ''}</div>${factsRow}</div><div class="hero-end"></div></header>`;
+function heroInner(page, { eyebrow, lead: ld, actions = '', side = '', note = '', tail, factsRow = '', noCrumbs = false, extra = '' }) {
+  return `<header class="hero hero--inner" data-hero><div class="container">${noCrumbs ? '' : crumbs(page)}<div class="hero__grid${side ? ' hero__grid--side' : ''}"><div class="hero__main"><p class="label">${eyebrow}</p><h1>${tailText(esc(page.h1), tail)}</h1>${ld ? `<p class="sub">${ld}</p>` : ''}${actions ? `<div class="hero__actions">${actions}</div>` : ''}${extra}${note ? `<p class="small note">${note}</p>` : ''}</div>${side ? `<div class="hero__side">${side}</div>` : ''}</div>${factsRow}</div><div class="hero-end"></div></header>`;
 }
 const stdFacts = () => facts([['срок аренды', 'от ' + S().terms.minDays + NB + 'суток'], ['документы', 'договор, счёт, акты'], ['оплата', 'по условиям заказа']], 'hero-meta--row');
 const reqBtn = (t = 'Получить расчёт') => btn('#zayavka', t, 'primary');
@@ -28,14 +29,14 @@ function audCards() {
 function zonesTable() {
   const Z = S().zones, D = S().rates.delivery;
   const price = [rub(D.cityPerTrip), rub(D.nearPerTrip), `${rub(D.nearPerTrip)} + ${rub(D.perKmOver)} за${NB}км сверх${NB}${D.nearKm}`];
-  return table({ caption: 'Зоны доставки и цена за рейс', cls: 'tbl--zone',
+  return table({ caption: 'Зоны доставки и цена за рейс', cls: 'tbl--zone', rowAttrs: Z.map((z) => `data-zrow="${z.id}"`),
     head: ['Зона', 'Цена за рейс (туда и обратно)', 'Ориентир по срокам'],
     rows: Z.map((z, i) => [`<span class="zone-chip zone-${z.chip.toLowerCase()}">${z.chip}</span> ${esc(z.name)}${z.towns.length ? `<br><span class="small">${z.towns.join(', ')} и др.</span>` : ''}`, price[i], esc(z.term)]) });
 }
 function zonesList() {
   const Z = S().zones, D = S().rates.delivery;
   const price = [rub(D.cityPerTrip), rub(D.nearPerTrip), `${rub(D.nearPerTrip)} + ${rub(D.perKmOver)}/км`];
-  return `<ul class="zones">${Z.map((z, i) => `<li class="zone"><h3>${esc(z.name)}</h3><b>${price[i]}</b><p>${esc(z.term)}</p><span class="sm">за рейс</span></li>`).join('')}</ul>`;
+  return `<ul class="zones">${Z.map((z, i) => `<li class="zone" data-zrow="${z.id}"><h3>${esc(z.name)}</h3><b>${price[i]}</b><p>${esc(z.term)}</p><span class="sm">за рейс</span></li>`).join('')}</ul>`;
 }
 function mapPh(label) {
   const Z = S().zones;
@@ -48,6 +49,10 @@ const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
 const homeFaqIds = () => S().faq.groups.flatMap((g) => g.items).filter((i) => i.home).map((i) => i.id);
 const groupIds = (id) => S().faqGroup(id).items.map((i) => i.id);
 const cabSvg = '<svg class="cab-fallback" viewBox="0 20 210 245" aria-hidden="true" focusable="false"><use href="#cabg"/></svg>';
+// запасной контент 3D-контейнера: рендер модели, если файл есть, иначе плоская SVG
+const cabFallback = (slug) => renderImg(slug, { alt: '', cls: 'cab-fallback cab-fallback--img', sizes: '(min-width:900px) 40vw, 90vw', eager: true }) || cabSvg;
+// параметры 3D (cabin-init.js читает data-*); autorotate выключаем только если сцена поддерживает drift
+const cabAttrs = (o) => ` data-model="${o.model}"${o.scene ? ` data-scene="${o.scene}"` : ''}${o.count ? ` data-count="${o.count}"` : ''}${o.drift ? ' data-drift="1"' : ''}${o.scrollRotate ? ' data-scroll-rotate="1"' : ''} data-autorotate="${o.drift && ctx.cabinScene ? 0 : 1}"`;
 
 /* =============== ШАБЛОНЫ =============== */
 export const templates = {
@@ -58,10 +63,10 @@ export const templates = {
     const hero = `<header class="hero hero--home" data-hero><div class="container"><div class="hero-top"><div class="hero-top__main">
 <h1 class="display">${tailText(esc(page.h1), 'в Новосибирске и области')}</h1>
 <p class="sub">Доставляем, устанавливаем, обслуживаем по графику и забираем. Для частных клиентов и организаций.</p>
-<p class="hero__actions">${btn('/ceny/', 'Рассчитать стоимость', 'primary', 'data-size="lg"')}${btn('#zayavka', 'Оставить заявку', 'outline', 'data-size="lg"')}</p></div>
-${facts(s.stats.slice(0, 2).map((x) => [esc(x.label), esc(x.value)]))}</div>
-<div class="stage"><div class="stage__view"><svg class="stage__bg" viewBox="0 0 1200 510" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><rect width="1200" height="510" fill="var(--stage-bg)"/><polygon points="470,0 580,0 400,400 280,400" fill="var(--stage-lt1)"/><polygon points="580,0 620,0 440,400 400,400" fill="var(--stage-lt2)"/><polygon points="0,380 1200,380 1200,510 0,510" fill="var(--stage-floor)"/><polygon points="0,380 1200,380 1200,384 0,384" fill="var(--stage-lt2)"/><polygon points="0,510 300,380 420,380 220,510" fill="var(--stage-tile)"/><polygon points="760,510 940,380 1010,380 900,510" fill="var(--stage-tile)"/></svg>
-<div class="stage-3d" data-cabin3d>${cabSvg}</div></div>
+<p class="hero__actions">${btn('/ceny/', 'Рассчитать стоимость', 'primary', 'data-size="lg"')}${btn('#zayavka', 'Оставить заявку', 'outline', 'data-size="lg"')}</p>${liveWidget()}</div>
+${facts(s.stats.slice(0, 2).map((x) => [esc(x.label), countVal(x.value)]))}</div>
+<div class="stage"><div class="stage__view">${ctx.cabinScene ? '<svg class="stage__bg" viewBox="0 0 1200 510" preserveAspectRatio="none" aria-hidden="true" focusable="false"><rect width="1200" height="510" fill="var(--stage-bg)"/></svg>' : `<svg class="stage__bg" viewBox="0 0 1200 510" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><rect width="1200" height="510" fill="var(--stage-bg)"/><polygon points="470,0 580,0 400,400 280,400" fill="var(--stage-lt1)"/><polygon points="580,0 620,0 440,400 400,400" fill="var(--stage-lt2)"/><polygon points="0,380 1200,380 1200,510 0,510" fill="var(--stage-floor)"/><polygon points="0,380 1200,380 1200,384 0,384" fill="var(--stage-lt2)"/><polygon points="0,510 300,380 420,380 220,510" fill="var(--stage-tile)"/><polygon points="760,510 940,380 1010,380 900,510" fill="var(--stage-tile)"/></svg>`}
+<div class="stage-3d" data-cabin3d${cabAttrs({ model: 'standart', scene: 'outdoor', count: 3, drift: true, scrollRotate: true })}>${cabFallback('standart')}</div><p class="stage__cap">3D-модель. Покрутите</p></div>
 <div class="stage-bar"><div><b>${m1.sku} ${esc(m1.name.replace(' кабина', ''))}</b>${esc(m1.cardFacts.join(', ')).replace(/ (л|кг|см)/g, NB + '$1')}</div><div><b>Мойка и дезинфекция</b>каждую кабину, перед выдачей</div><div><b>Радиус ${D.maxKm}${NB}км</b>Новосибирск и область</div></div></div></div><div class="hero-end"></div></header>`;
     const mqItems = [`${s.stats[0].value} ${s.stats[0].label}`, `${s.stats[1].value}: ${s.stats[1].label}`, s.stats[2].label.replace(/^./, (c) => c.toUpperCase()), 'Договор и закрывающие документы для организаций', 'Обслуживание по графику, зимой с незамерзающим составом', cap(C.hours)];
     const mq = `<div class="mq" role="region" aria-label="Коротко о нас"><div class="mq__t"><ul>${mqItems.map((t) => `<li>${esc(t)}</li>`).join('')}</ul><ul aria-hidden="true">${mqItems.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></div></div>`;
@@ -87,13 +92,14 @@ ${photo('festival-ryad', { cls: 'photo--card', sizes: '(min-width:800px) 55vw, 1
     const m = [];
     m.push(`<section class="section" id="chto" aria-labelledby="chto-h"><div class="container"><p class="label">Что мы делаем</p><div class="what-head"><h2 class="visually-hidden" id="chto-h">Что мы делаем</h2><p class="lead">${lead('Сдаём и продаём туалетные кабины в Новосибирске и области, привозим, обслуживаем по графику и вывозим по окончании аренды. Вам остаётся показать, где ставить.')}</p><p class="side">Работаем с дачниками, прорабами и организаторами мероприятий. Договор и закрывающие документы для организаций.</p></div>${bento}${who}</div></section>`);
     m.push(`<section class="section section--flush" id="poryadok" aria-labelledby="poryadok-h"><div class="container proc-head"><p class="label">Простой процесс</p><h2 class="visually-hidden" id="poryadok-h">Как мы работаем</h2><p class="lead">${lead('Четыре шага от звонка до вывоза. Вы называете адрес и даты, остальное берём на себя: от откачки до закрывающих документов.')}</p></div>${processSteps()}</section>`);
+    m.push(workGallery());
     m.push(section({ id: 'modeli', title: 'Модели под вашу задачу', tag: 'Кабины и цены', center: true },
       `<p class="mod-btns">${btn('/ceny/', 'Получить расчёт', 'primary')}${btn('/katalog/', 'Все модели', 'outline')}</p><div class="tiles">${s.models.map((x) => modelCard(x)).join('')}</div>${priceNote()}`));
     const ce = ctx.CALC.calculate(s, { n: 2, d: 10, u: 'weekly', z: 'city', m: 'standart' });
     m.push(`<section class="section section--paper" id="stoimost" aria-labelledby="stoimost-h"><div class="container"><p class="label">Сколько стоит</p><div class="price-g"><div><h2 class="lead" id="stoimost-h">${lead('Чем дольше срок, тем дешевле сутки. Ставки для всех моделей считаются от базовой ставки кабины ЭС-01.')}</h2><div class="price-tbl">${priceTable('Аренда: цена за кабину в сутки, ₽', false)}</div><div class="notes"><span>Скидка на аренду: ${s.rates.qtyDiscount.map((d) => `${d.pct}% от ${d.from} кабин`).join(', ')}.</span><span>Минимальный заказ ${rub(s.rates.minOrder)}.</span></div>${priceNote()}</div>
 <div class="ex"><h3>Пример: дача на 10 суток</h3><p class="t">2 стандартные кабины, обслуживание раз в неделю, доставка по Новосибирску.</p><dl><div><dt>Аренда<small>2 кабины × 10 суток × ${rub(ce.unit)}</small></dt><dd>${rub(ce.rent)}</dd></div><div><dt>Обслуживание<small>${ce.V} ${ctx.CALC.plural(ce.V, 'визит', 'визита', 'визитов')} × 2 кабины × ${rub(ce.visit)}</small></dt><dd>${rub(ce.service)}</dd></div><div><dt>Доставка<small>один рейс по городу</small></dt><dd>${rub(ce.delivery)}</dd></div></dl><p class="tot"><span>Итого</span><b>${rub(ce.total)}</b></p></div></div></div></section>`);
     m.push(section({ id: 'calc', title: 'Предварительный расчёт стоимости', tag: 'Калькулятор', lead: 'Укажите параметры, получите ориентир. Итоговую стоимость назовём до оплаты.' }, calc('compact')));
-    m.push(`<section class="section" id="zony" aria-labelledby="zony-h"><div class="container"><p class="label">Доставка и вывоз</p><div class="dl-g"><h2 class="lead" id="zony-h">${lead(`Три зоны, цена за рейс заранее. В одну машину помещается до ${D.cabinsPerTrip} кабин.`)}</h2><div>${zonesList()}<p class="zone-note">Пример: 100 км от города = ${rub(D.nearPerTrip)} + ${100 - D.nearKm} км × ${rub(D.perKmOver)} = ${rub(D.nearPerTrip + (100 - D.nearKm) * D.perKmOver)} за рейс. Вывоз считаем по тем же зонам. ${a('/dostavka/', 'Подробнее о зонах и сроках')}</p></div></div></div></section>`);
+    m.push(`<section class="section" id="zony" aria-labelledby="zony-h"><div class="container"><p class="label">Доставка и вывоз</p><div class="dl-g"><div><h2 class="lead" id="zony-h">${lead(`Три зоны, цена за рейс заранее. В одну машину помещается до ${D.cabinsPerTrip} кабин.`)}</h2><div class="zmap-wrap">${deliveryMap()}</div></div><div>${zonesList()}<p class="zone-note">Пример: 100 км от города = ${rub(D.nearPerTrip)} + ${100 - D.nearKm} км × ${rub(D.perKmOver)} = ${rub(D.nearPerTrip + (100 - D.nearKm) * D.perKmOver)} за рейс. Вывоз считаем по тем же зонам. ${a('/dostavka/', 'Подробнее о зонах и сроках')}</p></div></div></div></section>`);
     m.push(section({ id: 'usloviya', title: 'Что важно знать до заказа', tag: 'Условия', paper: true },
       `<div class="grid grid--4">
 <article class="svc-card"><h3 class="h4">Стоимость</h3><p>Складывается из аренды, обслуживания и доставки. Цены и формула расчёта открыты.</p>${btn('/ceny/', 'Цены на аренду', 'link')}</article>
@@ -147,6 +153,7 @@ ${photo('festival-ryad', { cls: 'photo--card', sizes: '(min-width:800px) 55vw, 1
 <article class="svc-card"><h3 class="h4">Дача</h3><p>Временное решение на сезон или период ремонта. Для постоянного использования подойдёт торфяной туалет.</p><p class="small">${a('/katalog/torfyanoj/', 'Торфяной туалет для дачи')}</p></article></div>`));
     m.push(section({ id: 'vhodit', title: 'Что вы получаете', tag: 'Состав', paper: true },
       checkList(['Чистую кабину: мойка и дезинфекция перед выдачей', 'Доставку и установку на указанное место', 'Обслуживание по выбранной частоте (по желанию)', 'Вывоз после окончания срока', 'Понятный расчёт: аренда, обслуживание и доставка указаны отдельными строками'])));
+    m.push(`<div class="section section--tight">${photoPair('stroyka-sinyaya', 'meropriyatie-pole')}</div>`);
     m.push(section({ id: 'calc', title: 'Рассчитайте стоимость', tag: 'Калькулятор' }, calc('compact', { n: 1, d: 3, u: 'none', z: 'city', km: 0 })));
     m.push(section({ id: 'oformlenie', title: 'Порядок оформления', tag: 'Порядок', paper: true, bleed: true },
       steps([{ t: 'Заявка', text: 'Оставляете заявку или звоните.' }, { t: 'Стоимость и место', text: 'Называем стоимость и согласуем дату, время и место установки.' }, { t: 'Предоплата', text: `Вносите предоплату (${s.terms.prepayPct}%).` }, { t: 'Доставка', text: 'Привозим кабину. Остаток оплачивается по факту доставки.' }], { media: ['ill:form', 'ill:doc', 'ill:doc', 'ill:cab'] })
@@ -175,6 +182,7 @@ ${photo('festival-ryad', { cls: 'photo--card', sizes: '(min-width:800px) 55vw, 1
 <div class="lg-5"><h3 class="h4">Образец договора</h3><p class="small">Образец договора по запросу.</p>${docsList()}<p class="more">${reqBtn('Запросить коммерческое предложение')}</p></div></div>`));
     m.push(section({ id: 'grafik', title: 'Обслуживание по графику', tag: 'График' },
       `<div class="grid grid--split"><div><p>Периодичность зависит от числа пользователей. Для стройки обычно 1–2 визита в неделю. График фиксируется в договоре. После визита отправляем отчёт в мессенджер или на почту.</p><p class="more">${btn('/obsluzhivanie/', 'Что входит в визит', 'link')}</p></div>${photo('stroyka-oranzhevaya', { cls: 'photo--card3', ar: '3/2', sizes: '(min-width:900px) 40vw, 100vw' })}</div>`));
+    m.push(`<div class="section section--tight">${photoPair('ulica-kontejner', 'malomobilnye')}</div>`);
     m.push(section({ id: 'raschety', title: 'Порядок расчётов', tag: 'Оплата', paper: true }, checkList(['Предоплата или постоплата по договору', 'Оплата по счёту', 'Для постоянных клиентов условия обсуждаются индивидуально'])));
     m.push(section({ id: 'calc', title: 'Предварительный расчёт', tag: 'Калькулятор' }, calc('compact', { n: 2, d: 30, u: 'weekly', z: 'city', km: 0 })));
     m.push(reviewsBlock(['stroygrad', 'beg', 'ip-andrey'], { paper: true, id: 'otzyvy-blok', title: 'Отзывы организаций' }));
@@ -237,18 +245,22 @@ ${photo('festival-ryad', { cls: 'photo--card', sizes: '(min-width:800px) 55vw, 1
   model(page) {
     const s = S(), m = s.modelById(page.model), rent = m.kind === 'rent';
     const three = !!m.view3d, mainPhoto = m.photo;
-    const scheme = `<figure class="gallery__slide gallery__slide--svg" data-slide${three || mainPhoto ? ' hidden' : ''}>${illus(m.slug, m.name + ': плоская иллюстрация', 'illus illus--big')}<figcaption class="gallery__cap">Схема модели ${m.sku}</figcaption></figure>`;
+    const rImg = renderImg(m.slug, { alt: `${m.sku} ${m.name}: реалистичное изображение`, cls: 'render render--big', sizes: '(min-width:900px) 55vw, 100vw' });
+    const scheme = rImg
+      ? `<figure class="gallery__slide gallery__slide--render" data-slide hidden>${rImg}<figcaption class="gallery__cap">Изображение модели ${m.sku}</figcaption></figure>`
+      : `<figure class="gallery__slide gallery__slide--svg" data-slide${three || mainPhoto ? ' hidden' : ''}>${illus(m.slug, m.name + ': плоская иллюстрация', 'illus illus--big')}<figcaption class="gallery__cap">Схема модели ${m.sku}</figcaption></figure>`;
     const slides = [];
     const thumbs = [];
     if (three) {
-      slides.push(`<figure class="gallery__slide gallery__slide--3d" data-slide><div class="stage-3d stage-3d--model" data-cabin3d>${cabSvg}</div><figcaption class="gallery__cap">3D-модель типовой кабины: потяните, чтобы повернуть.${m.slug === 'standart' ? '' : ' Особенности модели показаны на схеме и в характеристиках.'}</figcaption></figure>`);
+      const own = ctx.cabinModels; // отдельная 3D-модель для каждого варианта кабины
+      slides.push(`<figure class="gallery__slide gallery__slide--3d" data-slide><div class="stage-3d stage-3d--model" data-cabin3d${cabAttrs({ model: modelKey(m.slug) })}>${cabFallback(m.slug)}</div><figcaption class="gallery__cap">3D-модель${own ? ` ${m.sku}` : ' типовой кабины'}: потяните, чтобы повернуть.${own || m.slug === 'standart' ? '' : ' Особенности модели показаны на схеме и в характеристиках.'}</figcaption></figure>`);
       thumbs.push('3D-модель');
     }
     if (mainPhoto) {
       slides.push(`<div class="gallery__slide gallery__slide--photo" data-slide>${photo(mainPhoto, { cls: 'photo--gallery', ar: '3/2', eager: true, sizes: '(min-width:900px) 55vw, 100vw' })}</div>`);
       thumbs.push('Фото');
     }
-    slides.push(scheme); thumbs.push('Схема');
+    slides.push(scheme); thumbs.push(rImg ? 'Рендер' : 'Схема');
     const gal = `<div class="gallery" data-gallery><div class="gallery__main">${slides.join('')}<span class="label gallery__sku">${m.sku}</span></div>${thumbs.length > 1 ? `<div class="gallery__thumbs js-only" role="group" aria-label="Вид модели">${thumbs.map((t, n) => `<button class="gallery__t" type="button" data-thumb="${n}" aria-pressed="${n === 0}">${t}</button>`).join('')}</div>` : ''}</div>`;
     const hero = `<header class="hero hero--inner hero--model" data-hero><div class="container">${crumbs(page)}<div class="model-hero">${gal}
 <div class="buy"><p class="label">${m.sku} · ${rent ? 'Аренда' : 'Продажа'}</p><h1>${tailText(esc(page.h1), ['в аренду', 'для зимы', 'для дачи'].find((t) => page.h1.endsWith(t)))}</h1><p class="sub">${esc(m.purpose)}</p>
@@ -341,10 +353,10 @@ ${m.note ? `<p class="small note">${esc(m.note)}${ctx.production ? '' : ' <span 
 
   dostavka(page) {
     const s = S(), D = s.rates.delivery;
-    const hero = heroInner(page, { eyebrow: 'Доставка', tail: 'по Новосибирску и области', lead: `Привозим, устанавливаем и забираем кабины собственным транспортом. Стоимость зависит от расстояния и числа кабин: один рейс до ${D.cabinsPerTrip} кабин.` });
+    const hero = heroInner(page, { eyebrow: 'Доставка', tail: 'по Новосибирску и области', lead: `Привозим, устанавливаем и забираем кабины собственным транспортом. Стоимость зависит от расстояния и числа кабин: один рейс до ${D.cabinsPerTrip} кабин.`, extra: liveWidget() });
     const m = [];
     m.push(section({ id: 'zony', title: 'Зоны доставки', tag: 'Зоны' },
-      `<div class="grid"><div class="lg-5">${mapPh('Схема зон доставки: три кольца вокруг Новосибирска')}</div><div class="lg-7">${zonesTable()}<p class="small note">Свыше ${D.maxKm} км и крупные заказы: индивидуальный расчёт.</p></div></div>`));
+      `<div class="grid"><div class="lg-5">${deliveryMap()}</div><div class="lg-7">${zonesTable()}<p class="small note">Свыше ${D.maxKm} км и крупные заказы: индивидуальный расчёт.</p></div></div>`));
     m.push(section({ id: 'proverka', title: 'Узнать стоимость доставки', tag: 'Проверка адреса', paper: true },
       `<div class="grid"><div class="lg-5"><p>Укажите населённый пункт и телефон. Назовём стоимость и срок доставки.</p></div><div class="lg-7">${form({ mode: 'zone', heading: 'Проверка адреса', label: 'Проверка адреса доставки' })}</div></div>`));
     m.push(section({ id: 'kak', title: 'Как проходит доставка', tag: 'Порядок' },
@@ -358,13 +370,13 @@ ${m.note ? `<p class="small note">${esc(m.note)}${ctx.production ? '' : ' <span 
     const s = S(), K = s.company;
     const hero = heroInner(page, { eyebrow: 'О компании', lead: `Мы сдаём в аренду и обслуживаем туалетные кабины в Новосибирске и области с ${K.founded} года. Работаем с частными клиентами и организациями: стройки, мероприятия, дачи, производственные объекты.` });
     const m = [];
-    m.push(`<div class="stats-wrap"><dl class="stats stats--5">${s.companyStats.map((x) => `<div><dt class="small">${esc(x.label)}</dt><dd class="stat">${esc(x.value)}</dd></div>`).join('')}</dl></div>`);
+    m.push(`<div class="stats-wrap"><dl class="stats stats--5">${s.companyStats.map((x) => `<div><dt class="small">${esc(x.label)}</dt><dd class="stat">${countVal(x.value)}</dd></div>`).join('')}</dl></div>`);
     m.push(section({ id: 'printsipy', title: 'Принципы работы', tag: 'Принципы' },
       checkList(['Стоимость называем до оплаты и фиксируем в договоре или счёте.', 'Кабины моем и дезинфицируем перед каждой выдачей.', 'Обслуживание ведём по графику, график согласуем заранее.', 'Условия ответственности прописаны в договоре.', 'Для организаций оформляем договор и закрывающие документы.'])));
-    const ids = Object.keys(s.photos);
-    m.push(section({ id: 'park', title: 'Парк и оборудование', tag: 'Парк', paper: true },
+    m.push(section({ id: 'park', title: 'Парк и оборудование', tag: 'Парк' },
       `<div class="grid grid--split"><div><p>Кабины разных моделей, спецтехника для откачки, площадка для мойки и дезинфекции.</p>${dev('Количество кабин по моделям, спецтехника и фото парка: данные укажет клиент. Фото ниже иллюстративные, стоковые.')}</div></div>
-<div class="strip" role="group" aria-label="Фотографии, листайте вбок" tabindex="0">${ids.map((id) => photo(id, { cls: 'photo--strip', ar: '4/3', sizes: '(min-width:900px) 24vw, 70vw' })).join('')}</div>`));
+`));
+    m.push(workGallery());
     m.push(reviewsBlock(['anna', 'sergey', 'stroygrad', 'beg', 'olga', 'ip-andrey'], { id: 'otzyvy', devNote: 'Отзывы вымышлены. Заменить реальными с согласия авторов.' }));
     m.push(section({ id: 'rekvizity', title: 'Реквизиты', tag: 'Реквизиты', paper: true },
       kvTable('Реквизиты компании', ['Параметр', 'Значение'], [['Полное наименование', esc(K.legalName)], ['ИНН', K.inn], ['ОГРН', K.ogrn], ['Юридический адрес', esc(K.legalAddress)], ['Банковские реквизиты', esc(K.bank)]]) + dev('Реквизиты заполнит клиент.')));

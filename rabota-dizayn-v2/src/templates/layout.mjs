@@ -84,6 +84,7 @@ export function layout(page, main, sprite) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.className+=" js"</script>
 <title>${title}</title>
 <meta name="description" content="${desc}">
 ${page.index === false ? '<meta name="robots" content="noindex, follow">' : `<link rel="canonical" href="${canon}">`}
@@ -92,10 +93,11 @@ ${og}
 <link rel="icon" href="${u('/img/favicon.svg')}" type="image/svg+xml">
 <link rel="stylesheet" href="${u('/css/main.css')}">
 ${t3 ? `<link rel="stylesheet" href="${u('/cabin3d/cabin3d.css')}">` : ''}
-<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}form[data-form]{display:none}.sticky-cta{display:none!important}.mq__t{animation:none}</style></noscript>
+<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}form[data-form]{display:none}.sticky-cta{display:none!important}.mq__t{animation:none}.live{display:none}</style></noscript>
 <script defer src="${u('/js/content.js')}"></script>
 <script defer src="${u('/js/calc.js')}"></script>
 <script defer src="${u('/js/main.js')}"></script>
+<script defer src="${u('/js/life.js')}"></script>
 ${t3 ? `<script defer src="${u('/cabin3d/vendor/three.min.js')}"></script>
 <script defer src="${u('/cabin3d/cabin3d.js')}"></script>
 <script defer src="${u('/js/cabin-init.js')}"></script>` : ''}

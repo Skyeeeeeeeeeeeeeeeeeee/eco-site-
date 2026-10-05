@@ -5,12 +5,20 @@
 <style>
 body{margin:0;padding:24px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fff;color:#1d3550}
 h1{font-size:20px;margin:0 0 16px}
+h2.sec{font-size:17px;margin:32px 0 12px}
 .sub{margin:0 0 16px;color:#4a6078;font-size:14px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .card{border-radius:16px;padding:12px;border:1px solid rgba(47,95,143,.2)}
 .card h2{font-size:15px;margin:4px 8px 8px}
 .stage{height:460px}
+.bar{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 14px;font-size:14px}
+.bar b{font-weight:600;color:#2F5F8F}
+.bar button{font:inherit;border:1px solid rgba(47,95,143,.35);background:#fff;color:#1d3550;border-radius:999px;padding:6px 14px;cursor:pointer}
+.bar button[aria-pressed=true]{background:#2F5F8F;border-color:#2F5F8F;color:#fff}
+.bar button:focus-visible{outline:3px solid #2F5F8F;outline-offset:2px}
+.wide{height:520px;border-radius:16px;background:#E9F1F8}
+.scrollpad{height:60vh;display:flex;align-items:center;justify-content:center;color:#7b8fa5;font-size:14px}
 </style></head><body>
 <h1>Реалистичная модель</h1>
 <p class="sub">Интерактивная 3D-модель биотуалета: перетащите, чтобы повернуть; стрелки влево/вправо на клавиатуре.</p>
@@ -22,6 +30,35 @@ h1{font-size:20px;margin:0 0 16px}
   <div class="card" style="background:#E9EEF2"><h2>PRESET_CLASSIC «синий»</h2>
     <div class="stage" id="c"><svg viewBox="0 0 100 200" width="140" aria-hidden="true"><rect x="20" y="10" width="60" height="180" rx="6" fill="#1F5FAF"/></svg></div></div>
 </div>
+
+<h2 class="sec">Варианты моделей и сцен</h2>
+<div class="bar" role="group" aria-label="Модель">
+  <b>Модель:</b>
+  <button type="button" data-model="standart" aria-pressed="true">Стандарт</button>
+  <button type="button" data-model="rukomojnik" aria-pressed="false">С рукомойником</button>
+  <button type="button" data-model="malomobilnye" aria-pressed="false">Для маломобильных</button>
+  <button type="button" data-model="uteplennaya" aria-pressed="false">Утеплённая</button>
+  <button type="button" data-model="torfyanoj" aria-pressed="false">Торфяной</button>
+</div>
+<div class="bar" role="group" aria-label="Сцена">
+  <b>Сцена:</b>
+  <button type="button" data-scene="studio" aria-pressed="true">Студия</button>
+  <button type="button" data-scene="outdoor" aria-pressed="false">Outdoor</button>
+  <b style="margin-left:12px">Палитра:</b>
+  <button type="button" data-pal="PRESET_E" aria-pressed="true">E</button>
+  <button type="button" data-pal="PRESET_F" aria-pressed="false">F</button>
+</div>
+<div class="wide" id="sw"></div>
+
+<h2 class="sec">Outdoor, count: 3 (ряд кабин, лёгкий дрейф камеры)</h2>
+<p class="sub">Главная кабина впереди, две позади со сдвигом; у каждой свои цвета (<code>colorsList</code>). Автовращения нет — только медленный дрейф камеры на несколько градусов.</p>
+<div class="wide" id="o3" style="height:560px"></div>
+
+<h2 class="sec">scrollRotate: ±25° от положения при прокрутке</h2>
+<div class="scrollpad">Прокрутите страницу вниз и вверх</div>
+<div class="wide" id="sr" style="height:420px"></div>
+<div class="scrollpad">&nbsp;</div>
+
 <script src="vendor/three.min.js"></script>
 <script src="cabin3d.js"></script>
 <script>
@@ -30,4 +67,30 @@ window.cabins = {
   f: Cabin3D.mount(document.getElementById('f'), { colors: Cabin3D.PRESET_F, autoRotate: true, initialAngle: 40 }),
   c: Cabin3D.mount(document.getElementById('c'), { colors: Cabin3D.PRESET_CLASSIC, autoRotate: true, initialAngle: 20 })
 };
+
+// переключатель модели / сцены / палитры: пересоздаём экземпляр
+var sw = document.getElementById('sw'), cur = null, st = { model: 'standart', scene: 'studio', pal: 'PRESET_E' };
+function remount() {
+  if (cur) cur.destroy();
+  sw.innerHTML = '';
+  cur = Cabin3D.mount(sw, { model: st.model, scene: st.scene, colors: Cabin3D[st.pal], autoRotate: true, drift: st.scene === 'outdoor' });
+  window.cabins.sw = cur;
+}
+function bind(attr, key) {
+  document.querySelectorAll('[data-' + attr + ']').forEach(function (b) {
+    b.addEventListener('click', function () {
+      st[key] = b.getAttribute('data-' + attr);
+      document.querySelectorAll('[data-' + attr + ']').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      remount();
+    });
+  });
+}
+bind('model', 'model'); bind('scene', 'scene'); bind('pal', 'pal');
+remount();
+
+window.cabins.o3 = Cabin3D.mount(document.getElementById('o3'), {
+  scene: 'outdoor', count: 3, autoRotate: false, drift: true, initialAngle: 18,
+  colors: Cabin3D.PRESET_E, colorsList: [Cabin3D.PRESET_E, Cabin3D.PRESET_F, Cabin3D.PRESET_CLASSIC]
+});
+window.cabins.sr = Cabin3D.mount(document.getElementById('sr'), { colors: Cabin3D.PRESET_F, autoRotate: false, scrollRotate: true, model: 'malomobilnye' });
 </script></body></html>
