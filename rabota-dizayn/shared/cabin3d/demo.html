@@ -5,24 +5,29 @@
 <style>
 body{margin:0;padding:24px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#fff;color:#1d3550}
 h1{font-size:20px;margin:0 0 16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.sub{margin:0 0 16px;color:#4a6078;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
 .card{border-radius:16px;padding:12px;border:1px solid rgba(47,95,143,.2)}
 .card h2{font-size:15px;margin:4px 8px 8px}
 .stage{height:460px}
 </style></head><body>
-<h1>Интерактивная модель биотуалета</h1>
+<h1>Реалистичная модель</h1>
+<p class="sub">Интерактивная 3D-модель биотуалета: перетащите, чтобы повернуть; стрелки влево/вправо на клавиатуре.</p>
 <div class="grid">
-  <div class="card" style="background:#CFE4F8"><h2>PRESET_E «светло-голубой»</h2>
-    <div class="stage" id="e"><svg viewBox="0 0 100 200" width="140" aria-hidden="true"><rect x="20" y="10" width="60" height="180" rx="6" fill="#7FB2E5"/></svg></div></div>
+  <div class="card" style="background:#DCEAF7"><h2>PRESET_E «голубой»</h2>
+    <div class="stage" id="e"><svg viewBox="0 0 100 200" width="140" aria-hidden="true"><rect x="20" y="10" width="60" height="180" rx="6" fill="#6FA6DB"/></svg></div></div>
   <div class="card" style="background:#F4F9FE"><h2>PRESET_F «воздушный»</h2>
     <div class="stage" id="f"><svg viewBox="0 0 100 200" width="140" aria-hidden="true"><rect x="20" y="10" width="60" height="180" rx="6" fill="#8DBCEB"/></svg></div></div>
+  <div class="card" style="background:#E9EEF2"><h2>PRESET_CLASSIC «синий»</h2>
+    <div class="stage" id="c"><svg viewBox="0 0 100 200" width="140" aria-hidden="true"><rect x="20" y="10" width="60" height="180" rx="6" fill="#1F5FAF"/></svg></div></div>
 </div>
 <script src="vendor/three.min.js"></script>
 <script src="cabin3d.js"></script>
 <script>
 window.cabins = {
   e: Cabin3D.mount(document.getElementById('e'), { colors: Cabin3D.PRESET_E, autoRotate: true }),
-  f: Cabin3D.mount(document.getElementById('f'), { colors: Cabin3D.PRESET_F, autoRotate: true, initialAngle: 40 })
+  f: Cabin3D.mount(document.getElementById('f'), { colors: Cabin3D.PRESET_F, autoRotate: true, initialAngle: 40 }),
+  c: Cabin3D.mount(document.getElementById('c'), { colors: Cabin3D.PRESET_CLASSIC, autoRotate: true, initialAngle: 20 })
 };
 </script></body></html>
