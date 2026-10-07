@@ -143,10 +143,11 @@
         if (y > 140 && dy > 6) h.classList.add('is-hidden');
         else if (dy < -4 || y <= 140) h.classList.remove('is-hidden');
       } else h.classList.remove('is-hidden');
+      document.documentElement.classList.toggle('hdr-off', h.classList.contains('is-hidden'));
       if (Math.abs(dy) > 6 || y <= 140) last = y;
     }
     window.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(upd); }, { passive: true });
-    h.addEventListener('focusin', function () { h.classList.remove('is-hidden'); });
+    h.addEventListener('focusin', function () { h.classList.remove('is-hidden'); document.documentElement.classList.remove('hdr-off'); });
     upd();
   })();
 

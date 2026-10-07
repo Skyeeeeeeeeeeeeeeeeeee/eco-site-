@@ -73,119 +73,76 @@
     window.addEventListener('resize', () => { if (window.innerWidth >= 1180 && burger.getAttribute('aria-expanded') === 'true') setMenu(false); });
   }
 
-  /* ---------- Sticky-панель: после первого экрана, скрыта рядом с формами ---------- */
+  /* ---------- Нижняя панель связи на телефоне: после первого экрана, скрыта рядом с блоком связи и подвалом ---------- */
   const sticky = $('[data-sticky]');
   if (sticky && 'IntersectionObserver' in window) {
-    let pastHero = false, formsVisible = 0, focusInForm = false;
-    const upd = () => sticky.classList.toggle('is-visible', pastHero && !formsVisible && !focusInForm);
+    let pastHero = false, covered = 0;
+    const upd = () => sticky.classList.toggle('is-visible', pastHero && !covered);
     const hero = $('[data-hero]');
     if (hero) {
       new IntersectionObserver((en) => { const r = en[0]; pastHero = !r.isIntersecting && r.boundingClientRect.bottom < 0; upd(); }).observe(hero);
     } else { const onS = () => { pastHero = window.scrollY > window.innerHeight; upd(); }; window.addEventListener('scroll', onS, { passive: true }); onS(); }
     const vis = new Map();
-    $$('form[data-form], .calc, .evcalc').forEach((f) => {
-      new IntersectionObserver((en) => { vis.set(f, en[0].isIntersecting); formsVisible = [...vis.values()].filter(Boolean).length; upd(); }).observe(f);
-    });
-    document.addEventListener('focusin', (e) => { focusInForm = !!e.target.closest('form'); upd(); });
-    document.addEventListener('focusout', () => { focusInForm = false; upd(); });
-  }
-
-  /* ---------- Телефон: маска с каретой, 8xx, 8 в начале ---------- */
-  function natDigits(raw) {
-    const d = raw.replace(/\D/g, ''); let strip = 0;
-    if (/^\s*\+/.test(raw)) strip = 1; else if (d.length >= 11 && /^[78]/.test(d)) strip = 1; else if (d.length === 1 && /[78]/.test(d)) strip = 1;
-    return { nat: d.slice(strip, strip + 10), strip };
-  }
-  function fmtPhone(n) {
-    if (!n.length) return '';
-    let s = '+7 (' + n.slice(0, 3);
-    if (n.length > 3) s += ') ' + n.slice(3, 6);
-    if (n.length > 6) s += '-' + n.slice(6, 8);
-    if (n.length > 8) s += '-' + n.slice(8, 10);
-    return s;
-  }
-  function attachMask(el) {
-    el._nat = '';
-    el.addEventListener('input', (e) => {
-      const raw = el.value, caret = el.selectionStart == null ? raw.length : el.selectionStart;
-      const cntRaw = raw.slice(0, caret).replace(/\D/g, '').length;
-      const r = natDigits(raw); let nat = r.nat, cnt = Math.max(0, Math.min(nat.length, cntRaw - r.strip));
-      const type = e.inputType || '';
-      if (type.indexOf('delete') === 0) {
-        if (nat.length && nat === el._nat) { // удалили разделитель: убираем цифру рядом с кареткой
-          if (type === 'deleteContentForward') nat = nat.slice(0, cnt) + nat.slice(cnt + 1);
-          else if (cnt > 0) { nat = nat.slice(0, cnt - 1) + nat.slice(cnt); cnt -= 1; }
-        }
-      }
-      el._nat = nat;
-      let out = fmtPhone(nat);
-      if (!nat.length) out = type.indexOf('delete') === 0 || !raw.replace(/\D/g, '').length ? '' : '+7 (';
-      el.value = out;
-      let pos = out.length;
-      if (nat.length && cnt < nat.length) { let c = 0; pos = 4; if (cnt > 0) { for (let i = 4; i < out.length; i++) { if (/\d/.test(out[i])) { c++; if (c === cnt) { pos = i + 1; break; } } } } }
-      try { el.setSelectionRange(pos, pos); } catch (x) { /* type=tel допускает */ }
+    $$('.cta, .site-footer').forEach((f) => {
+      new IntersectionObserver((en) => { vis.set(f, en[0].isIntersecting); covered = [...vis.values()].filter(Boolean).length; upd(); }).observe(f);
     });
   }
 
-  /* ---------- Формы ---------- */
-  const E = S.forms.errors;
-  function fieldOf(el) { return el.closest('.field'); }
-  function setErr(el, msg) {
-    const f = fieldOf(el); if (!f) return;
-    f.dataset.state = msg ? 'error' : 'default';
-    const m = document.getElementById(el.id + '-msg'); if (m) m.textContent = msg || '';
-    if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
-  }
-  function check(el) {
-    const t = el.dataset.v;
-    if (t === 'name') return el.value.trim() ? '' : E.name;
-    if (t === 'place') return el.value.trim() ? '' : E.place;
-    if (t === 'type') return el.value ? '' : E.type;
-    if (t === 'consent') return el.checked ? '' : E.consent;
-    if (t === 'phone') { const n = natDigits(el.value).nat; if (n.length < 10) return E.phone; if ('3489'.indexOf(n[0]) < 0) return E.phoneBad; return ''; }
-    return '';
-  }
-  const utm = (() => { const p = new URLSearchParams(location.search), a = []; p.forEach((v, k) => { if (/^utm_/.test(k)) a.push(k + '=' + v); }); return a.join('&'); })();
-  $$('form[data-form]').forEach((form) => {
-    const fields = $$('[data-v]', form);
-    const summary = $('.form__summary', form), ok = $('.form__ok', form), fail = $('.form__fail', form), fieldsBox = $('.form__fields', form), btn = $('button[type=submit]', form);
-    const label = (el) => { const l = form.querySelector('label[for="' + el.id + '"]'); return l ? l.textContent.replace(/\(.*?\)/, '').trim() : 'Согласие'; };
-    if (form.elements.utm) form.elements.utm.value = utm;
-    fields.forEach((el) => {
-      if (el.dataset.v === 'phone') attachMask(el);
-      const ev = el.type === 'checkbox' || el.tagName === 'SELECT' ? 'change' : 'input';
-      el.addEventListener('blur', () => { if (el.dataset.v === 'consent') return; if (el.value.trim() || fieldOf(el).dataset.state === 'error') setErr(el, check(el)); });
-      el.addEventListener(ev, () => { if (fieldOf(el).dataset.state === 'error' && !check(el)) setErr(el, ''); });
+  /* ---------- Общие помощники: WhatsApp с готовым текстом, копирование, всплывающая подсказка ---------- */
+  const CM = S.forms.calcMessages;
+  const plain = (t) => String(t).replace(/[  ]/g, ' ');
+  function waUrl(text) { return S.contacts.whatsappUrl + (text ? '?text=' + encodeURIComponent(plain(text)) : ''); }
+  function copyText(text) {
+    return new Promise((res, rej) => {
+      const fallback = () => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.setAttribute('readonly', ''); ta.setAttribute('aria-hidden', 'true'); ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+          document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+          const ok = document.execCommand('copy'); document.body.removeChild(ta); if (ok) res(); else rej(new Error('copy'));
+        } catch (e) { rej(e); }
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(res, fallback); else fallback();
     });
-    form.addEventListener('submit', (e) => {
+  }
+  let toastEl, toastT;
+  function toast(msg) {
+    if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'toast'; toastEl.setAttribute('role', 'status'); toastEl.setAttribute('aria-live', 'polite'); document.body.appendChild(toastEl); }
+    toastEl.textContent = ''; clearTimeout(toastT);
+    setTimeout(() => { toastEl.textContent = msg; toastEl.classList.add('is-on'); }, 20);
+    toastT = setTimeout(() => toastEl.classList.remove('is-on'), 2200);
+  }
+  // Блок действий с расчётом: [data-share-wa], [data-share-copy], [data-share-status]; текст отдаёт getText()
+  function bindShare(box, getText) {
+    if (!box) return null;
+    const wa = $('[data-share-wa]', box), cp = $('[data-share-copy]', box), st = $('[data-share-status]', box);
+    const refresh = () => { const t = getText(); if (wa) wa.href = waUrl(t); if (st) st.textContent = ''; if (cp) cp.setAttribute('aria-disabled', t ? 'false' : 'true'); };
+    if (cp) cp.addEventListener('click', () => {
+      const t = getText(); if (!t) { if (st) st.textContent = 'Сначала заполните расчёт'; return; }
+      copyText(plain(t)).then(() => { if (st) { st.textContent = ''; setTimeout(() => { st.textContent = CM.copied; }, 20); } }, () => { if (st) st.textContent = CM.copyFail; });
+    });
+    box._refresh = refresh; refresh();
+    return refresh;
+  }
+  window.SITE_UI = { waUrl, copyText, toast, bindShare, plain };
+
+  /* ---------- Телефон на компьютере: клик копирует номер (на телефонах работает tel:) ---------- */
+  if (window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href^="tel:"]'); if (!a || e.defaultPrevented || e.button) return;
       e.preventDefault();
-      const bad = fields.filter((el) => { const m = check(el); setErr(el, m); return m; });
-      if (summary) {
-        if (bad.length && fields.length > 3 && form.dataset.form === 'full') {
-          summary.hidden = false;
-          summary.innerHTML = '<span class="notice__ico i i--alert" aria-hidden="true"></span><div><p class="notice__t">Исправьте ' + bad.length + ' ' + CALC.plural(bad.length, 'поле', 'поля', 'полей') + '</p><ul>' + bad.map((el) => '<li><a href="#' + el.id + '">' + label(el) + '</a></li>').join('') + '</ul></div>';
-          summary.querySelectorAll('a').forEach((a) => a.addEventListener('click', (ev) => { ev.preventDefault(); document.getElementById(a.getAttribute('href').slice(1)).focus(); }));
-        } else summary.hidden = true;
-      }
-      if (bad.length) { bad[0].focus(); return; }
-      btn.classList.add('is-loading'); btn.setAttribute('aria-busy', 'true'); btn.disabled = true;
-      const t = btn.textContent; btn.textContent = 'Отправляем…';
-      // Заявка никуда не отправляется: интеграция (CRM, почта) подключается позже. Здесь только состояние успеха.
-      setTimeout(() => {
-        btn.classList.remove('is-loading'); btn.removeAttribute('aria-busy'); btn.disabled = false; btn.textContent = t;
-        fieldsBox.hidden = true; ok.hidden = false; ok.focus();
-      }, 600);
+      copyText(S.contacts.phone).then(() => toast(CM.phoneCopied), () => toast(S.contacts.phone));
     });
-    const again = $('.form__again', form);
-    if (again) again.addEventListener('click', () => {
-      form.reset(); fields.forEach((el) => { setErr(el, ''); if (el._nat != null) el._nat = ''; });
-      ok.hidden = true; fieldsBox.hidden = false; if (summary) summary.hidden = true; const f = fields[0]; if (f) f.focus();
-    });
-  });
+  }
 
   /* ---------- Калькулятор стоимости ---------- */
   const rubF = S.rub, MAXKM = S.rates.delivery.maxKm;
   const APX = '<span class="apx" aria-hidden="true"></span><span class="visually-hidden">около </span>';
+  function parseMix(v) {
+    if (!v) return null; const out = []; let sum = 0;
+    String(v).split(',').forEach((x) => { const p = x.split(':'), m = S.modelById(p[0]); if (m && m.rent && /^\d+$/.test(p[1] || '') && +p[1] > 0) { out.push({ m: m.slug, n: +p[1] }); sum += +p[1]; } });
+    return out.length && sum <= S.rates.maxCabins ? out : null;
+  }
   function paramsFromUrl() {
     const p = new URLSearchParams(location.search), o = {};
     const int = (k, lo, hi) => { const v = p.get(k); if (v && /^\d+$/.test(v) && +v >= lo && +v <= hi) o[k] = +v; };
@@ -193,17 +150,24 @@
     if (['none', 'weekly', 'twice', 'daily'].indexOf(p.get('u')) >= 0) o.u = p.get('u');
     if (['city', 'region'].indexOf(p.get('z')) >= 0) o.z = p.get('z');
     const m = S.modelById(p.get('m') || ''); if (m && m.rent) o.m = m.slug;
+    const mix = parseMix(p.get('mix')); if (mix) { o.mix = mix; o.n = mix.reduce((s, x) => s + x.n, 0); }
     return o;
   }
+  const mixLabel = (mix) => mix.map((x) => x.n + ' × ' + S.modelById(x.m).name).join(' + ');
   const urlP = paramsFromUrl();
+  function mergeUrl(obj) {
+    try { const p = new URLSearchParams(location.search); Object.keys(obj).forEach((k) => { if (obj[k] === null || obj[k] === '') p.delete(k); else p.set(k, obj[k]); }); const q = p.toString(); history.replaceState(null, '', (q ? '?' + q : location.pathname.split('/').pop() || '') + location.hash); } catch (x) { /* file:// */ }
+  }
+  window.SITE_UI.mergeUrl = mergeUrl;
   $$('.calc').forEach((root) => {
     const mode = root.dataset.calc, id = root.id, full = mode === 'full';
     const q = (s) => $(s, root);
     const nIn = q('#' + id + '-n'), dIn = q('#' + id + '-d'), kmIn = q('#' + id + '-km'), mSel = q('#' + id + '-m');
     const radio = (suffix) => $$('input[name="' + id + '-' + suffix + '"]', root);
     const checked = (suffix) => { const r = radio(suffix).find((x) => x.checked); return r ? r.value : null; };
-    const body = q('.quote__body'), quote = q('.quote'), kmBox = q('.calc__km'), form = q('.calc__form form'), sendBtn = q('[data-calc-send]');
+    const body = q('.quote__body'), quote = q('.quote'), kmBox = q('.calc__km'), share = q('[data-share]');
     const touched = {};
+    let mix = full && mSel && urlP.mix ? urlP.mix : null;
     // предзаполнение из URL
     if (urlP.n) nIn.value = urlP.n;
     if (urlP.d) { const mo = urlP.d >= S.rates.daysInMonth && urlP.d % S.rates.daysInMonth === 0; dIn.value = mo ? urlP.d / S.rates.daysInMonth : urlP.d; radio('du').forEach((r) => { r.checked = r.value === (mo ? 'month' : 'day'); }); }
@@ -211,13 +175,17 @@
     if (urlP.z) radio('z').forEach((r) => { r.checked = r.value === urlP.z; });
     if (urlP.km) kmIn.value = urlP.km;
     if (urlP.m && mSel) mSel.value = urlP.m;
+    if (mix) { const o = document.createElement('option'); o.value = 'mix'; o.textContent = 'Набор из подбора: ' + mixLabel(mix); mSel.insertBefore(o, mSel.firstChild); mSel.value = 'mix'; }
+    const leaveMix = () => { if (mix) { mix = null; const o = $('option[value="mix"]', mSel); if (o) o.remove(); mSel.value = 'komfort'; } };
     const state = () => {
       const unit = checked('du'), dv = parseInt(dIn.value.replace(/\s/g, ''), 10);
       const km = kmIn.value.trim() === '' ? NaN : parseInt(kmIn.value, 10);
-      return { n: /^\s*\d+\s*$/.test(nIn.value) ? parseInt(nIn.value, 10) : NaN, d: /^\s*\d+\s*$/.test(dIn.value) ? dv * (unit === 'month' ? S.rates.daysInMonth : 1) : NaN,
+      const st = { n: /^\s*\d+\s*$/.test(nIn.value) ? parseInt(nIn.value, 10) : NaN, d: /^\s*\d+\s*$/.test(dIn.value) ? dv * (unit === 'month' ? S.rates.daysInMonth : 1) : NaN,
         u: checked('u'), z: checked('z'), km: checked('z') === 'region' ? km : 0, m: mSel ? mSel.value : (JSON.parse(root.dataset.defaults).m || 'standart') };
+      if (mix && st.m === 'mix') { st.mix = mix; st.n = mix.reduce((s, x) => s + x.n, 0); st.m = mix[0].m; }
+      return st;
     };
-    function setFieldErr(el, msg, key) { if (!el) return; const f = fieldOf(el) || el.closest('.field'); if (!f) return; const show = msg && touched[key]; f.dataset.state = show ? 'error' : 'default'; const m = document.getElementById(el.id + '-msg'); if (m) m.textContent = show ? msg : ''; if (show) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid'); }
+    function setFieldErr(el, msg, key) { if (!el) return; const f = el.closest('.field'); if (!f) return; const show = msg && touched[key]; f.dataset.state = show ? 'error' : 'default'; const m = document.getElementById(el.id + '-msg'); if (m) m.textContent = show ? msg : ''; if (show) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid'); }
     let timer;
     function recalc(first) {
       const st = state(), r = CALC.calculate(S, st);
@@ -230,52 +198,54 @@
       const dec = q('[data-step="-1"]'), inc = q('[data-step="1"]'); const nv = st.n;
       dec.disabled = !(nv > 1); inc.disabled = nv >= S.rates.maxCabins;
       const link = q('[data-calc-full]'), qs = new URLSearchParams({ n: isNaN(st.n) ? '' : st.n, d: isNaN(st.d) ? '' : st.d, u: st.u, z: st.z, km: st.z === 'region' && !isNaN(st.km) ? st.km : 0 });
-      if (full && first !== true) { try { history.replaceState(null, '', '?' + qs.toString() + location.hash); } catch (x) { /* file:// */ } }
+      if (full && first !== true) mergeUrl({ n: qs.get('n'), d: qs.get('d'), u: st.u, z: st.z, km: st.z === 'region' && !isNaN(st.km) ? st.km : '', m: mix ? null : st.m, mix: mix ? mix.map((x) => x.m + ':' + x.n).join(',') : null });
       qs.set('m', st.m);
       if (link) link.href = BASE + '/ceny/index.html?' + qs.toString() + '#calc';
       const model = S.modelById(st.m);
-      const summ = r.ok ? ('Расчёт: ' + model.name + ', ' + st.n + ' шт., ' + st.d + ' сут., обслуживание: ' + (S.rates.serviceOptions.find((o) => o.id === st.u) || {}).label + ', доставка: ' + (st.z === 'city' ? 'Новосибирск' : 'область ' + st.km + ' км') + ', итого ≈ ' + r.total + ' ₽') : '';
-      const tg = q('[data-calc-tg]'); if (tg) tg.href = S.contacts.telegramUrl + (summ ? '?text=' + encodeURIComponent(summ) : '');
-      if (form && form.elements.calc) form.elements.calc.value = summ;
+      const modelTxt = st.mix ? mixLabel(st.mix) : model.name + ', ' + st.n + ' шт.';
+      const summ = r.ok ? ('Расчёт с сайта ЭКО СЕРВИС: ' + modelTxt + ', ' + st.d + ' сут., обслуживание: ' + (S.rates.serviceOptions.find((o) => o.id === st.u) || {}).label.toLowerCase() + ', доставка: ' + (st.z === 'city' ? 'Новосибирск' : 'область ' + st.km + ' км') + ', итого ≈ ' + rubF(r.total)) : '';
       root._summary = summ;
+      if (share && share._refresh) share._refresh();
     }
     const ev = (el, name, fn) => el && el.addEventListener(name, fn);
-    ev(nIn, 'input', () => { touched.n = true; recalc(); }); ev(dIn, 'input', () => { touched.d = true; recalc(); }); ev(kmIn, 'input', () => { touched.km = true; recalc(); });
+    ev(nIn, 'input', () => { leaveMix(); touched.n = true; recalc(); }); ev(dIn, 'input', () => { touched.d = true; recalc(); }); ev(kmIn, 'input', () => { touched.km = true; recalc(); });
     ev(nIn, 'blur', () => { touched.n = true; recalc(); }); ev(dIn, 'blur', () => { touched.d = true; recalc(); }); ev(kmIn, 'blur', () => { touched.km = true; recalc(); });
-    ev(mSel, 'change', recalc);
+    ev(mSel, 'change', () => { if (mSel.value !== 'mix') { mix = null; const o = $('option[value="mix"]', mSel); if (o) o.remove(); } recalc(); });
     ['du', 'u', 'z'].forEach((s) => radio(s).forEach((r) => r.addEventListener('change', recalc)));
     // stepper: кнопки, удержание, стрелки
     $$('.stepper__btn', root).forEach((b) => {
-      const step = (d) => { const v = parseInt(nIn.value, 10); const base = isNaN(v) ? 1 : v; nIn.value = Math.max(1, Math.min(S.rates.maxCabins, base + d)); touched.n = true; recalc(); };
+      const step = (d) => { leaveMix(); const v = parseInt(nIn.value, 10); const base = isNaN(v) ? 1 : v; nIn.value = Math.max(1, Math.min(S.rates.maxCabins, base + d)); touched.n = true; recalc(); };
       let h, rep;
       b.addEventListener('click', (e) => { if (e.detail === 0 || !h) step(+b.dataset.step); h = false; });
       b.addEventListener('pointerdown', () => { h = false; clearTimeout(rep); rep = setTimeout(function tick() { h = true; step(+b.dataset.step); rep = setTimeout(tick, 80); }, 400); });
       ['pointerup', 'pointerleave', 'pointercancel'].forEach((n) => b.addEventListener(n, () => { clearTimeout(rep); setTimeout(() => { h = false; }, 0); }));
     });
-    nIn.addEventListener('keydown', (e) => { if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); const v = parseInt(nIn.value, 10) || 1; nIn.value = Math.max(1, Math.min(S.rates.maxCabins, v + (e.key === 'ArrowUp' ? 1 : -1))); recalc(); } });
-    if (sendBtn) sendBtn.addEventListener('click', () => {
-      const f = q('.calc__form'), open = sendBtn.getAttribute('aria-expanded') === 'true';
-      sendBtn.setAttribute('aria-expanded', String(!open)); f.hidden = open;
-      if (!open) { recalc(); const first = $('input:not([type=hidden]):not([tabindex="-1"])', f); if (first) first.focus(); }
-    });
+    nIn.addEventListener('keydown', (e) => { if (e.key === 'ArrowUp' || e.key === 'ArrowDown') { e.preventDefault(); leaveMix(); const v = parseInt(nIn.value, 10) || 1; nIn.value = Math.max(1, Math.min(S.rates.maxCabins, v + (e.key === 'ArrowUp' ? 1 : -1))); recalc(); } });
+    bindShare(share, () => root._summary || '');
     recalc(true);
   });
 
   /* ---------- Расчёт количества кабин на мероприятии ---------- */
   $$('[data-evcalc]').forEach((root) => {
-    const g = $('[data-ev=guests]', root), alc = $('[data-ev=alcohol]', root), out = $('[data-ev-result]', root), link = $('[data-ev-link]', root);
-    const durs = $$('input[name=evdur]', root);
+    const g = $('[data-ev=guests]', root), out = $('[data-ev-result]', root), link = $('[data-ev-link]', root), share = $('[data-share]', root);
+    const durs = $$('input[name=evdur]', root), alcs = $$('input[name=evalc]', root);
+    let summ = '';
+    bindShare(share, () => summ);
     function run() {
-      const dur = (durs.find((x) => x.checked) || {}).value;
-      const r = CALC.events(S, { guests: g.value.replace(/\s/g, ''), dur, alcohol: alc.checked });
-      const f = fieldOf(g), m = document.getElementById(g.id + '-msg');
-      if (!r.ok) { out.textContent = '—'; link.hidden = true; f.dataset.state = 'error'; m.textContent = 'Укажите количество гостей от 1 до ' + S.fmt(S.eventRules.maxGuests); g.setAttribute('aria-invalid', 'true'); return; }
+      const dur = (durs.find((x) => x.checked) || {}).value, alc = (alcs.find((x) => x.checked) || {}).value === 'yes';
+      const r = CALC.events(S, { guests: g.value.replace(/\s/g, ''), dur, alcohol: alc });
+      const f = g.closest('.field'), m = document.getElementById(g.id + '-msg');
+      if (!r.ok) { out.textContent = '—'; link.hidden = true; summ = ''; f.dataset.state = 'error'; m.textContent = 'Укажите количество гостей от 1 до ' + S.fmt(S.eventRules.maxGuests); g.setAttribute('aria-invalid', 'true'); share._refresh(); return; }
       f.dataset.state = 'default'; m.textContent = ''; g.removeAttribute('aria-invalid');
       const big = r.total > S.rates.maxCabins;
       out.textContent = big ? r.text + ' ' + S.forms.calcMessages.custom : r.text; link.hidden = big;
-      link.href = BASE + '/ceny/index.html?n=' + r.total + '&m=mtk-komfort&d=1#calc';
+      link.href = BASE + '/ceny/index.html?n=' + r.total + '&mix=komfort:' + r.komfort + ',vip:' + r.vip + '&d=1#calc';
+      const durLabel = (S.eventRules.durations.find((x) => x.id === dur) || {}).label.toLowerCase();
+      summ = 'Мероприятие, расчёт с сайта ЭКО СЕРВИС: ' + r.rawGuests + ' гостей, ' + durLabel + ', алкоголь: ' + (alc ? 'да' : 'нет') + '. Кабин: ' + r.total + ' (' + (r.komfort ? r.komfort + ' × МТК Комфорт' : '') + (r.komfort && r.vip ? ' + ' : '') + (r.vip ? r.vip + ' × МТК VIP' : '') + '), срок 1 сут., доставка: Новосибирск' + (r.quote && r.quote.ok ? ', итого ≈ ' + rubF(r.quote.total) : '');
+      share._refresh();
     }
-    g.addEventListener('input', run); alc.addEventListener('change', run); durs.forEach((d) => d.addEventListener('change', run));
+    g.addEventListener('input', run); alcs.forEach((a) => a.addEventListener('change', run)); durs.forEach((d) => d.addEventListener('change', run));
+    run();
   });
 
   /* ---------- Вкладки (ARIA tabs): группы FAQ, характеристики модели ---------- */
@@ -365,11 +335,4 @@
     ds.forEach((d) => d.addEventListener('toggle', () => { if (d.open) ds.forEach((o) => { if (o !== d) o.open = false; }); }));
   });
 
-  const pr = $('[data-print]'); if (pr) pr.addEventListener('click', () => window.print());
-  // оглавление политики: подсветка текущего раздела
-  const toc = $$('.toc a');
-  if (toc.length && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver((en) => en.forEach((x) => { if (x.isIntersecting) toc.forEach((a) => { if (a.getAttribute('href') === '#' + x.target.id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); }), { rootMargin: '-20% 0px -70% 0px' });
-    $$('.policy__s').forEach((s) => io.observe(s));
-  }
 })();

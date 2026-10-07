@@ -25,7 +25,7 @@ ${logo(S)}
 <div class="mainbar__r"><a class="mainbar__tel tel" href="${C.phoneHref}">${esc(C.phone).replace(/ /g, NB)}</a><a class="btn btn--primary btn--sm nav__cta" href="${u('/ceny/')}">Рассчитать</a>
 <a class="icon-btn mainbar__ico" href="${C.phoneHref}" aria-label="Позвонить: ${esc(C.phone)}">${ic('phone')}</a>
 <button class="burger" type="button" aria-expanded="false" aria-controls="m-menu" aria-label="Меню"><span class="burger__ico" aria-hidden="true"></span></button></div></div></div>
-<div class="m-menu" id="m-menu"><div class="m-menu__in container"><nav aria-label="Мобильное меню">${mob}</nav><div class="m-menu__foot"><a class="btn btn--outline" href="${C.phoneHref}">${ic('phone')} ${esc(C.phone).replace(/ /g, NB)}</a><a class="btn btn--primary" href="${u('/ceny/')}">Рассчитать стоимость</a></div></div></div></header>`;
+<div class="m-menu" id="m-menu"><div class="m-menu__in container"><nav aria-label="Мобильное меню">${mob}</nav><div class="m-menu__foot"><a class="btn btn--primary" href="${C.phoneHref}">${ic('phone')} ${esc(C.phone).replace(/ /g, NB)}</a><a class="btn btn--outline" href="${u('/#podbor')}">Подобрать кабину</a><a class="btn btn--outline" href="${u('/ceny/')}">Рассчитать стоимость</a></div></div></div></header>`;
 }
 
 function footer() {
@@ -34,14 +34,15 @@ function footer() {
   return `<footer class="site-footer"><div class="container"><div class="footer__grid">
 <div class="footer__col footer__brand">${logo(S)}<p class="footer__d">${esc(K.tagline)}</p><p class="footer__d">${esc(K.legalName)}, ИНН${NB}${K.inn}</p></div>
 <nav class="footer__nav" aria-label="Подвал">${S.nav.footer.map(col).join('')}</nav>
-<div class="footer__col"><h2 class="footer__h">Контакты</h2><ul><li>${tel()}</li><li><a href="mailto:${C.email}">${esc(C.email)}</a></li><li><a href="${C.telegramUrl}" rel="noopener">Telegram</a></li><li><a href="${C.whatsappUrl}" rel="noopener">WhatsApp</a></li><li><span class="footer__txt">${esc(C.address)}</span></li><li><span class="footer__txt">${cap(esc(C.hours))}</span></li><li>${a('/o-kompanii/', 'О компании')}</li></ul></div></div>
-<div class="site-footer__bottom"><span>© ${S.site.year} ${esc(K.name)}</span>${a('/politika-konfidencialnosti/', 'Политика обработки персональных данных')}${a('/o-kompanii/#rekvizity', 'Реквизиты')}${a('/o-kompanii/#istochniki-foto', 'Источники фото')}</div></div></footer>`;
+<div class="footer__col"><h2 class="footer__h">Контакты</h2><ul><li>${tel()}</li><li><a href="${C.telegramUrl}" rel="noopener">Telegram</a></li><li><a href="${C.whatsappUrl}" rel="noopener">WhatsApp</a></li><li><span class="footer__txt">${esc(C.address)}</span></li><li><span class="footer__txt">${cap(esc(C.hours))}</span></li><li>${a('/o-kompanii/', 'О компании')}</li></ul></div></div>
+<div class="site-footer__bottom"><span>© ${S.site.year} ${esc(K.name)}</span>${a('/politika-konfidencialnosti/', 'Конфиденциальность')}${a('/o-kompanii/#rekvizity', 'Реквизиты')}${a('/o-kompanii/#istochniki-foto', 'Источники фото')}</div></div></footer>`;
 }
 
 function sticky(page) {
   if (page.noSticky) return '';
   const C = ctx.S.contacts;
-  return `<div class="sticky-cta" data-sticky role="region" aria-label="Быстрые действия"><a class="btn btn--outline" href="${C.phoneHref}">${ic('phone')} Позвонить</a><a class="btn btn--primary" href="${u(page.path === '/ceny/' ? '#calc' : '/ceny/')}">Рассчитать</a></div>`;
+  const b = (href, icon, text, extra = '') => `<a class="sbar__b" href="${href}"${extra}>${ic(icon)}<span>${text}</span></a>`;
+  return `<div class="sticky-cta sbar" data-sticky role="region" aria-label="Связаться с нами">${b(C.phoneHref, 'phone', 'Позвонить')}${b(C.telegramUrl, 'telegram', 'Telegram', ' target="_blank" rel="noopener"')}${b(C.whatsappUrl, 'whatsapp', 'WhatsApp', ' target="_blank" rel="noopener"')}</div>`;
 }
 
 function jsonLd(page) {
@@ -49,7 +50,7 @@ function jsonLd(page) {
   const abs = (p) => dom + p;
   const out = [];
   if (page.path === '/' || page.path === '/kontakty/') {
-    out.push({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: K.name, url: abs('/'), telephone: C.phoneE164, email: C.email, image: abs(S.site.ogImage),
+    out.push({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: K.name, url: abs('/'), telephone: C.phoneE164, image: abs(S.site.ogImage),
       address: { '@type': 'PostalAddress', streetAddress: 'ул. Примерная, 1', addressLocality: 'Новосибирск', addressCountry: 'RU' },
       geo: { '@type': 'GeoCoordinates', latitude: C.geo.lat, longitude: C.geo.lon },
       openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: C.hoursSchema.days, opens: C.hoursSchema.opens, closes: C.hoursSchema.closes }],
@@ -90,11 +91,12 @@ ${og}
 <meta name="theme-color" content="${ctx.theme === 'e' ? '#CFE4F8' : '#FFFFFF'}">
 <link rel="icon" href="${u('/img/favicon.svg')}" type="image/svg+xml">
 <link rel="stylesheet" href="${u('/css/main.css')}">
-<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}form[data-form]{display:none}.sticky-cta{display:none!important}.mq__t{animation:none}.live{display:none}.offer__seg{display:none}</style></noscript>
+<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}.sticky-cta{display:none!important}.mq__t{animation:none}.live{display:none}.offer__seg{display:none}</style></noscript>
 <script defer src="${u('/js/content.js')}"></script>
 <script defer src="${u('/js/calc.js')}"></script>
 <script defer src="${u('/js/main.js')}"></script>
 <script defer src="${u('/js/life.js')}"></script>
+<script defer src="${u('/js/extras.js')}"></script>
 ${jsonLd(page)}
 </head>`;
   const body = `<body${page.noSticky ? '' : ' class="has-sticky"'}>

@@ -93,7 +93,7 @@ function buildTheme(theme, data) {
   }
   for (const { page, file, variant, isVariant } of jobs) {
     const depth = file.split('/').length - 1;
-    Object.assign(lib.ctx, { page, secN: 0, formN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), prefix: depth ? '../'.repeat(depth) : './' });
+    Object.assign(lib.ctx, { page, secN: 0, uidN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), prefix: depth ? '../'.repeat(depth) : './' });
     const main = templates[page.template](page, variant);
     const html = layout(page, main, sprite);
     out.set(file, html);
@@ -110,7 +110,7 @@ function buildTheme(theme, data) {
   const css = fs.readFileSync(path.join(SRC, 'css/main.css'), 'utf8') + '\n' + fs.readFileSync(path.join(SRC, 'css/themes.css'), 'utf8');
   fs.mkdirSync(path.join(OUT, 'css'), { recursive: true });
   fs.writeFileSync(path.join(OUT, 'css/main.css'), css);
-  for (const f of ['content.js', 'calc.js', 'main.js', 'life.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
+  for (const f of ['content.js', 'calc.js', 'main.js', 'life.js', 'extras.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
   for (const f of fs.readdirSync(path.join(SRC, 'fonts'))) cp(path.join(SRC, 'fonts', f), path.join(OUT, 'fonts', f));
   for (const f of ['favicon.svg', 'og.svg']) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
   for (const id of Object.keys(SITE.photos)) for (const f of [id + '.jpg', id + '-640.jpg']) cp(path.join(SHARED, 'photos', f), path.join(OUT, 'photos', f)); // только используемые фото
@@ -142,6 +142,15 @@ function buildTheme(theme, data) {
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((x) => x[1]); const dup = ids.filter((x, i) => ids.indexOf(x) !== i);
     if (dup.length) err(`${file}: повторяющиеся id ${[...new Set(dup)].join(', ')}`);
     if (/<link rel="preload"|crossorigin|type="module"|fetch\(|XMLHttpRequest/.test(html)) err(`${file}: preload/crossorigin/module (ломает file://)`);
+    // Решение клиента: сайт не собирает персональные данные. Ни одной формы и поля с ПД ни на одной странице (в т.ч. вариантах главной и 404).
+    for (const bad of [/<form\b/i, /type="tel"/i, /type="email"/i, /autocomplete="tel"/i, /name="phone"/i, /name="name"/i, /name="consent"/i, /type="checkbox"/i, /<textarea\b/i, /type="password"/i, /autocomplete="(name|email|street-address|address-level\d)"/i]) if (bad.test(html)) err(`${file}: персональные данные: найдено ${bad}`);
+    // явный белый список полей: только числа калькулятора/подбора, радио, один поиск по FAQ (name="q"); остальное запрещено
+    for (const m of html.matchAll(/<input\b[^>]*>/g)) {
+      const t = m[0], okRadio = /type="radio"/.test(t), okNum = /type="text"/.test(t) && /inputmode="numeric"/.test(t), okSearch = /type="search"/.test(t) && /name="q"/.test(t) && /id="faq-q"/.test(t);
+      if (!(okRadio || okNum || okSearch)) err(`${file}: поле вне белого списка: ${t.slice(0, 90)}`);
+    }
+    for (const m of html.matchAll(/<select\b[^>]*>/g)) if (!/data-f="m"/.test(m[0])) err(`${file}: select вне белого списка (только выбор модели калькулятора)`);
+    if (/<input\b[^>]*type="search"/.test(html) && /<form\b/.test(html)) err(`${file}: поиск не должен лежать в form`);
     // 3D снят полностью
     if (/three\.min\.js|cabin3d|cabin-init|data-cabin3d|stage-3d/.test(html)) err(`${file}: остатки 3D`);
     // каждое фото: figure с подписью автор + лицензия + ссылка на источник
@@ -156,7 +165,7 @@ function buildTheme(theme, data) {
   for (const { page, file, html, variant, isVariant } of meta) {
     const p = page.path;
     if (['/', '/dostavka/'].includes(p)) {
-      if (!/data-live[\s>]/.test(html) || !/aria-live="polite"/.test(html)) err(`${file}: нет виджета приёма заявок с aria-live`);
+      if (!/data-live[\s>]/.test(html) || !/aria-live="polite"/.test(html)) err(`${file}: нет виджета «успеваем сегодня» с aria-live`);
       if (!/data-zmap/.test(html) || (html.match(/data-zrow="/g) || []).length < 3) err(`${file}: нет схемы зон или строк data-zrow`);
     } else if (/data-live[\s>]/.test(html)) err(`${file}: виджет не должен быть на этой странице`);
     if (['/', '/o-kompanii/'].includes(p) && (html.match(/class="photo photo--gal"/g) || []).length !== nPhotos) err(`${file}: в галерее не все ${nPhotos} фото`);
@@ -164,6 +173,11 @@ function buildTheme(theme, data) {
     if (!/<html[^>]*>[\s\S]*?<script>document\.documentElement\.className\+=" js"<\/script>/.test(html)) err(`${file}: нет класса .js в head`);
     if (/data-timeline/.test(html) && (html.match(/<li class="row">/g) || []).length < 3) err(`${file}: таймлайн без шагов`);
     if (page.template === 'home') {
+      const blocks = (html.match(/<header class="hero\b|<section\b/g) || []).length;
+      if (blocks > 8) err(`${file}: на главной ${blocks} блоков, нужно не больше 8`);
+      if (/class="slide"|class="rev"|data-carousel[^>]*>.*Отзывы/.test(html)) err(`${file}: на главной не должно быть отзывов`);
+      if (!/data-picker/.test(html) || !/id="podbor"/.test(html)) err(`${file}: нет подбора кабины`);
+      if (!/data-cmp/.test(html)) err(`${file}: нет таблицы сравнения`);
       if (variant === 'a' && !/class="hero-a"/.test(html)) err(`${file}: нет героя A`);
       if (variant === 'a' && !/class="photo photo--heroa"[\s\S]*?Фото: /.test(html)) err(`${file}: в герое A нет подписи автора фото`);
       if (variant === 'b') {
@@ -175,7 +189,11 @@ function buildTheme(theme, data) {
       if (/three|cabin3d/.test(html)) err(`${file}: 3D на главной`);
       if (isVariant && !/name="robots" content="noindex/.test(html)) err(`${file}: вариант главной должен быть noindex`);
     }
+    if (p === '/ceny/' && (!/data-picker/.test(html) || !/data-subnav/.test(html))) err(`${file}: на /ceny/ нужны подбор и якорная навигация`);
+    if (p === '/katalog/' && !/data-cmp/.test(html)) err(`${file}: нет таблицы сравнения`);
+    if (p === '/voprosy/' && !/id="faq-q"[^>]*name="q"|name="q"[^>]*id="faq-q"/.test(html)) err(`${file}: нет поиска по вопросам`);
     if (p.startsWith('/katalog/') && page.template === 'model') {
+      if (!/data-msum/.test(html) || !/class="mpager"/.test(html)) err(`${file}: нет сводки или навигации по моделям`);
       const m = SITE.modelById(page.model);
       if (m.id === 'vip' && !/#mVin/.test(html)) err(`${file}: на странице VIP нет иллюстрации «внутри»`);
       if (!new RegExp(`<use href="#${{ standart: 'mS', ekonom: 'mE', komfort: 'mK', vip: 'mV' }[m.id]}"`).test(html)) err(`${file}: нет SVG модели`);
@@ -199,6 +217,11 @@ function buildTheme(theme, data) {
   const g800 = CALC.events(SITE, { guests: 800, dur: 'to4h', alcohol: false });
   if (g800.total > SITE.rates.delivery.cabinsPerTrip || g800.trips !== 1) err(`800 гостей до 4 часов: ${g800.total} кабин, ${g800.trips} рейс(а), ожидался один рейс`);
   if (SITE.rates.delivery.cabinsPerTrip !== 20) err('в одну машину помещается 20 кабин (факт клиента)');
+  // в скриптах не осталось форм, маски телефона и согласия
+  for (const f of ['content.js', 'calc.js', 'main.js', 'life.js', 'extras.js']) {
+    const src = fs.readFileSync(path.join(SRC, 'js', f), 'utf8');
+    if (/form\[data-form\]|attachMask|natDigits|\.form__|consent|createElement\('form'\)|FormData|\.submit\(/.test(src)) err(`js/${f}: остатки форм, маски телефона или согласия`);
+  }
   // запрещённые формулировки и снятые модели (в видимом тексте страниц)
   const banned = /лиценз|НДС|рейтинг|возврат денег|вернём деньги|в течение 2 часов|скидк[аи] за опоздан/i;
   const removed = /торф|маломобил|утепл|ЭС-0|(?<![а-яё])зим|−35|ежедневно|8:00|21:00|круглосуточно|без выходных|4 каб|четыр[её]х? каб/i;
@@ -264,7 +287,7 @@ h2{font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-hei
 </style></head><body><main class="w">
 <p style="font-size:13px;color:#4E6278">Версия 2, вторая итерация: без 3D, новый ассортимент МТК. Выбор оформления и первого экрана</p>
 <h1>${S.company.name}: <span>две темы, три варианта первого экрана</span></h1>
-<p class="lead">Структура, тексты, калькулятор и формы одинаковые. Различаются палитра (тема Е тёмно-синие панели, тема F всё светлое) и первый экран главной: A «Фото», B «Линейка моделей», C «Какая задача?». Всё, что ниже первого экрана, у вариантов общее. Сайты открываются двойным кликом, без сервера.</p>
+<p class="lead">Структура, тексты и калькулятор одинаковые, форм и сбора персональных данных нет. Различаются палитра (тема Е тёмно-синие панели, тема F всё светлое) и первый экран главной: A «Фото», B «Линейка моделей», C «Какая задача?». Всё, что ниже первого экрана, у вариантов общее. Сайты открываются двойным кликом, без сервера.</p>
 ${T.map(sect).join('\n')}
 <p class="note">Данные на обоих сайтах помечены «Заглушка». Фотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования указаны под каждым фото и на странице «О компании».</p>
 </main></body></html>

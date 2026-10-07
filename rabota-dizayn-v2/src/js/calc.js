@@ -11,6 +11,13 @@
     return 0;
   }
 
+  // Доставка: рейсов по cabinsPerTrip кабин в машину, цена за рейс по зоне
+  function deliveryCost(S, n, z, km) {
+    const DL = S.rates.delivery, trips = Math.ceil(n / DL.cabinsPerTrip);
+    const perTrip = z === 'region' && km > 0 ? (km <= DL.nearKm ? DL.nearPerTrip : DL.nearPerTrip + (km - DL.nearKm) * DL.perKmOver) : DL.cityPerTrip;
+    return { trips, perTrip, cost: trips * perTrip };
+  }
+
   // inp: n (число кабин), d (суток), u (обслуживание), z (city|region), km, m (модель: id или slug). Или mix: [{ m, n }, ...] для смеси моделей (мероприятие).
   // Цена аренды за кабину в сутки: SITE.unitRate(модель, срок): Стандарт по ступеням срока, Комфорт и VIP по фиксированной цене за сутки.
   function calculate(S, inp) {
@@ -39,7 +46,7 @@
     const visit = u === 'daily' ? R.service.visitDaily : R.service.visit;
     const service = N * V * visit;
     const trips = Math.ceil(N / DL.cabinsPerTrip);         // в одну машину помещается до DL.cabinsPerTrip кабин (20)
-    const delivery = trips * (z === 'city' ? DL.cityPerTrip : (km <= DL.nearKm ? DL.nearPerTrip : DL.nearPerTrip + (km - DL.nearKm) * DL.perKmOver));
+    const delivery = deliveryCost(S, N, z, km).cost;
     const sum = rent - discount + service + delivery;
     const minApplied = sum < R.minOrder;
     const raw = Math.max(sum, R.minOrder);
@@ -77,7 +84,7 @@
       quote = calculate(S, { mix: [{ m: 'komfort', n: komfort }, { m: 'vip', n: vip }], d: 1, u: 'none', z: 'city' });
       text += ' Ориентир на одни сутки с доставкой по Новосибирску: ' + (quote.ok ? '≈\u00a0' + S.rub(quote.total) : '—') + ' (' + trips + ' ' + plural(trips, 'рейс', 'рейса', 'рейсов') + ').';
     } else text += ' ' + trips + ' ' + plural(trips, 'рейс', 'рейса', 'рейсов') + ', стоимость считаем индивидуально.';
-    return { ok: true, total, komfort, vip, trips, quote, base: total, text };
+    return { ok: true, total, komfort, vip, trips, quote, base: total, text, rawGuests: g };
   }
 
   function resultHtml(S, r, mode, apx) {
@@ -104,7 +111,15 @@
     return h;
   }
 
-  const api = { calculate, events, plural, resultHtml };
+  // Покупка: цена кабин (sale.from × количество) плюс доставка. Скидок по количеству на продажу нет.
+  function sale(S, inp) {
+    const model = S.modelById(inp.m), n = num(inp.n), z = inp.z === 'region' ? 'region' : 'city', km = num(inp.km || 0);
+    if (!model || !model.sale || !(n >= 1) || n > S.rates.maxCabins || (z === 'region' && (!(km >= 1) || km > S.rates.delivery.maxKm))) return { ok: false };
+    const price = model.sale.from * n, d = deliveryCost(S, n, z, km), sum = price + d.cost;
+    return { ok: true, model, n, price, trips: d.trips, delivery: d.cost, total: Math.round(sum / S.rates.roundTo) * S.rates.roundTo };
+  }
+
+  const api = { calculate, events, plural, resultHtml, deliveryCost, sale };
   root.SITE_CALC = api;
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

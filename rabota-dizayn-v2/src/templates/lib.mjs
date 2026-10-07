@@ -5,7 +5,7 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 export const NB = ' ';
 
 // Контекст сборки: заполняется build.mjs. prefix: относительный путь до корня сайта ('./', '../', '../../').
-export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), theme: 'e' };
+export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, uidN: 0, faqUsed: [], photosUsed: new Set(), theme: 'e' };
 
 // Ссылки page-relative и с явным index.html, чтобы сайт открывался двойным кликом (file://) без сервера.
 export const u = (path) => {
@@ -34,7 +34,7 @@ export const thumb = (id) => `<svg class="thumb" viewBox="0 0 280 260" aria-hidd
 export function illScene(kind) {
   const bg = '<rect width="200" height="200" fill="var(--ph-bg)"/><polygon points="0,150 200,150 200,200 0,200" fill="var(--ph-floor)"/>';
   const body = {
-    form: '<rect x="40" y="52" width="120" height="76" rx="6" fill="#fff"/><rect x="52" y="66" width="60" height="6" fill="var(--ph-ink)"/><rect x="52" y="80" width="92" height="4" fill="var(--ph-soft)"/><rect x="52" y="90" width="76" height="4" fill="var(--ph-soft)"/><rect x="52" y="104" width="34" height="12" rx="6" fill="var(--ph-btn)"/>',
+    chat: '<rect x="34" y="46" width="104" height="58" rx="14" fill="#fff"/><polygon points="58,104 58,124 80,104" fill="#fff"/><rect x="50" y="62" width="64" height="6" fill="var(--ph-ink)"/><rect x="50" y="76" width="72" height="4" fill="var(--ph-soft)"/><rect x="50" y="86" width="48" height="4" fill="var(--ph-soft)"/><rect x="108" y="102" width="62" height="38" rx="12" fill="var(--ph-btn)"/><rect x="120" y="114" width="38" height="4" fill="#fff"/><rect x="120" y="123" width="26" height="4" fill="#fff"/>',
     doc: '<rect x="56" y="36" width="88" height="112" rx="6" fill="#fff"/><rect x="68" y="52" width="50" height="6" fill="var(--ph-ink)"/><rect x="68" y="66" width="64" height="4" fill="var(--ph-soft)"/><rect x="68" y="76" width="56" height="4" fill="var(--ph-soft)"/><rect x="68" y="86" width="64" height="4" fill="var(--ph-soft)"/><circle cx="118" cy="122" r="10" fill="var(--ph-btn)"/><path d="m113 122 4 4 7-8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
     cab: '<g transform="translate(58 38) scale(.5)"><use href="#cabg"/></g><polygon points="120,0 150,0 80,150 50,150" fill="var(--ph-lt)"/>',
     service: '<g transform="translate(20 46) scale(.46)"><use href="#cabg"/></g><rect x="118" y="88" width="56" height="62" rx="4" fill="var(--ph-tank)"/><rect x="128" y="70" width="36" height="20" fill="var(--ph-cap)"/><rect x="170" y="100" width="22" height="4" fill="var(--ph-ink)"/>',
@@ -215,12 +215,12 @@ export function modelCard(m, { headingLevel = 3, cta = false } = {}) {
 <p class="small">${esc(m.short)}</p>
 <ul class="kv kv--list">${m.cardFacts.map((f) => `<li>${esc(f).replace(/ (л|кг|мм)/g, NB + '$1')}</li>`).join('')}</ul>
 <div class="model-card__foot"><div>${priceLines(m).join('<br>')}<br><span class="small note">${note}</span></div></div>
-${cta ? `<a class="btn btn--outline btn--sm model-card__req" href="${u('/katalog/' + m.slug + (m.rent ? '/#raschet' : '/#kupit'))}">${m.rent ? 'Получить расчёт' : 'Купить'}</a>` : ''}</div></article>`;
+${cabinHelper(m)}${cta ? `<a class="btn btn--outline btn--sm model-card__req" href="${u('/katalog/' + m.slug + (m.rent ? '/#raschet' : '/#kupit'))}">${m.rent ? 'Рассчитать стоимость' : 'Как купить'}</a>` : ''}</div></article>`;
 }
 
 /* ---------- процесс: строки с кружком-номером и медиа (фото или плоская иллюстрация) ---------- */
-// media[i]: 'ill:form|doc|cab|service|load' или id фото
-const DEF_MEDIA = ['ill:form', 'ill:doc', 'ill:cab', 'ill:load'];
+// media[i]: 'ill:chat|doc|cab|service|load' или id фото
+const DEF_MEDIA = ['ill:chat', 'ill:doc', 'ill:cab', 'ill:load'];
 export function steps(items, o = {}) {
   const media = o.media || DEF_MEDIA;
   const m = (x) => {
@@ -230,7 +230,7 @@ export function steps(items, o = {}) {
   };
   return `<ol class="rows" data-timeline>${items.map((s, i) => `<li class="row"><div class="container row__in"><div class="row__l"><span class="num" aria-hidden="true">${i + 1}</span><h3>${s.t}</h3></div><div class="row__m">${m(media[i])}</div><p class="row__p">${s.text}</p></div></li>`).join('')}</ol>`;
 }
-export const processSteps = () => steps(ctx.S.steps, { media: ['ill:form', 'ill:doc', 'stroyka-sinyaya', 'meropriyatie-pole'] });
+export const processSteps = () => steps(ctx.S.steps, { media: ['ill:chat', 'ill:doc', 'stroyka-sinyaya', 'meropriyatie-pole'] });
 
 /* ---------- FAQ ---------- */
 export function faqItem(f, idp = 'q-') {
@@ -261,47 +261,104 @@ export function reviewsBlock(ids, o = {}) {
 <div class="container rev-f">${o.devNote ? dev(o.devNote) : ''}${o.link ? `<p class="more">${btn('/o-kompanii/#otzyvy', 'Все отзывы', 'link')}</p>` : ''}</div></section>`;
 }
 
-/* ---------- формы ---------- */
-const field = (id, label, input, hint = '') => `<div class="field" data-state="default"><label class="field__label" for="${id}">${label}</label>${input}${hint ? `<p class="field__hint" id="${id}-hint">${hint}</p>` : ''}<p class="field__msg" id="${id}-msg"></p></div>`;
-export function form(o = {}) {
-  const S = ctx.S, E = S.forms.errors;
-  const id = 'f' + (++ctx.formN);
-  const mode = o.mode || 'short'; // short | full | zone | calc
-  const d = (o.describe || '');
-  let fields = '';
-  if (mode === 'zone') {
-    fields += field(id + '-place', 'Населённый пункт', `<input class="input" id="${id}-place" name="place" type="text" autocomplete="address-level2" placeholder="Например, Бердск" required aria-describedby="${id}-place-msg" data-v="place">`);
-  }
-  fields += field(id + '-name', 'Имя', `<input class="input" id="${id}-name" name="name" type="text" autocomplete="name" placeholder="Как к вам обращаться" required aria-describedby="${id}-name-msg" data-v="name">`);
-  fields += field(id + '-phone', 'Телефон', `<input class="input" id="${id}-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" required aria-describedby="${id}-phone-msg" data-v="phone">`);
-  if (mode === 'full') {
-    const opts = S.forms.requestTypes.map((t, i) => `<option value="${esc(t)}"${o.type === i ? ' selected' : ''}>${esc(t)}</option>`).join('');
-    fields += field(id + '-type', 'Что нужно', `<div class="select-wrap"><select class="select" id="${id}-type" name="type" required aria-describedby="${id}-type-msg" data-v="type"><option value=""${o.type == null ? ' selected' : ''} disabled>Выберите</option>${opts}</select></div>`);
-    fields += field(id + '-comment', 'Комментарий <span class="small">(необязательно)</span>', `<textarea class="textarea" id="${id}-comment" name="comment" rows="4" placeholder="Адрес, даты, количество кабин или гостей: всё, что известно"></textarea>`);
-  }
-  const btnText = o.button || (mode === 'full' ? 'Отправить заявку' : mode === 'zone' ? 'Узнать стоимость' : 'Получить расчёт');
-  const success = mode === 'zone' ? S.forms.zoneSuccess : S.forms.success;
-  const heading = o.heading ? `<h3 class="form__h">${o.heading}</h3>` : '';
-  return `<div class="formbox">${heading}<form class="form form--${mode}${o.cls ? ' ' + o.cls : ''}" data-form="${mode}" method="post" action="#" novalidate aria-label="${esc(o.label || o.heading || 'Заявка')}">
-<div class="form__summary notice notice--error" role="alert" tabindex="-1" hidden></div>
-<div class="form__fields">${fields}
-<div class="hp" aria-hidden="true"><label>Не заполняйте <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-<input type="hidden" name="source" value="${esc(ctx.page.path)}"><input type="hidden" name="calc" value=""><input type="hidden" name="utm" value="">
-<div class="field field--consent" data-state="default"><label class="check"><input type="checkbox" name="consent" id="${id}-consent" required aria-describedby="${id}-consent-msg" data-v="consent"><span class="check__box" aria-hidden="true"></span><span class="check__t">Согласен(на) на обработку персональных данных. ${a('/politika-konfidencialnosti/', 'Политика обработки данных', '', 'target="_blank" rel="noopener"')}</span></label><p class="field__msg" id="${id}-consent-msg"></p></div>
-<div class="form__act"><button class="btn btn--primary btn--lg" type="submit" data-label="${btnText}">${btnText}</button><p class="small note">${esc(S.forms.micro)}${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</p></div></div>
-<div class="notice notice--ok form__ok" role="status" tabindex="-1" hidden><span class="notice__ico i i--check" aria-hidden="true"></span><div><p class="notice__t">${mode === 'zone' ? 'Запрос принят' : 'Заявка принята'}</p><p>${esc(success.replace(/^(Заявка|Запрос) принят[а]?\.\s*/, ''))}</p><p><button class="btn btn--link form__again" type="button">Отправить ещё одну</button></p></div></div>
-<div class="notice notice--error form__fail" role="alert" hidden><span class="notice__ico i i--alert" aria-hidden="true"></span><p>${esc(S.forms.failure)}</p></div>
-</form>
-<noscript><div class="notice notice--info"><span class="notice__ico i i--alert" aria-hidden="true"></span><p>Форма работает при включённом JavaScript. Позвоните: ${tel()} или напишите: ${a(S.contacts.telegramUrl, 'Telegram')}.</p></div></noscript></div>`;
+/* ---------- контакты: форм на сайте нет, связь только по телефону и в мессенджерах ---------- */
+const capFirst = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+export const contactBtns = (o = {}) => {
+  const C = ctx.S.contacts, sm = o.sm ? ' btn--sm' : '';
+  return `<a class="btn btn--primary${sm}" href="${C.phoneHref}">${ic('phone')} Позвонить</a><a class="btn btn--outline${sm}" href="${C.telegramUrl}" target="_blank" rel="noopener">${ic('telegram')} Telegram</a><a class="btn btn--outline${sm}" href="${C.whatsappUrl}" target="_blank" rel="noopener">${ic('whatsapp')} WhatsApp</a>`;
+};
+// Блок связи: большой телефон, три кнопки, часы работы и короткая строка
+export function contactPanel({ title = '', line, cls = '' } = {}) {
+  const C = ctx.S.contacts;
+  return `<div class="cpanel${cls ? ' ' + cls : ''}">${title ? `<p class="cpanel__t">${title}</p>` : ''}<p class="cpanel__line">${line || esc(C.contactLine)}</p><a class="cpanel__tel" href="${C.phoneHref}">${esc(C.phone).replace(/ /g, NB)}</a><div class="cpanel__btns">${contactBtns()}</div><p class="cpanel__hours">${ic('clock')} <span>${esc(C.hoursShort)}</span></p></div>`;
+}
+export function ctaBlock() {
+  const S = ctx.S, C = S.contacts;
+  return `<section class="section cta" id="kontakt" aria-labelledby="cta-h"><div class="container cta-g">
+<div class="cta__text"><p class="label">Связаться</p><h2 id="cta-h">Позвоните или напишите. <span class="g">Назовём цену и сроки под вашу задачу.</span></h2>
+<p class="cta__sub">Мы не просим оставлять данные на сайте: вы сами звоните или пишете, когда вам удобно.</p><p class="cta__sub small">${esc(C.address)}</p>
+<p class="more">${btn('/#podbor', 'Подобрать кабину за 3 шага', 'link')}${btn('/ceny/', 'Или посчитайте самостоятельно', 'link')}</p></div>
+<div class="cta__form">${contactPanel({ cls: 'cpanel--big' })}</div></div></section>`;
 }
 
-export function ctaBlock() {
-  const S = ctx.S;
-  return `<section class="section cta" id="zayavka" aria-labelledby="cta-h"><div class="container cta-g">
-<div class="cta__text"><p class="label">Связаться</p><h2 id="cta-h">Назовите адрес и даты. <span class="g">Рассчитаем стоимость под вашу задачу.</span></h2>
-<div class="cont"><p>${tel('big')}</p><p class="cont__row"><a class="btn btn--outline btn--sm" href="${S.contacts.telegramUrl}" rel="noopener">${ic('telegram')} Telegram</a><a class="btn btn--outline btn--sm" href="${S.contacts.whatsappUrl}" rel="noopener">${ic('whatsapp')} WhatsApp</a></p><p class="small">${esc(S.contacts.hours.charAt(0).toUpperCase() + S.contacts.hours.slice(1))} · ${esc(S.contacts.address)}</p></div></div>
-<div class="cta__form">${form({ mode: 'short', heading: 'Получить расчёт' })}<p class="more">${btn('/ceny/', 'Или посчитайте самостоятельно', 'link')}</p></div></div></section>`;
+/* ---------- v2u: сравнение моделей (Эконом / Стандарт / Комфорт / VIP) ---------- */
+const yn = (on, text) => `<span class="yn ${on ? 'yn--y' : 'yn--n'}">${ic(on ? 'yes' : 'no', 'ic yn__i')}<span>${on ? '<span class="visually-hidden">да: </span>' : '<span class="visually-hidden">нет: </span>'}${text}</span></span>`;
+export function compareTable({ compact = false, id = 'cmp' } = {}) {
+  const S = ctx.S, cols = ['ekonom', 'standart', 'komfort', 'vip'].map((i) => S.modelById(i));
+  const last = S.rates.rentPerDay[S.rates.rentPerDay.length - 1].from;
+  const head = `<th scope="col" class="cmp__corner"><span class="visually-hidden">Параметр</span></th>${cols.map((m) => `<th scope="col"><a class="cmp__h" href="${esc(u('/katalog/' + m.slug + '/'))}">${thumb(m.id)}<span>${esc(m.name)}</span></a></th>`).join('')}`;
+  const price = (m) => [m.rent ? `Аренда от${NB}${rub(S.modelFromPrice(m))}/сутки` : '', m.sale ? `Продажа от${NB}${rub(S.saleFrom(m))}` : ''].filter(Boolean).map((t) => `<span class="cmp__p">${t}</span>`).join('');
+  const rows = [
+    ['Для чего', (m) => esc(m.cmp.use)],
+    ['Аренда / Продажа', (m) => yn(!!m.rent, m.rent ? (m.rent.type === 'event' ? 'Аренда, мероприятия' : `Аренда от${NB}${last}${NB}суток`) : 'Аренда') + yn(!!m.sale, 'Продажа')],
+    ['Цена', price],
+    ['Бак', (m) => esc(m.cmp.tank)],
+    ['Размеры', (m) => esc(m.cmp.size).replace(/ мм/, NB + 'мм')],
+    ['Вес', (m) => esc(m.cmp.weight)],
+    ['Внутри', (m) => esc(m.cmp.kit)],
+    ['Обслуживание', (m) => esc(m.cmp.service)]
+  ].filter((r) => !compact || ['Для чего', 'Аренда / Продажа', 'Цена', 'Бак', 'Размеры'].includes(r[0]));
+  return `<div class="cmp${compact ? ' cmp--compact' : ''}" data-cmp id="${id}"><p class="cmp__hint" aria-hidden="true">листайте <span>→</span></p><div class="cmp__scroll" tabindex="0" role="region" aria-label="Сравнение моделей, таблица прокручивается вбок"><table class="cmp__t"><caption class="visually-hidden">Сравнение моделей МТК: Эконом, Стандарт, Комфорт, VIP</caption><thead><tr>${head}</tr></thead><tbody>${rows.map(([l, f]) => `<tr><th scope="row">${l}</th>${cols.map((m) => `<td>${f(m)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
 }
+
+/* ---------- v2u: «Сколько кабин нужно» для Комфорт и VIP: гости и часы ---------- */
+export function cabinHelper(m, page = false) {
+  if (!(m.rent && m.rent.type === 'event')) return '';
+  const S = ctx.S, id = 'ch' + (++ctx.uidN), r = ctx.CALC.events(S, { guests: 100, dur: 'to8h', alcohol: false });
+  const link = u(`/ceny/?n=${r.total}&mix=komfort:${r.komfort},vip:${r.vip}&d=1#calc`);
+  return `<div class="chelp js-only${page ? ' chelp--page' : ''}" data-chelp role="group" aria-labelledby="${id}-t"><p class="chelp__t" id="${id}-t">Сколько кабин нужно</p><div class="chelp__row"><label class="chelp__f" for="${id}-g"><span>Гостей</span><input class="input" id="${id}-g" type="text" inputmode="numeric" value="100" data-ch="guests" autocomplete="off"></label><label class="chelp__f" for="${id}-h"><span>Часов</span><input class="input" id="${id}-h" type="text" inputmode="numeric" value="6" data-ch="hours" autocomplete="off"></label></div><p class="chelp__r" data-ch-out aria-live="polite">${chelpText(r)}</p><a class="chelp__a" data-ch-link href="${esc(link)}">Рассчитать стоимость</a></div>`;
+}
+export const chelpText = (r) => `≈ ${r.total} ${ctx.CALC.plural(r.total, 'кабина', 'кабины', 'кабин')} (из них VIP ${r.vip})`;
+
+/* ---------- v2u: подбор кабины за 3 шага ---------- */
+function pkRadios(name, legend, opts, checked, cls = '') {
+  return `<fieldset class="seg ${cls}"><legend class="field__label">${legend}</legend><div class="seg__row">${opts.map((o, i) => `<input type="radio" name="${name}" id="${name}-${i}" value="${o.id}"${o.id === checked ? ' checked' : ''}><label for="${name}-${i}">${o.label}</label>`).join('')}</div></fieldset>`;
+}
+const pkNum = (id, label, val, hint = '') => `<div class="field" data-state="default"><label class="field__label" for="${id}">${label}</label><input class="input" id="${id}" type="text" inputmode="numeric" value="${val}" autocomplete="off"${hint ? ` aria-describedby="${id}-hint"` : ''}>${hint ? `<p class="field__hint" id="${id}-hint">${hint}</p>` : ''}</div>`;
+export function picker({ id = 'podbor', heading = 'Подобрать кабину за 3 шага', lead: ld = 'Ответьте на три вопроса: подскажем модель и количество кабин и прикинем цену. Ничего вводить о себе не нужно.', tag = 'Подбор', h = 2 } = {}) {
+  const S = ctx.S, E = S.eventRules, W = S.picker.workersPerCabin, C = S.contacts;
+  const std = S.modelById('standart'), eco = S.modelById('ekonom'), kom = S.modelById('komfort'), vip = S.modelById('vip');
+  const task = [['stroyka', 'Стройка / объект', 'Длительная аренда МТК Стандарт'], ['event', 'Мероприятие', 'МТК Комфорт и МТК VIP на сутки'], ['buy', 'Купить кабину', 'МТК Стандарт или МТК Эконом']];
+  const tasks = task.map(([v, t, d], i) => `<input type="radio" name="pk-task" id="pk-task-${i}" value="${v}"><label for="pk-task-${i}"><b>${t}</b><span>${d}</span></label>`).join('');
+  const dur = E.durations.map((d) => ({ id: d.id, label: d.label }));
+  const sub = {
+    stroyka: `<div class="pk__sub" data-pk-sub="stroyka" hidden><div class="pk__two">${pkNum('pk-days', 'Срок аренды', 60, 'Минимум 1 сутки')}${pkRadios('pk-du', 'Единица срока', [{ id: 'day', label: 'Сутки' }, { id: 'month', label: 'Месяцы' }], 'month')}</div>${pkNum('pk-workers', 'Сколько рабочих на объекте', 30, `Ориентир: 1 кабина на ${S.terms.workersPerCabin} рабочих.${ctx.production ? '' : ' ЗАГЛУШКА'}`)}</div>`,
+    event: `<div class="pk__sub" data-pk-sub="event" hidden>${pkNum('pk-guests', 'Сколько гостей', 100)}${pkRadios('pk-dur', 'Длительность', dur, 'to8h')}${pkRadios('pk-alc', 'Подаётся алкоголь', [{ id: 'no', label: 'Нет' }, { id: 'yes', label: 'Да' }], 'no')}</div>`,
+    buy: `<div class="pk__sub" data-pk-sub="buy" hidden>${pkNum('pk-qty', 'Сколько кабин купить', 1)}${pkRadios('pk-for', 'Для чего', [{ id: 'dacha', label: 'Дача, участок' }, { id: 'object', label: 'Объект, стройка' }], 'dacha')}</div>`
+  };
+  const zone = `<div class="pk__sub">${pkRadios('pk-zone', 'Куда везти', [{ id: 'city', label: 'Новосибирск' }, { id: 'near', label: `До ${S.rates.delivery.nearKm} км от города` }, { id: 'region', label: 'Область' }], 'city', 'seg--grid')}<div class="field" data-state="default" data-pk-kmbox hidden><label class="field__label" for="pk-km">Расстояние от границы Новосибирска, км</label><input class="input" id="pk-km" type="text" inputmode="numeric" value="" autocomplete="off" aria-describedby="pk-km-hint"><p class="field__hint" id="pk-km-hint">От ${S.rates.delivery.nearKm + 1} до ${S.rates.delivery.maxKm} км до места установки.</p></div></div>`;
+  const Hn = 'h' + h;
+  const stat = `<noscript><div class="pk-static"><h3 class="h4">Как выбрать кабину без калькулятора</h3><ul class="checks"><li><span><b>Стройка или объект:</b> ${a('/katalog/' + std.slug + '/', 'МТК Стандарт')}, 1 кабина на ${S.terms.workersPerCabin} рабочих, обслуживание раз в неделю. Цены по срокам: ${a('/ceny/#stavki', 'таблица ставок')}.</span></li><li><span><b>Мероприятие:</b> ${a('/katalog/' + kom.slug + '/', 'МТК Комфорт')} и ${a('/katalog/' + vip.slug + '/', 'МТК VIP')}: 1 кабина на ${E.guestsPerCabin.to4h} гостей при программе до 4 часов, на ${E.guestsPerCabin.to8h} при 4–8 часах, на ${E.guestsPerCabin.over8h} при более длительной; с алкоголем на треть больше, каждая ${E.vipShare}-я кабина VIP. Подробнее: ${a('/meropriyatiya/#normy', 'нормы и цены')}.</span></li><li><span><b>Купить:</b> ${a('/katalog/' + eco.slug + '/', 'МТК Эконом')} для дачи, ${a('/katalog/' + std.slug + '/', 'МТК Стандарт')} для объекта. ${a('/prodazha/', 'Условия покупки')}.</span></li></ul><p>Позвоните: ${tel()} или напишите в ${a(C.telegramUrl, 'Telegram')} или ${a(C.whatsappUrl, 'WhatsApp')}.</p></div></noscript>`;
+  return `<section class="section picker-sec" id="${id}" aria-labelledby="${id}-h"><div class="container"><header class="sec-head"><p class="label">${tag}</p><${Hn} id="${id}-h">${heading}</${Hn}><p class="lead">${lead(ld)}</p></header>
+<div class="pk js-only" data-picker>
+<div class="pk__prog"><p class="pk__no" data-pk-no aria-live="polite">Шаг 1 из 3</p><span class="pk__bar" aria-hidden="true"><i data-pk-bar></i></span></div>
+<div class="pk__steps">
+<div class="pk__step" data-pk-step="1"><fieldset class="pk__fs"><legend class="pk__q">Что вам нужно?</legend><div class="pk__opts">${tasks}</div></fieldset></div>
+<div class="pk__step" data-pk-step="2" hidden><p class="pk__q" data-pk-q2>Расскажите о задаче</p>${sub.stroyka}${sub.event}${sub.buy}</div>
+<div class="pk__step" data-pk-step="3" hidden><p class="pk__q">Куда везти кабины?</p>${zone}</div>
+</div>
+<p class="pk__err" data-pk-err role="alert"></p>
+<div class="pk__nav"><button class="btn btn--outline" type="button" data-pk-back hidden>Назад</button><button class="btn btn--primary" type="button" data-pk-next disabled>Далее</button></div>
+<div class="pk__res quote" data-pk-result tabindex="-1" aria-live="polite" hidden></div>
+</div>${stat}</div></section>`;
+}
+
+/* ---------- v2u: компактный процесс, 4 шага в одну строку ---------- */
+export function stepsRow(items) {
+  return `<ol class="sr">${items.map((s, i) => `<li class="sr__i"><span class="sr__n" aria-hidden="true">${i + 1}</span><h3>${s.t}</h3><p>${s.text}</p></li>`).join('')}</ol>`;
+}
+
+/* ---------- v2u: страницы моделей: предыдущая и следующая, плавающая сводка ---------- */
+export function modelPager(m) {
+  const S = ctx.S, list = S.models, i = list.findIndex((x) => x.id === m.id);
+  const prev = list[(i - 1 + list.length) % list.length], next = list[(i + 1) % list.length];
+  return `<nav class="mpager" aria-label="Другие модели"><a class="mpager__a" rel="prev" href="${esc(u('/katalog/' + prev.slug + '/'))}"><span class="small">← Предыдущая модель</span><b>${esc(prev.name)}</b></a><a class="btn btn--outline mpager__all" href="${esc(u('/katalog/'))}">Все модели</a><a class="mpager__a mpager__a--next" rel="next" href="${esc(u('/katalog/' + next.slug + '/'))}"><span class="small">Следующая модель →</span><b>${esc(next.name)}</b></a></nav>`;
+}
+export function modelSummary(m) {
+  const S = ctx.S, C = S.contacts, pl = priceLines(m).join(' · ').replace(/<[^>]+>/g, '');
+  return `<div class="msum js-only" data-msum role="region" aria-label="Кратко о модели" hidden><div class="container msum__in"><b class="msum__n">${esc(m.name)}</b><span class="msum__p">${pl}</span><span class="msum__b"><a class="btn btn--primary btn--sm" href="${C.phoneHref}">${ic('phone')} Позвонить</a><a class="btn btn--outline btn--sm" href="${C.whatsappUrl}" target="_blank" rel="noopener" data-wa-plain data-wa-text="${esc('Здравствуйте! Интересует ' + m.name)}">${ic('whatsapp')} WhatsApp</a></span></div></div>`;
+}
+
 
 /* ---------- калькулятор ---------- */
 export function stepper(id, label, value, min, max) {
@@ -309,6 +366,14 @@ export function stepper(id, label, value, min, max) {
 }
 function radios(name, legend, opts, checked, cls = '') {
   return `<fieldset class="seg ${cls}"><legend class="field__label">${legend}</legend><div class="seg__row">${opts.map((o, i) => `<input type="radio" name="${name}" id="${name}-${i}" value="${o.id}"${o.id === checked ? ' checked' : ''}><label for="${name}-${i}">${o.label}</label>`).join('')}</div></fieldset>`;
+}
+// Действия с расчётом: WhatsApp с готовым текстом (посетитель отправляет сам), копирование, звонок. Тексты подставляет main.js
+export function shareActions({ calc: isCalc = false, attr = 'data-share' } = {}) {
+  const C = ctx.S.contacts;
+  return `<div class="quote__act" ${attr}><a class="btn btn--primary btn--block" data-share-wa href="${C.whatsappUrl}" target="_blank" rel="noopener">${ic('whatsapp')} Отправить расчёт в WhatsApp</a>
+<button class="btn btn--outline btn--block" type="button" data-share-copy>${ic('copy')} Скопировать расчёт</button>
+<a class="btn btn--outline btn--block" href="${C.phoneHref}">${ic('phone')} Позвонить</a>
+<p class="quote__copied" data-share-status role="status" aria-live="polite"></p></div>`;
 }
 export function calc(mode = 'compact', defaults = { n: 1, d: 3, u: 'none', z: 'city', km: 0 }) {
   const S = ctx.S, R = S.rates, full = mode === 'full';
@@ -332,9 +397,7 @@ ${radios(id + '-z', 'Доставка', [{ id: 'city', label: 'Новосиби�
 ${kmField}</div>
 <aside class="quote" aria-label="Результат расчёта"><div class="quote__head"><h3>${full ? 'Смета' : 'Предварительный расчёт'}</h3></div><div class="quote__body" aria-live="polite">${ctx.CALC.resultHtml(S, res, mode, apx)}</div>
 <p class="small quote__note">${esc(S.forms.calcMessages.note)}</p>
-<div class="quote__act"><button class="btn btn--primary btn--block" type="button" data-calc-send aria-expanded="false" aria-controls="${id}-form">Отправить расчёт в заявке</button>
-<a class="btn btn--link" data-calc-tg href="${S.contacts.telegramUrl}" rel="noopener">Отправить расчёт в мессенджер</a>
-${full ? '' : `<a class="btn btn--link" data-calc-full href="${u('/ceny/')}">Подробный расчёт с выбором модели</a>`}</div></aside></div>
-<div class="calc__form" id="${id}-form" hidden>${form({ mode: 'calc', heading: 'Заявка с расчётом', button: 'Получить расчёт', label: 'Заявка с расчётом' })}</div></div>
+${shareActions({ calc: true })}
+${full ? '' : `<a class="btn btn--link quote__full" data-calc-full href="${u('/ceny/')}">Подробный расчёт с выбором модели</a>`}</aside></div></div>
 <noscript><div class="notice notice--info"><span class="notice__ico i i--alert" aria-hidden="true"></span><p>Калькулятор работает при включённом JavaScript. Ставки указаны в таблицах на странице ${a('/ceny/#stavki', 'цен')}, для расчёта позвоните: ${tel()}.</p></div></noscript>`;
 }
