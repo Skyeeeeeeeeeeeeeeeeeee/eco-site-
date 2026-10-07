@@ -1,3 +1,4 @@
+import NSK from './nsk-map-data.mjs';
 // Компоненты и каркас страницы. Всё возвращает строки HTML. Данные берутся из SITE (js/content.js).
 // Темы E и F отличаются только CSS-токенами (css/themes.css): разметка у обеих одна.
 export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -68,20 +69,26 @@ export function liveWidget(cls = '') {
   return `<div class="live${cls ? ' ' + cls : ''}" data-live><span class="live__dot" aria-hidden="true"></span><p class="live__t" data-live-text aria-live="polite">${esc(C.liveStatic)}</p>${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</div>`;
 }
 
-/* ---------- v2: схема зон доставки (не карта): круги, Обь полосой, грузовик по пунктирному маршруту ---------- */
-const ROUTE = 'M222 282 C 292 296, 330 326, 400 374';
+/* ---------- v2: схема зон доставки — стилизованный Новосибирск по данным OpenStreetMap (не навигационная карта) ---------- */
+const ROUTE = 'M250 250 C 296 282, 306 352, 312.6 418.2'; // склад → Бердск (ЗАГЛУШКА: пример рейса)
 export function deliveryMap() {
-  const S = ctx.S, Z = S.zones, L = S.copy.mapZoneLabels, D = S.rates.delivery;
+  const S = ctx.S, Z = S.zones, L = S.copy.mapZoneLabels, D = S.rates.delivery, M = NSK;
   const price = [S.rub(D.cityPerTrip), S.rub(D.nearPerTrip), S.rub(D.nearPerTrip) + ' и далее по километражу'];
-  const lab = (i, chipX, chipY, tx, ty, anchor) => `<circle class="zmap__chip" cx="${chipX}" cy="${chipY}" r="13"/><text class="zmap__ch" x="${chipX}" y="${chipY + 5}" text-anchor="middle">${Z[i].chip}</text><text class="zmap__t" x="${tx}" y="${ty}" text-anchor="${anchor}">${esc(L[Z[i].id])}</text>`;
-  const z = (i, r, labels) => `<g class="zmap__z" data-z="${Z[i].id}" tabindex="0" role="img" aria-label="Зона ${Z[i].chip}: ${esc(Z[i].name)}, ${esc(price[i])} за рейс"><circle class="zmap__c zmap__c--${Z[i].chip.toLowerCase()}" cx="250" cy="250" r="${r}"/>${labels}</g>`;
-  return `<figure class="zmap" data-zmap><svg class="zmap__svg" viewBox="0 0 500 500" role="group" aria-label="Схема зон доставки вокруг Новосибирска. Не карта." focusable="false">
-${z(2, 226, lab(2, 197, 48, 218, 54, 'start'))}${z(1, 152, lab(1, 202, 122, 223, 128, 'start'))}${z(0, 84, lab(0, 250, 196, 250, 238, 'middle'))}
-<path class="zmap__ob" d="M366 -10 C 342 80, 376 172, 326 252 S 236 410, 292 510"/><text class="zmap__river" x="396" y="96" transform="rotate(-76 396 96)">р. Обь</text>
-<path class="zmap__route" d="${ROUTE}"/><circle class="zmap__dest" cx="400" cy="374" r="7"/>
-<rect class="zmap__base" x="215" y="275" width="14" height="14" rx="3"/><text class="zmap__bt" x="222" y="314" text-anchor="middle">${esc(S.copy.mapBase)}</text>
-<g class="zmap__truck" style="offset-path:path('${ROUTE}')" aria-hidden="true"><g transform="scale(1.45)"><rect x="-16" y="-9" width="20" height="13" rx="2"/><path d="M4 -5h6l4 5v4H4z"/><circle cx="-8" cy="5" r="3.4"/><circle cx="8.5" cy="5" r="3.4"/></g></g>
-</svg><figcaption class="zmap__cap">${esc(S.copy.mapCaption)}${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</figcaption></figure>`;
+  const chip = (i, x, y) => `<circle class="zmap__chip" cx="${x}" cy="${y}" r="13"/><text class="zmap__ch" x="${x}" y="${y + 5}" text-anchor="middle">${Z[i].chip}</text>`;
+  const z = (i, shape, labels) => `<g class="zmap__z" data-z="${Z[i].id}" tabindex="0" role="img" aria-label="Зона ${Z[i].chip}: ${esc(Z[i].name)}, ${esc(price[i])} за рейс">${shape}${labels}</g>`;
+  const town = (name, dx = 7, dy = -6, anchor = 'start') => { const [x, y] = M.towns[name]; return `<circle class="zmap__town" cx="${x}" cy="${y}" r="3.5"/><text class="zmap__tt" x="${x + dx}" y="${y + dy}" text-anchor="${anchor}">${name}</text>`; };
+  const cityPaths = M.city.map((d) => `<path class="zmap__c zmap__c--a" d="${d}"/>`).join('');
+  return `<figure class="zmap" data-zmap><svg class="zmap__svg" viewBox="0 0 500 500" role="group" aria-label="Схема зон доставки: Новосибирск, Обь и Обское море, пригороды. Не навигационная карта." focusable="false">
+${z(2, '<rect class="zmap__c zmap__c--c" x="0" y="0" width="500" height="500"/>', chip(2, 28, 30) + `<text class="zmap__t" x="48" y="36">${esc(L[Z[2].id])}</text><text class="zmap__ts" x="48" y="56">по области</text>`)}
+${z(1, `<circle class="zmap__c zmap__c--b" cx="250" cy="250" r="${M.r30}"/>`, chip(1, 250, 250 - M.r30) + `<text class="zmap__t" x="270" y="${250 - M.r30 + 6}">${esc(L[Z[1].id])}</text>`)}
+${z(0, cityPaths, chip(0, 214, 168) + `<text class="zmap__t zmap__t--city" x="234" y="174">${esc(L[Z[0].id])}</text>`)}
+<g class="zmap__water" aria-hidden="true">${M.river.map((d) => `<path class="zmap__ob" d="${d}"/>`).join('')}${M.reservoir.map((d) => `<path class="zmap__sea" d="${d}"/>`).join('')}</g>
+<text class="zmap__river" x="196" y="78" transform="rotate(-70 196 78)">р. Обь</text><text class="zmap__river" x="182" y="470" transform="rotate(-38 182 470)">Обское море</text>
+<g class="zmap__towns" aria-hidden="true">${town('Колывань')}${town('Обь', -8, 18, 'end')}${town('Толмачёво', -8, -6, 'end')}${town('Краснообск', -8, 16, 'end')}${town('Кольцово')}${town('Академгородок')}${town('Бердск', 8, 14)}</g>
+<path class="zmap__route" d="${ROUTE}"/><circle class="zmap__dest" cx="312.6" cy="418.2" r="6"/>
+<rect class="zmap__base" x="243" y="243" width="14" height="14" rx="3"/><text class="zmap__bt" x="262" y="262">${esc(S.copy.mapBase)}</text>
+<g class="zmap__truck" style="offset-path:path('${ROUTE}')" aria-hidden="true"><g transform="scale(1.3)"><rect x="-16" y="-9" width="20" height="13" rx="2"/><path d="M4 -5h6l4 5v4H4z"/><circle cx="-8" cy="5" r="3.4"/><circle cx="8.5" cy="5" r="3.4"/></g></g>
+</svg><figcaption class="zmap__cap">${esc(S.copy.mapCaption)} Основа схемы: © участники <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>.${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</figcaption></figure>`;
 }
 
 /* ---------- v2: галерея «Кабины в работе»: все фото, scroll-snap, стрелки, drag ---------- */

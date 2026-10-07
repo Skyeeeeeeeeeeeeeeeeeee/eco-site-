@@ -719,13 +719,18 @@ p { max-width: 68ch; }
 .zmap-wrap { margin-top: 32px; }
 .zmap__svg { width: 100%; height: auto; display: block; background: var(--panel2-bg); border: 1px solid var(--panel-bd); border-radius: 20px; overflow: hidden; }
 .zmap__c { stroke: var(--ph-ink); stroke-width: 1.5; stroke-dasharray: 6 6; transition: stroke-width .2s; }
-.zmap__c--c { fill: var(--tile-bg); } .zmap__c--b { fill: var(--chip-bg); } .zmap__c--a { fill: var(--dbtn-bg); stroke-dasharray: none; }
+.zmap__c--c { fill: var(--tile-bg); stroke: none; } .zmap__c--b { fill: var(--chip-bg); } .zmap__c--a { fill: var(--dbtn-bg); stroke-dasharray: none; stroke-linejoin: round; }
 .zmap__z { outline: none; cursor: default; }
 .zmap__z.is-hl .zmap__c, .zmap__z:focus-visible .zmap__c { stroke: var(--ink); stroke-width: 3.5; stroke-dasharray: none; }
 .zmap__chip { fill: var(--panel2-bg); stroke: var(--ink); stroke-width: 1.2; }
 .zmap__ch { font-size: 15px; font-weight: 600; fill: var(--ink); }
 .zmap__t { font-size: 20px; font-weight: 500; fill: var(--ink); letter-spacing: -.01em; }
-.zmap__ob { fill: none; stroke: var(--map-river); stroke-width: 24; stroke-linecap: round; pointer-events: none; }
+.zmap__ob { fill: none; stroke: var(--map-river); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+.zmap__sea { fill: var(--map-river); stroke: var(--map-river); stroke-width: 1; pointer-events: none; }
+.zmap__town { fill: var(--ink); } .zmap__tt { font-size: 15px; fill: var(--ink); font-weight: 500; paint-order: stroke; stroke: var(--panel2-bg); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
+.zmap__ts { font-size: 14px; fill: var(--mute); }
+.zmap__t--city { font-weight: 600; }
+.zmap__t, .zmap__river, .zmap__bt { paint-order: stroke; stroke: var(--panel2-bg); stroke-width: 4px; stroke-linejoin: round; }
 .zmap__river { font-size: 17px; font-style: italic; fill: var(--ink); text-anchor: middle; pointer-events: none; }
 .zmap__route { fill: none; stroke: var(--ink); stroke-width: 3; stroke-dasharray: 3 9; stroke-linecap: round; pointer-events: none; }
 .zmap__dest { fill: var(--ink); }
