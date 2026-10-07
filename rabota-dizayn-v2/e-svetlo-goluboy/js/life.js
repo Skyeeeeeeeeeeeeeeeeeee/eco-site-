@@ -73,12 +73,18 @@
   (function live() {
     var w = $('[data-live]'); if (!w || !COPY) return;
     var out = $('[data-live-text]', w), last = '';
-    function nsk() { var d = new Date(new Date().getTime() + COPY.tzOffsetHours * 3600000); return d.getUTCHours() * 3600 + d.getUTCMinutes() * 60 + d.getUTCSeconds(); }
-    function left(mins) { var h = Math.floor(mins / 60), m = mins % 60; return h ? (m ? h + ' ч ' + m + ' мин' : h + ' ч') : m + ' мин'; }
+    // Время Новосибирска (UTC+7): секунды от полуночи и день недели (0 = воскресенье). Рабочие дни и часы: SITE.copy.
+    function nsk() { var d = new Date(new Date().getTime() + COPY.tzOffsetHours * 3600000); return { s: d.getUTCHours() * 3600 + d.getUTCMinutes() * 60 + d.getUTCSeconds(), wd: d.getUTCDay() }; }
+    function left(mins) { var h = Math.floor(mins / 60), m = mins % 60; return h ? (m ? h + ' ч ' + m + ' мин' : h + ' ч') : m + ' мин'; }
+    function isWork(wd) { return COPY.workDays.indexOf(wd) >= 0; }
+    // когда ответим, если рабочее время кончилось: «завтра» или название ближайшего рабочего дня («в понедельник»)
+    function nextDay(wd) { var d = (wd + 1) % 7; if (isWork(wd) && isWork(d)) return COPY.tomorrow; while (!isWork(d)) d = (d + 1) % 7; return COPY.dayNames[d]; }
     function tick() {
-      var s = nsk(), state, text;
-      if (s < COPY.open * 3600 || s >= COPY.close * 3600) { state = 'off'; text = COPY.liveOff; }
-      else if (s >= COPY.cutoff * 3600) { state = 'closed'; text = COPY.liveClosed; }
+      var t = nsk(), s = t.s, state, text;
+      if (!isWork(t.wd)) { state = 'off'; text = COPY.liveOff.replace('{day}', nextDay(t.wd)); }
+      else if (s < COPY.open * 3600) { state = 'off'; text = COPY.liveOff.replace('{day}', COPY.today); }
+      else if (s >= COPY.close * 3600) { state = 'off'; text = COPY.liveOff.replace('{day}', nextDay(t.wd)); }
+      else if (s >= COPY.cutoff * 3600) { state = 'closed'; text = COPY.liveClosed.replace('{day}', nextDay(t.wd)); }
       else { state = 'open'; text = COPY.liveOpen.replace('{left}', left(Math.ceil((COPY.cutoff * 3600 - s) / 60))); }
       w.setAttribute('data-state', state);
       if (text !== last) { last = text; out.textContent = text; }   // меняется не чаще раза в минуту

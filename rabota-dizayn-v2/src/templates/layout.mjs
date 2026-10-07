@@ -59,12 +59,11 @@ function jsonLd(page) {
     out.push({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbItems(page).map(([h, t], i) => Object.assign({ '@type': 'ListItem', position: i + 1, name: t }, h ? { item: abs(h) } : {})) });
   }
   if (page.template === 'model') {
-    const m = S.modelById(page.model), rent = m.kind === 'rent';
-    const offer = rent
-      ? { '@type': 'Offer', priceCurrency: 'RUB', price: S.modelFromPrice(m), availability: 'https://schema.org/InStock', url: abs(page.path),
-          priceSpecification: { '@type': 'UnitPriceSpecification', price: S.modelFromPrice(m), priceCurrency: 'RUB', unitCode: 'DAY', referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'DAY' } } }
-      : { '@type': 'Offer', priceCurrency: 'RUB', price: S.terms.peatPrice, availability: 'https://schema.org/InStock', url: abs(page.path) };
-    out.push({ '@context': 'https://schema.org', '@type': 'Product', name: m.name, description: m.purpose, sku: m.sku, brand: { '@type': 'Brand', name: K.short }, offers: offer });
+    const m = S.modelById(page.model), offers = [];
+    if (m.rent) { const p = S.modelFromPrice(m); offers.push({ '@type': 'Offer', name: 'Аренда', priceCurrency: 'RUB', price: p, availability: 'https://schema.org/InStock', url: abs(page.path),
+      priceSpecification: { '@type': 'UnitPriceSpecification', price: p, priceCurrency: 'RUB', unitCode: 'DAY', referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'DAY' } } }); }
+    if (m.sale) offers.push({ '@type': 'Offer', name: 'Продажа', priceCurrency: 'RUB', price: S.saleFrom(m), availability: 'https://schema.org/InStock', url: abs(page.path) });
+    out.push({ '@context': 'https://schema.org', '@type': 'Product', name: m.name, description: m.purpose, brand: { '@type': 'Brand', name: K.short }, offers });
   }
   const faq = [...new Map((ctx.faqUsed || []).map((f) => [f.id, f])).values()];
   if (faq.length && ['home', 'voprosy'].includes(page.template)) {
@@ -78,7 +77,6 @@ export function layout(page, main, sprite) {
   const canon = dom + (page.path === '/404.html' ? '' : page.path);
   const title = esc(page.title), desc = esc(page.description);
   const og = page.index === false ? '' : `<meta property="og:type" content="website"><meta property="og:locale" content="${S.site.locale}"><meta property="og:site_name" content="${esc(S.company.name)}"><meta property="og:title" content="${title}"><meta property="og:description" content="${desc}"><meta property="og:url" content="${canon}"><meta property="og:image" content="${dom}${S.site.ogImage}">`;
-  const t3 = !!page.uses3d;
   const head = `<!doctype html>
 <html lang="ru" data-theme="${ctx.theme}" data-base="${esc(ctx.prefix.replace(/\/$/, ''))}">
 <head>
@@ -92,15 +90,11 @@ ${og}
 <meta name="theme-color" content="${ctx.theme === 'e' ? '#CFE4F8' : '#FFFFFF'}">
 <link rel="icon" href="${u('/img/favicon.svg')}" type="image/svg+xml">
 <link rel="stylesheet" href="${u('/css/main.css')}">
-${t3 ? `<link rel="stylesheet" href="${u('/cabin3d/cabin3d.css')}">` : ''}
-<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}form[data-form]{display:none}.sticky-cta{display:none!important}.mq__t{animation:none}.live{display:none}</style></noscript>
+<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}form[data-form]{display:none}.sticky-cta{display:none!important}.mq__t{animation:none}.live{display:none}.offer__seg{display:none}</style></noscript>
 <script defer src="${u('/js/content.js')}"></script>
 <script defer src="${u('/js/calc.js')}"></script>
 <script defer src="${u('/js/main.js')}"></script>
 <script defer src="${u('/js/life.js')}"></script>
-${t3 ? `<script defer src="${u('/cabin3d/vendor/three.min.js')}"></script>
-<script defer src="${u('/cabin3d/cabin3d.js')}"></script>
-<script defer src="${u('/js/cabin-init.js')}"></script>` : ''}
 ${jsonLd(page)}
 </head>`;
   const body = `<body${page.noSticky ? '' : ' class="has-sticky"'}>

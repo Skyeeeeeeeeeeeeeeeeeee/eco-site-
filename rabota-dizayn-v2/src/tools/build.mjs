@@ -4,13 +4,14 @@
 //   node rabota-dizayn-v2/src/tools/build.mjs                 собрать оба сайта и страницу выбора (rabota-dizayn-v2/index.html)
 //   node rabota-dizayn-v2/src/tools/build.mjs --theme=e       только одну тему (e | f)
 //   node rabota-dizayn-v2/src/tools/build.mjs --production    падает, пока в content.js остались «ЗАГЛУШКА»; метки не выводятся
-// Версия 2: общие ресурсы (3D, фото, рендеры) лежат в ../rabota-dizayn/shared/ и копируются в каждый сайт при сборке.
-// Рендеры shared/renders/{model}-{e|f}.png (+ -450.png) подхватываются автоматически; нет файла: плоская SVG и предупреждение.
+// Фото лежат в ../rabota-dizayn/shared/photos (только чтение, v1 не трогаем) и копируются в каждый сайт при сборке (только используемые).
+// 3D и растровых рендеров нет: изображения моделей плоские SVG из src/img/cabins.svg.frag.
+// Главная собирается в трёх вариантах первого экрана: index-a.html, index-b.html, index-c.html; index.html = копия варианта A.
 //
 // Каждый сайт самодостаточен и открывается двойным кликом (file://): ссылки page-relative и с явным index.html,
 // SVG-спрайт встроен в страницу, нет preload шрифтов с crossorigin, нет ES-модулей, нет fetch/XHR.
 // После сборки запускаются проверки (title ≤60, description ≤160, один H1, ссылки и якоря, JSON-LD, примеры калькулятора,
-// размеры и подписи фото). При ошибках код выхода 1.
+// размеры и подписи фото, отсутствие снятых моделей и 3D). При ошибках код выхода 1.
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -18,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT = path.resolve(SRC, '..');           // rabota-dizayn-v2/
-const SHARED = process.env.ECO_SHARED ? path.resolve(process.env.ECO_SHARED) : path.resolve(ROOT, '../rabota-dizayn/shared'); // общие ресурсы v1, только чтение (ECO_SHARED: для проверок)
+const SHARED = process.env.ECO_SHARED ? path.resolve(process.env.ECO_SHARED) : path.resolve(ROOT, '../rabota-dizayn/shared'); // общие ресурсы v1, только чтение
 const OUTROOT = process.env.ECO_OUT ? path.resolve(process.env.ECO_OUT) : ROOT;
 const args = process.argv.slice(2);
 const PROD = args.includes('--production') || process.env.NODE_ENV === 'production';
@@ -30,7 +31,7 @@ const THEMES = [
 ].filter((t) => !only || t.id === only);
 
 const lib = await import('../templates/lib.mjs');
-const { templates, crumbItems } = await import('../templates/pages.mjs');
+const { templates } = await import('../templates/pages.mjs');
 const { layout } = await import('../templates/layout.mjs');
 
 /* ---------- данные ---------- */
@@ -40,28 +41,7 @@ function loadData() {
   const contentSrc = fs.readFileSync(path.join(SRC, 'js/content.js'), 'utf8');
   vm.runInContext(contentSrc, sandbox, { filename: 'content.js' });
   vm.runInContext(fs.readFileSync(path.join(SRC, 'js/calc.js'), 'utf8'), sandbox, { filename: 'calc.js' });
-  // v2: возможности 3D-компонента определяем по его исходнику (новые опции обратно совместимы, старая версия их игнорирует)
-  const c3 = fs.readFileSync(path.join(SHARED, 'cabin3d/cabin3d.js'), 'utf8');
-  const cabinModels = /torfyanoj/.test(c3) && /rukomojnik/.test(c3), cabinScene = /outdoor/.test(c3) && /drift/.test(c3);
-  if (cabinModels) { // у каждой модели своя 3D-версия: 3D показываем на всех страницах моделей
-    sandbox.SITE.models.forEach((m) => { m.view3d = true; const pg = sandbox.SITE.pages['/katalog/' + m.slug + '/']; if (pg) pg.uses3d = true; });
-  }
-  return { SITE: sandbox.SITE, CALC: sandbox.SITE_CALC, contentSrc, cabinModels, cabinScene };
-}
-
-/* ---------- PNG: размеры из IHDR ---------- */
-function pngSize(file) { const b = fs.readFileSync(file); return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) }; }
-const MODEL_KEYS = ['standart', 'rukomojnik', 'malomobilnye', 'uteplennaya', 'torfyanoj'];
-function scanRenders(themeId, warns) {
-  const found = {};
-  for (const k of MODEL_KEYS) {
-    const big = path.join(SHARED, 'renders', `${k}-${themeId}.png`), small = path.join(SHARED, 'renders', `${k}-${themeId}-450.png`);
-    if (!fs.existsSync(big)) { warns.push(`нет рендера ${k}-${themeId}.png: показана плоская SVG (shared/renders/)`); continue; }
-    const sz = pngSize(big), has450 = fs.existsSync(small);
-    if (!has450) warns.push(`нет ${k}-${themeId}-450.png: srcset без малого размера`);
-    found[`${k}-${themeId}`] = { w: sz.w, h: sz.h, has450 };
-  }
-  return found;
+  return { SITE: sandbox.SITE, CALC: sandbox.SITE_CALC, contentSrc };
 }
 
 /* ---------- JPEG: размеры из заголовка ---------- */
@@ -87,33 +67,42 @@ function makeSprite() {
 const rmrf = (p) => fs.rmSync(p, { recursive: true, force: true });
 const cp = (a, b) => { fs.mkdirSync(path.dirname(b), { recursive: true }); fs.copyFileSync(a, b); };
 
+// Эталонные примеры калькулятора (документируются здесь и в README):
+//  1) 2 кабины МТК Стандарт, 10 суток, обслуживание раз в неделю, Новосибирск: 2×10×550 = 11 000 + 2 визита×2 кабины×400 = 1 600 + рейс 800 = 13 400 ₽
+//  2) мероприятие на 300 гостей, 4–8 часов, с алкоголем, одни сутки, Новосибирск: 11 кабин = 8 МТК Комфорт + 3 МТК VIP;
+//     8×2 500 + 3×3 900 = 31 700, скидка 10% (от 10 кабин) −3 170, доставка 1 рейс (в машину до 20 кабин) 800 = 29 330, округление до 50: 29 350 ₽
+const EXAMPLES = { std: 13400, evTotal: 11, evKomfort: 8, evVip: 3, evRent: 31700, evDiscount: 3170, evTrips: 1, evSum: 29350 };
+
 function buildTheme(theme, data) {
   const { SITE, CALC, contentSrc } = data;
   const OUT = path.join(OUTROOT, theme.dir);
   const errors = [], warns = [];
   const err = (m) => errors.push(`[${theme.id}] ${m}`);
-  Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id, renders: scanRenders(theme.id, warns), cabinModels: data.cabinModels, cabinScene: data.cabinScene });
-  if (!data.cabinModels) warns.push('cabin3d.js без опции model: на страницах моделей 3D-кабина типовая');
-  if (!data.cabinScene) warns.push('cabin3d.js без scene/drift: в герое одна кабина в студии');
+  Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id });
   const sprite = makeSprite();
 
-  // 1. рендер
+  // 1. рендер: каждая страница; главная ещё в трёх вариантах первого экрана (index-a/b/c.html), index.html = вариант A
   const pages = [...Object.values(SITE.pages), SITE.notFound];
   const out = new Map();
   const meta = [];
+  const jobs = [];
   for (const page of pages) {
     const file = page.path === '/' ? 'index.html' : page.path === '/404.html' ? '404.html' : page.path.slice(1) + 'index.html';
+    jobs.push({ page, file, variant: page.template === 'home' ? 'a' : null });
+    if (page.template === 'home') for (const v of SITE.heroVariants) jobs.push({ page: Object.assign({}, page, { index: false }), file: v.file, variant: v.id, isVariant: true });
+  }
+  for (const { page, file, variant, isVariant } of jobs) {
     const depth = file.split('/').length - 1;
     Object.assign(lib.ctx, { page, secN: 0, formN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), prefix: depth ? '../'.repeat(depth) : './' });
-    const main = templates[page.template](page);
+    const main = templates[page.template](page, variant);
     const html = layout(page, main, sprite);
     out.set(file, html);
-    meta.push({ page, file, html, photos: new Set(lib.ctx.photosUsed) });
+    meta.push({ page, file, html, variant, isVariant: !!isVariant, photos: new Set(lib.ctx.photosUsed) });
   }
   const urls = pages.filter((p) => p.index !== false).map((p) => p.path);
   out.set('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((p) => `  <url><loc>${SITE.site.domain}${p}</loc><lastmod>${SITE.site.lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   out.set('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE.site.domain}/sitemap.xml\n`);
-  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и общих ресурсов \`rabota-dizayn/shared/\`.\n\nФотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования: страница «О компании», раздел «Источники фото».\n`);
+  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Варианты первого экрана главной: \`index-a.html\`, \`index-b.html\`, \`index-c.html\` (\`index.html\` = вариант A). Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и фото \`rabota-dizayn/shared/photos/\`.\n\nФотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования: страница «О компании», раздел «Источники фото».\n`);
 
   // 2. запись
   rmrf(OUT);
@@ -121,15 +110,10 @@ function buildTheme(theme, data) {
   const css = fs.readFileSync(path.join(SRC, 'css/main.css'), 'utf8') + '\n' + fs.readFileSync(path.join(SRC, 'css/themes.css'), 'utf8');
   fs.mkdirSync(path.join(OUT, 'css'), { recursive: true });
   fs.writeFileSync(path.join(OUT, 'css/main.css'), css);
-  for (const f of ['content.js', 'calc.js', 'main.js', 'life.js', 'cabin-init.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
+  for (const f of ['content.js', 'calc.js', 'main.js', 'life.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
   for (const f of fs.readdirSync(path.join(SRC, 'fonts'))) cp(path.join(SRC, 'fonts', f), path.join(OUT, 'fonts', f));
   for (const f of ['favicon.svg', 'og.svg']) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
-  for (const f of fs.readdirSync(path.join(SHARED, 'photos'))) cp(path.join(SHARED, 'photos', f), path.join(OUT, 'photos', f));
-  const rdir = path.join(SHARED, 'renders');
-  if (fs.existsSync(rdir)) for (const f of fs.readdirSync(rdir)) if (/\.png$/.test(f) && new RegExp(`-${theme.id}(-450)?\\.png$`).test(f)) cp(path.join(rdir, f), path.join(OUT, 'renders', f));
-  for (const f of ['cabin3d.js', 'cabin3d.css']) cp(path.join(SHARED, 'cabin3d', f), path.join(OUT, 'cabin3d', f));
-  cp(path.join(SHARED, 'cabin3d/vendor/three.min.js'), path.join(OUT, 'cabin3d/vendor/three.min.js'));
-  cp(path.join(SHARED, 'cabin3d/vendor/LICENSE'), path.join(OUT, 'cabin3d/vendor/LICENSE'));
+  for (const id of Object.keys(SITE.photos)) for (const f of [id + '.jpg', id + '-640.jpg']) cp(path.join(SHARED, 'photos', f), path.join(OUT, 'photos', f)); // только используемые фото
 
   // 3. проверки
   const textOf = (h) => h.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
@@ -138,75 +122,92 @@ function buildTheme(theme, data) {
     const t = page.title, d = page.description;
     if (t.length > 60) err(`${page.path}: title ${t.length} > 60`);
     if (d.length > 160) err(`${page.path}: description ${d.length} > 160`);
-    if ((html.match(/<h1[\s>]/g) || []).length !== 1) err(`${page.path}: H1 != 1`);
-    if (textOf((html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1] || '') !== page.h1) err(`${page.path}: текст H1 не совпадает с данными`);
+    if ((html.match(/<h1[\s>]/g) || []).length !== 1) err(`${file}: H1 != 1`);
+    if (textOf((html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/) || [])[1] || '') !== page.h1) err(`${file}: текст H1 не совпадает с данными`);
     const dir = path.posix.dirname(file);
     for (const m of html.matchAll(/\s(?:href|src)="([^"]+)"/g)) {
       const h = m[1].replace(/&amp;/g, '&');
       if (/^(tel:|mailto:|https?:)/.test(h)) continue;
-      if (h.startsWith('#')) { if (h.length > 1 && !idsOf.get(file).has(h.slice(1))) err(`${page.path}: нет якоря ${h}`); continue; }
-      if (h.startsWith('/')) { err(`${page.path}: абсолютная ссылка ${h} (нужна page-relative)`); continue; }
+      if (h.startsWith('#')) { if (h.length > 1 && !idsOf.get(file).has(h.slice(1))) err(`${file}: нет якоря ${h}`); continue; }
+      if (h.startsWith('/')) { err(`${file}: абсолютная ссылка ${h} (нужна page-relative)`); continue; }
       const [pp, hash] = h.split('#'); const clean = pp.split('?')[0];
       const target = path.posix.normalize(path.posix.join(dir, clean));
       const known = out.has(target), onDisk = fs.existsSync(path.join(OUT, target));
-      if (!known && !onDisk) { err(`${page.path}: битая ссылка ${h}`); continue; }
-      if (/\/$/.test(clean)) err(`${page.path}: ссылка без index.html ${h}`);
-      if (hash && known && !idsOf.get(target).has(hash)) err(`${page.path}: нет якоря #${hash} на ${clean}`);
+      if (!known && !onDisk) { err(`${file}: битая ссылка ${h}`); continue; }
+      if (/\/$/.test(clean)) err(`${file}: ссылка без index.html ${h}`);
+      if (hash && known && !idsOf.get(target).has(hash)) err(`${file}: нет якоря #${hash} на ${clean}`);
     }
-    for (const m of html.matchAll(/<(?:link|script|img)\b[^>]*>/g)) { if (/rel="canonical"/.test(m[0])) continue; const x = /(?:href|src)="(https?:[^"]+)"/.exec(m[0]); if (x) err(`${page.path}: внешний ресурс ${x[1]}`); }
-    for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) { try { JSON.parse(m[1]); } catch { err(`${page.path}: битый JSON-LD`); } }
+    for (const m of html.matchAll(/<(?:link|script|img)\b[^>]*>/g)) { if (/rel="canonical"/.test(m[0])) continue; const x = /(?:href|src)="(https?:[^"]+)"/.exec(m[0]); if (x) err(`${file}: внешний ресурс ${x[1]}`); }
+    for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) { try { JSON.parse(m[1]); } catch { err(`${file}: битый JSON-LD`); } }
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((x) => x[1]); const dup = ids.filter((x, i) => ids.indexOf(x) !== i);
-    if (dup.length) err(`${page.path}: повторяющиеся id ${[...new Set(dup)].join(', ')}`);
-    if (/<link rel="preload"|crossorigin|type="module"|fetch\(|XMLHttpRequest/.test(html)) err(`${page.path}: preload/crossorigin/module (ломает file://)`);
-    // три.js только там, где есть 3D
-    const has3d = html.includes('three.min.js'), wants = html.includes('data-cabin3d');
-    if (has3d !== wants) err(`${page.path}: three.min.js (${has3d}) и data-cabin3d (${wants}) не согласованы`);
+    if (dup.length) err(`${file}: повторяющиеся id ${[...new Set(dup)].join(', ')}`);
+    if (/<link rel="preload"|crossorigin|type="module"|fetch\(|XMLHttpRequest/.test(html)) err(`${file}: preload/crossorigin/module (ломает file://)`);
+    // 3D снят полностью
+    if (/three\.min\.js|cabin3d|cabin-init|data-cabin3d|stage-3d/.test(html)) err(`${file}: остатки 3D`);
     // каждое фото: figure с подписью автор + лицензия + ссылка на источник
     const figs = [...html.matchAll(/<figure class="photo[^"]*">[\s\S]*?<\/figure>/g)].map((x) => x[0]);
-    for (const f of figs) if (!/<figcaption class="photo__cap">Фото: [^<]+, <a href="https:\/\/commons\.wikimedia\.org[^"]+"/.test(f) || !/loading="(lazy|eager)"/.test(f) || !/width="\d+" height="\d+"/.test(f) || !/srcset="[^"]+640w, [^"]+1280w"/.test(f)) err(`${page.path}: фото без подписи/srcset/размеров`);
+    for (const f of figs) if (!/<figcaption class="photo__cap">Фото: [^<]+, <a href="https:\/\/commons\.wikimedia\.org[^"]+"/.test(f) || !/loading="(lazy|eager)"/.test(f) || !/width="\d+" height="\d+"/.test(f) || !/srcset="[^"]+640w, [^"]+1280w"/.test(f)) err(`${file}: фото без подписи/srcset/размеров`);
     const imgCount = (html.match(/<img\b[^>]*src="[^"]*photos\//g) || []).length;
     const thumbCount = (html.match(/class="credits__th"/g) || []).length;
-    if (imgCount - thumbCount !== figs.length) err(`${page.path}: <img> с фото (${imgCount - thumbCount}) не равно числу подписанных figure (${figs.length})`);
+    if (imgCount - thumbCount !== figs.length) err(`${file}: <img> с фото (${imgCount - thumbCount}) не равно числу подписанных figure (${figs.length})`);
   }
-  // v2: проверки «живых» блоков
+  // «живые» блоки и варианты главной
   const nPhotos = Object.keys(SITE.photos).length;
-  for (const { page, html } of meta) {
+  for (const { page, file, html, variant, isVariant } of meta) {
     const p = page.path;
     if (['/', '/dostavka/'].includes(p)) {
-      if (!/data-live[\s>]/.test(html) || !/aria-live="polite"/.test(html)) err(`${p}: нет виджета приёма заявок с aria-live`);
-      if (!/data-zmap/.test(html) || (html.match(/data-zrow="/g) || []).length < 3) err(`${p}: нет схемы зон или строк data-zrow`);
-    } else if (/data-live[\s>]/.test(html)) err(`${p}: виджет не должен быть на этой странице`);
-    if (['/', '/o-kompanii/'].includes(p) && (html.match(/class="photo photo--gal"/g) || []).length !== nPhotos) err(`${p}: в галерее не все ${nPhotos} фото`);
-    if (p === '/' && !/data-scene="outdoor" data-count="3" data-drift="1" data-scroll-rotate="1"/.test(html)) err('/: нет параметров 3D-сцены героя');
-    if (p === '/' && !/3D-модель\. Покрутите/.test(html)) err('/: нет подписи к 3D-сцене');
-    if (['/', '/o-kompanii/'].includes(p) && !/data-count/.test(html)) err(`${p}: нет счётчиков`);
-    if (!/<html[^>]*>[\s\S]*?<script>document\.documentElement\.className\+=" js"<\/script>/.test(html)) err(`${p}: нет класса .js в head`);
-    if (/data-timeline/.test(html) && (html.match(/<li class="row">/g) || []).length < 3) err(`${p}: таймлайн без шагов`);
+      if (!/data-live[\s>]/.test(html) || !/aria-live="polite"/.test(html)) err(`${file}: нет виджета приёма заявок с aria-live`);
+      if (!/data-zmap/.test(html) || (html.match(/data-zrow="/g) || []).length < 3) err(`${file}: нет схемы зон или строк data-zrow`);
+    } else if (/data-live[\s>]/.test(html)) err(`${file}: виджет не должен быть на этой странице`);
+    if (['/', '/o-kompanii/'].includes(p) && (html.match(/class="photo photo--gal"/g) || []).length !== nPhotos) err(`${file}: в галерее не все ${nPhotos} фото`);
+    if (['/', '/o-kompanii/'].includes(p) && !/data-count/.test(html)) err(`${file}: нет счётчиков`);
+    if (!/<html[^>]*>[\s\S]*?<script>document\.documentElement\.className\+=" js"<\/script>/.test(html)) err(`${file}: нет класса .js в head`);
+    if (/data-timeline/.test(html) && (html.match(/<li class="row">/g) || []).length < 3) err(`${file}: таймлайн без шагов`);
+    if (page.template === 'home') {
+      if (variant === 'a' && !/class="hero-a"/.test(html)) err(`${file}: нет героя A`);
+      if (variant === 'a' && !/class="photo photo--heroa"[\s\S]*?Фото: /.test(html)) err(`${file}: в герое A нет подписи автора фото`);
+      if (variant === 'b') {
+        const tiles = (html.match(/class="mtile"/g) || []).length;
+        if (tiles !== 4 || !/data-offer-box/.test(html) || !/id="offer-rent"/.test(html) || !/id="offer-sale"/.test(html)) err(`${file}: в герое B должно быть 4 плитки и переключатель Аренда/Купить`);
+        if ((html.match(/data-p="rent"/g) || []).length !== 3 || (html.match(/data-p="sale"/g) || []).length !== 2) err(`${file}: в герое B цены аренды (3) и продажи (2)`);
+      }
+      if (variant === 'c' && (html.match(/class="task-card"/g) || []).length !== 3) err(`${file}: в герое C должно быть 3 карточки`);
+      if (/three|cabin3d/.test(html)) err(`${file}: 3D на главной`);
+      if (isVariant && !/name="robots" content="noindex/.test(html)) err(`${file}: вариант главной должен быть noindex`);
+    }
     if (p.startsWith('/katalog/') && page.template === 'model') {
-      const key = { standart: 'standart', 's-rukomojnikom': 'rukomojnik', 'dlya-malomobilnyh': 'malomobilnye', uteplennaya: 'uteplennaya', torfyanoj: 'torfyanoj' }[page.model.replace(/^.*$/, (x) => SITE.modelById(x).slug)];
-      if (data.cabinModels && !new RegExp(`data-cabin3d data-model="${key}"`).test(html)) err(`${p}: 3D-контейнер не с моделью ${key}`);
+      const m = SITE.modelById(page.model);
+      if (m.id === 'vip' && !/#mVin/.test(html)) err(`${file}: на странице VIP нет иллюстрации «внутри»`);
+      if (!new RegExp(`<use href="#${{ standart: 'mS', ekonom: 'mE', komfort: 'mK', vip: 'mV' }[m.id]}"`).test(html)) err(`${file}: нет SVG модели`);
     }
   }
+  // старые страницы моделей не должны существовать
+  for (const old of ['standart', 's-rukomojnikom', 'dlya-malomobilnyh', 'uteplennaya', 'torfyanoj']) if (fs.existsSync(path.join(OUT, 'katalog', old))) err(`остался старый каталог /katalog/${old}/`);
   // размеры фото соответствуют файлам
   for (const [id, p] of Object.entries(SITE.photos)) {
     const sz = jpegSize(path.join(SHARED, 'photos', id + '.jpg'));
     if (!sz || sz.w !== p.w || sz.h !== p.h) err(`фото ${id}: в content.js ${p.w}x${p.h}, файл ${sz ? sz.w + 'x' + sz.h : '?'}`);
     if (!p.author || !p.license || !p.source) err(`фото ${id}: нет автора/лицензии/источника в credits.json`);
   }
-  for (const c of credits) if (!SITE.photos[c.file.replace(/\.jpg$/, '')]) warns.push(`фото ${c.file} из credits.json не используется в content.js`);
-  // калькулятор: оба примера из structure.md и пример мероприятия
+  for (const c of credits) if (!SITE.photos[c.file.replace(/\.jpg$/, '')]) warns.push(`фото ${c.file} из credits.json не используется (не копируется)`);
+  // калькулятор: два эталонных примера (см. EXAMPLES выше)
   const c1 = CALC.calculate(SITE, { n: 2, d: 10, u: 'weekly', z: 'city', m: 'standart' }).total;
-  const c2 = CALC.calculate(SITE, { n: 6, d: 30, u: 'twice', z: 'region', km: 40, m: 'standart' }).total;
-  const e1 = CALC.events(SITE, { guests: 300, dur: 'to8h', alcohol: true }).total;
-  if (c1 !== 13400) err(`калькулятор: пример 1 = ${c1}, ожидалось 13400`);
-  if (c2 !== 104850) err(`калькулятор: пример 2 = ${c2}, ожидалось 104850`);
-  if (e1 !== 12) err(`мероприятие: пример = ${e1}, ожидалось 12`);
-  // запрещённые формулировки
+  const ev = CALC.events(SITE, { guests: 300, dur: 'to8h', alcohol: true }), q = ev.quote || {};
+  if (c1 !== EXAMPLES.std) err(`калькулятор: пример 1 = ${c1}, ожидалось ${EXAMPLES.std}`);
+  if (ev.total !== EXAMPLES.evTotal || ev.komfort !== EXAMPLES.evKomfort || ev.vip !== EXAMPLES.evVip) err(`мероприятие: ${ev.komfort} Комфорт + ${ev.vip} VIP = ${ev.total}, ожидалось ${EXAMPLES.evKomfort}+${EXAMPLES.evVip}=${EXAMPLES.evTotal}`);
+  if (q.rent !== EXAMPLES.evRent || q.discount !== EXAMPLES.evDiscount || q.trips !== EXAMPLES.evTrips || q.total !== EXAMPLES.evSum) err(`мероприятие: аренда ${q.rent}, скидка ${q.discount}, рейсов ${q.trips}, итого ${q.total}; ожидалось ${EXAMPLES.evRent}, ${EXAMPLES.evDiscount}, ${EXAMPLES.evTrips}, ${EXAMPLES.evSum}`);
+  const g800 = CALC.events(SITE, { guests: 800, dur: 'to4h', alcohol: false });
+  if (g800.total > SITE.rates.delivery.cabinsPerTrip || g800.trips !== 1) err(`800 гостей до 4 часов: ${g800.total} кабин, ${g800.trips} рейс(а), ожидался один рейс`);
+  if (SITE.rates.delivery.cabinsPerTrip !== 20) err('в одну машину помещается 20 кабин (факт клиента)');
+  // запрещённые формулировки и снятые модели (в видимом тексте страниц)
   const banned = /лиценз|НДС|рейтинг|возврат денег|вернём деньги|в течение 2 часов|скидк[аи] за опоздан/i;
-  for (const { page, html } of meta) {
+  const removed = /торф|маломобил|утепл|ЭС-0|(?<![а-яё])зим|−35|ежедневно|8:00|21:00|круглосуточно|без выходных|4 каб|четыр[её]х? каб/i;
+  for (const { page, file, html } of meta) {
     const text = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ');
     const m = text.match(banned);
-    if (m) err(`${page.path}: запрещённая формулировка «${m[0]}»`);
+    if (m) err(`${file}: запрещённая формулировка «${m[0]}»`);
+    const r = text.match(removed);
+    if (r) err(`${file}: снятая модель или устаревший текст «${r[0]}»`);
   }
   // заглушки
   const phLines = contentSrc.split('\n').filter((l) => /ЗАГЛУШКА/.test(l)).length;
@@ -216,18 +217,20 @@ function buildTheme(theme, data) {
   } else warns.push(`заглушек в content.js: ${phLines} (в dev-режиме разрешены)`);
 
   warns.forEach((w) => console.log(`[${theme.id}] внимание: ${w}`));
-  console.log(`[${theme.id}] ${theme.dir}: страниц ${pages.length}, файлов ${out.size + 1}, калькулятор ${c1} / ${c2}, мероприятие ${e1}`);
+  console.log(`[${theme.id}] ${theme.dir}: файлов ${out.size + 1}, страниц ${pages.length} + 3 варианта главной, калькулятор ${c1}, мероприятие ${ev.komfort}+${ev.vip} кабин = ${q.total}`);
   return errors;
 }
 
-/* ---------- страница выбора ---------- */
+/* ---------- страница выбора: варианты главной для обеих тем ---------- */
 function chooser(data) {
   const S = data.SITE;
-  const card = (t, p) => `<a class="card card--${t.id}" href="${t.dir}/index.html"><span class="card__img"><img src="previews/${t.id}-home.jpg" width="800" height="520" alt="Превью главной страницы, тема ${t.name}" loading="lazy"></span><span class="card__sw" aria-hidden="true">${p.map((c) => `<i style="background:${c}"></i>`).join('')}</span><span class="card__t">${t.name}</span><span class="card__d">${t.note}</span><span class="card__go">Открыть сайт</span></a>`;
-  const T = [{ id: 'e', dir: 'e-svetlo-goluboy', name: 'Е «Светло-голубой»', note: 'Голубая шапка и герой, тёмно-синие блоки: карточки, расчёт, отзывы, подвал.' }, { id: 'f', dir: 'f-vozdushnyy', name: 'F «Воздушный»', note: 'Всё светлое: белый и бледно-голубой, без тёмных блоков.' }];
+  const T = [{ id: 'e', dir: 'e-svetlo-goluboy', name: 'Е «Светло-голубой»', note: 'Голубая шапка и герой, тёмно-синие блоки: карточки, расчёт, отзывы, подвал.', sw: ['#CFE4F8', '#B9D7F4', '#13263A', '#0C1B2A', '#9CC9F5'] },
+    { id: 'f', dir: 'f-vozdushnyy', name: 'F «Воздушный»', note: 'Всё светлое: белый и бледно-голубой, без тёмных блоков.', sw: ['#FFFFFF', '#F4F9FE', '#DDEDFB', '#9CC9F5', '#2F6FAE'] }];
+  const vcard = (t, v) => `<a class="card card--${t.id}" href="${t.dir}/${v.file}"><span class="card__img"><img src="previews/${t.id}-${v.id}.jpg" width="800" height="520" alt="Превью главной, тема ${t.name}, вариант ${v.name}" loading="lazy"></span><span class="card__t">${v.name}</span><span class="card__d">${v.note}</span><span class="card__go">Открыть вариант</span></a>`;
+  const sect = (t) => `<section class="theme" aria-labelledby="h-${t.id}"><div class="theme__h"><span class="card__sw" aria-hidden="true">${t.sw.map((c) => `<i style="background:${c}"></i>`).join('')}</span><div><h2 id="h-${t.id}">${t.name}</h2><p class="card__d">${t.note}</p></div><a class="all" href="${t.dir}/index.html">Весь сайт (главная = вариант A)</a></div><div class="grid">${S.heroVariants.map((v) => vcard(t, v)).join('')}</div></section>`;
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${S.company.name}: две темы одного сайта, версия 2</title>
+<title>${S.company.name}: две темы и три варианта главной</title>
 <meta name="robots" content="noindex">
 <style>
 @font-face{font-family:Onest;font-weight:400 600;font-display:swap;src:url(e-svetlo-goluboy/fonts/onest-cyrillic.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
@@ -235,28 +238,34 @@ function chooser(data) {
 @font-face{font-family:"Onest Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:109.8%;ascent-override:88.3%;descent-override:27.8%;line-gap-override:0%}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Onest,"Onest Fallback",Arial,sans-serif;background:#F4F9FE;color:#0C1B2A;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-.w{width:min(1120px,100% - 32px);margin-inline:auto;padding:48px 0 64px}
+.w{width:min(1180px,100% - 32px);margin-inline:auto;padding:48px 0 64px}
 h1{font-size:clamp(30px,5vw,56px);font-weight:500;letter-spacing:-.035em;line-height:1.08}
 h1 span{color:#4E6278}
-.lead{margin-top:18px;max-width:38em;color:#4E6278;font-size:17px}
-.grid{margin-top:40px;display:grid;gap:20px;grid-template-columns:1fr}
-@media(min-width:800px){.grid{grid-template-columns:1fr 1fr}}
-.card{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:#fff;border:1px solid #D3E4F4;color:inherit;text-decoration:none}
+h2{font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-height:1.15}
+.lead{margin-top:18px;max-width:40em;color:#4E6278;font-size:17px}
+.theme{margin-top:48px}
+.theme__h{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.theme__h > div{flex:1;min-width:220px}
+.all{min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:999px;border:1px solid #0C1B2A;color:#0C1B2A;text-decoration:none;font-size:14px;font-weight:500}
+.all:hover{background:#0C1B2A;color:#fff}
+.grid{margin-top:20px;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:20px;background:#fff;border:1px solid #D3E4F4;color:inherit;text-decoration:none}
 .card:hover{border-color:#0C1B2A}
-.card:focus-visible,.go:focus-visible{outline:2px solid #0C1B2A;outline-offset:3px}
-.card__img{display:block;border-radius:14px;overflow:hidden;background:#DDEDFB;aspect-ratio:800/520}
+.card:focus-visible,.all:focus-visible{outline:2px solid #0C1B2A;outline-offset:3px}
+.card__img{display:block;border-radius:12px;overflow:hidden;background:#DDEDFB;aspect-ratio:800/520}
 .card__img img{width:100%;height:100%;object-fit:cover;display:block}
-.card__sw{display:flex;gap:6px}.card__sw i{width:28px;height:28px;border-radius:8px;border:1px solid #D3E4F4}
-.card__t{font-size:24px;font-weight:500;letter-spacing:-.03em}
-.card__d{color:#4E6278;font-size:15px}
-.card__go{align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;padding:0 22px;border-radius:999px;background:#0C1B2A;color:#fff;font-weight:500;font-size:14px}
+.card__sw{display:flex;gap:6px}.card__sw i{width:24px;height:24px;border-radius:8px;border:1px solid #D3E4F4}
+.card__t{font-size:20px;font-weight:500;letter-spacing:-.03em}
+.card__d{color:#4E6278;font-size:14px}
+.card__go{align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;padding:0 20px;border-radius:999px;background:#0C1B2A;color:#fff;font-weight:500;font-size:14px;margin-top:auto}
 .card--f .card__go{background:#9CC9F5;color:#0C1B2A;border:1px solid #6FA6DB}
 .note{margin-top:32px;font-size:14px;color:#4E6278;max-width:46em}
 </style></head><body><main class="w">
-<p style="font-size:13px;color:#4E6278">Версия 2: реалистичнее и живее. Выбор оформления</p>
-<h1>${S.company.name}: <span>две цветовые темы одного дизайна</span></h1>
-<p class="lead">Структура, тексты, калькулятор и формы одинаковые. Различаются только палитра и несколько блоков: в теме Е тёмно-синие панели, в теме F всё светлое. Оба сайта открываются двойным кликом, без сервера.</p>
-<div class="grid">${card(T[0], ['#CFE4F8', '#B9D7F4', '#13263A', '#0C1B2A', '#9CC9F5'])}${card(T[1], ['#FFFFFF', '#F4F9FE', '#DDEDFB', '#9CC9F5', '#2F6FAE'])}</div>
+<p style="font-size:13px;color:#4E6278">Версия 2, вторая итерация: без 3D, новый ассортимент МТК. Выбор оформления и первого экрана</p>
+<h1>${S.company.name}: <span>две темы, три варианта первого экрана</span></h1>
+<p class="lead">Структура, тексты, калькулятор и формы одинаковые. Различаются палитра (тема Е тёмно-синие панели, тема F всё светлое) и первый экран главной: A «Фото», B «Линейка моделей», C «Какая задача?». Всё, что ниже первого экрана, у вариантов общее. Сайты открываются двойным кликом, без сервера.</p>
+${T.map(sect).join('\n')}
 <p class="note">Данные на обоих сайтах помечены «Заглушка». Фотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования указаны под каждым фото и на странице «О компании».</p>
 </main></body></html>
 `;

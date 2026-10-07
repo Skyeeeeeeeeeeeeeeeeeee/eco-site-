@@ -39,7 +39,7 @@
   /* иллюстрации */
   --ph-bg: #E6F1FC; --ph-floor: #CFE4F8; --ph-ink: #5E95CC; --ph-soft: #A9CFF3; --ph-btn: #4A7FB6; --ph-lt: #DCEBFA; --ph-tank: #A9CFF3; --ph-cap: #7FB2E5; --ph-bar: #A9CFF3;
   /* плоская кабина */
-  --front: #7FB2E5; --side: #5E95CC; --roof: #A9CFF3; --roof2: #93C0EC; --rim: #DCEBFA; --rim2: #4F86BF; --door: #4A7FB6; --facet: #9CC9F5; --detail: #2F5F8F;
+  --front: #7FB2E5; --side: #5E95CC; --roof: #A9CFF3; --roof2: #93C0EC; --rim: #DCEBFA; --rim2: #4F86BF; --door: #4A7FB6; --facet: #9CC9F5; --detail: #2F5F8F; --roofl: #EAF3FC; --roofl2: #DCEBFA;
 }
 
 /* ---------- Тема F «воздушный» ---------- */
@@ -70,7 +70,7 @@
   --ftr-bg: #EAF3FC; --ftr-bd: #D3E4F4; --ftr-h: #0C1B2A; --ftr-link: #4E6278; --ftr-hover: #0C1B2A; --ftr-fg: #0C1B2A; --ftr-line: #CBE3F8; --ftr-soc: #6FA6DB;
   --sticky-bg: #fff; --sticky-bd: #D3E4F4;
   --ph-bg: #DDEDFB; --ph-floor: #CBE3F8; --ph-ink: #5A90C8; --ph-soft: #CBE3F8; --ph-btn: #9CC9F5; --ph-lt: #fff; --ph-tank: #6AA2DA; --ph-cap: #CBE3F8; --ph-bar: #8DBCEB;
-  --front: #8DBCEB; --side: #6AA2DA; --roof: #B8D8F5; --roof2: #A9CFF3; --rim: #4F86BF; --rim2: #4F86BF; --door: #5A90C8; --facet: #A9CFF3; --detail: #2F5F8F;
+  --front: #8DBCEB; --side: #6AA2DA; --roof: #B8D8F5; --roof2: #A9CFF3; --rim: #4F86BF; --rim2: #4F86BF; --door: #5A90C8; --facet: #A9CFF3; --detail: #2F5F8F; --roofl: #fff; --roofl2: #F4F9FE;
 }
 
 /* ---------- Малые отличия, которые нельзя выразить токенами ---------- */

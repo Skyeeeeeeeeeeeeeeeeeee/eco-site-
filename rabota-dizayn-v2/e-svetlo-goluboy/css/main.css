@@ -175,18 +175,6 @@ p { max-width: 68ch; }
   .crumbs li + li:nth-last-child(2)::before { content: "←"; }
 }
 
-/* сцена героя: 3D-кабина на светлой площадке */
-.stage { margin-top: 40px; background: var(--stage-bg); border: 1px solid var(--stage-bd); border-radius: 20px; overflow: hidden; }
-.stage__view { position: relative; height: clamp(360px, 46vw, 600px); }
-.stage__bg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.stage-3d { position: relative; z-index: 1; width: 100%; height: 100%; }
-.cab-fallback { height: 86%; width: auto; aspect-ratio: 210 / 245; }
-.stage-bar { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--stage-bd); background: var(--stage-bar-bg); }
-.stage-bar div { padding: 16px 20px; font-size: 13px; color: var(--stage-bar-fg); border-bottom: 1px solid var(--stage-bd); }
-.stage-bar div:last-child { border-bottom: 0; }
-.stage-bar b { display: block; color: var(--ink); font-weight: 500; font-size: 15px; letter-spacing: -.02em; }
-@media (min-width: 700px) { .stage-bar { grid-template-columns: repeat(3, 1fr); } .stage-bar div { border-bottom: 0; border-right: 1px solid var(--stage-bd); } .stage-bar div:last-child { border-right: 0; } }
-
 /* бегущая строка */
 .mq { background: var(--mq-bg); color: var(--mq-fg); border-block: 1px solid var(--mq-bd); overflow: hidden; padding: 26px 0; }
 .mq__t { display: flex; width: max-content; animation: mq 70s linear infinite; }
@@ -269,8 +257,7 @@ p { max-width: 68ch; }
 /* плитки моделей */
 .mod-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 8px; max-width: none; }
 .tiles { margin-top: 36px; display: grid; gap: 10px 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-@media (min-width: 700px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1100px) { .tiles { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 760px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
 .model-card { position: relative; display: flex; flex-direction: column; min-width: 0; }
 .sq { background: var(--tile-bg); border: 1px solid var(--tile-bd); border-radius: 14px; aspect-ratio: 1; display: grid; place-items: center; padding: 12% 8% 6%; transition: background .2s; }
 .sq svg { width: 100%; height: 100%; }
@@ -604,7 +591,6 @@ p { max-width: 68ch; }
 .gallery { min-width: 0; }
 .gallery__main { position: relative; background: var(--stage-bg); border: 1px solid var(--stage-bd); border-radius: 20px; overflow: hidden; }
 .gallery__slide { margin: 0; }
-.gallery__slide .stage-3d--model { height: clamp(340px, 64vw, 540px); }
 .gallery__cap { font-size: 12px; color: var(--facts-fg); padding: 10px 16px 12px; max-width: none; }
 .gallery__sku { position: absolute; left: 16px; top: 14px; z-index: 2; color: var(--facts-fg); }
 .illus { width: 100%; height: auto; }
@@ -669,15 +655,6 @@ p { max-width: 68ch; }
 .site-header.is-scrolled .mainbar { border-bottom-color: var(--hdr-bds); }
 @media (max-width: 767.98px) { .site-header.is-hidden { transform: translateY(-100%); } }
 
-/* сцена героя: подпись и запасной рендер */
-.stage__cap { position: absolute; left: 16px; top: 14px; z-index: 2; padding: 6px 12px; border-radius: 999px; background: #fff; border: 1px solid var(--stage-bd); color: var(--ink); font-size: 13px; line-height: 1.3; pointer-events: none; max-width: none; }
-.cab-fallback--img { height: 90%; width: auto; max-width: 90%; aspect-ratio: auto; object-fit: contain; }
-
-/* рендеры моделей */
-.sq--r { padding: 0; overflow: hidden; }
-.sq .render { width: 100%; height: 100%; object-fit: contain; transition: transform .2s ease; }
-.render--big { width: 100%; height: auto; max-height: 560px; object-fit: contain; }
-.gallery__slide--render { background: var(--stage-bg); }
 
 /* живой виджет приёма заявок */
 .live { display: flex; align-items: flex-start; gap: 12px; width: fit-content; max-width: 100%; margin-top: 22px; padding: 12px 16px; border-radius: 16px; border: 1px solid var(--hero-line); background: var(--panel2-bg); color: var(--ink); font-size: 14px; line-height: 1.4; }
@@ -705,7 +682,7 @@ p { max-width: 68ch; }
 .card, .svc-card:has(a), .aud-card, .model-card .sq { transition: transform .2s ease, box-shadow .2s ease, background .2s; }
 .card:hover, .card:focus-within, .svc-card:has(a):hover, .aud-card:hover, .aud-card:focus-within, .model-card:hover .sq, .model-card:focus-within .sq { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(12, 27, 42, .16); }
 .card .photo__frame img, .aud-card .photo__frame img, .photo--gal .photo__frame img, .slide .photo__frame img { transition: transform .25s ease; }
-.card:hover .photo__frame img, .aud-card:hover .photo__frame img, .photo--gal:hover .photo__frame img, .model-card:hover .sq .render, .slide:hover .photo__frame img { transform: scale(1.03); }
+.card:hover .photo__frame img, .aud-card:hover .photo__frame img, .photo--gal:hover .photo__frame img, .slide:hover .photo__frame img { transform: scale(1.03); }
 .btn[data-size="lg"]::after, .btn--link::after { content: "\2192"; display: inline-block; transition: transform .2s ease; }
 .btn--link { position: relative; text-decoration: none; }
 .btn--link::after { width: 1em; text-align: center; }
@@ -777,6 +754,100 @@ p { max-width: 68ch; }
 @media (min-width: 900px) { .row { --nc: 50%; } }
 @media (prefers-reduced-motion: reduce) { .row::after { transform: none; } }
 
+/* ============================================================
+   v3: МТК (4 модели), плоские SVG вместо 3D, три варианта первого экрана главной
+   ============================================================ */
+.thumb { display: inline-block; width: 46px; height: 43px; vertical-align: middle; margin-right: 10px; }
+.tbl--thumbs thead .thumb { display: block; width: 56px; height: 52px; margin: 0 0 6px; }
+.tbl--thumbs th a, .tbl--thumbs th { vertical-align: middle; }
+.model-card__top { flex-wrap: wrap; justify-content: flex-start; }
+@media (min-width: 640px) and (max-width: 1099.98px) { .grid--cards.cards-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .grid--cards.cards-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px 20px; } }
+.buy__offers { margin-top: 22px; display: grid; gap: 14px; max-width: none; }
+.buy__offers li { display: grid; gap: 2px; padding-top: 14px; border-top: 1px solid var(--hero-line); }
+.buy__offers .price { font-size: clamp(26px, 3.4vw, 36px); }
+.buy__k { font-size: 13px; color: var(--hero-mute); }
+.price--lg { font-size: clamp(34px, 5vw, 48px); }
+.sq--sale { max-width: 240px; aspect-ratio: 1.1; }
+.evmodel { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 16px; align-items: center; }
+.evmodel__i { background: var(--tile-bg); border-radius: 14px; padding: 8px; }
+.evmodel p { margin-top: 6px; }
+.ex-col { display: grid; gap: 16px; }
+
+/* переключатель вариантов первого экрана (только в dev-сборке) */
+.vbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 12px; font-size: 13px; color: var(--hero-mute); }
+.vbar a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px dashed var(--mute); border-radius: 999px; color: var(--ink); }
+.vbar a[aria-current] { background: var(--btn-bg); color: var(--btn-fg); border: 1px solid var(--btn-bd); }
+.vbar a:hover:not([aria-current]) { background: var(--chip-bg); }
+
+/* полоса цифр */
+.hero-meta--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+@media (min-width: 640px) { .hero-meta--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .hero-meta--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; } }
+
+/* вариант A: фото на всю ширину контейнера + карточка предложения */
+.hero-a { position: relative; }
+.hero-a .photo__frame { border-radius: 24px; --ar: 4 / 3; }
+.hero-a .photo__cap { position: absolute; right: 10px; top: 10px; max-width: calc(100% - 20px); padding: 4px 12px; border-radius: 999px; background: #fff; color: var(--ink); font-size: 12px; }
+.hero-a__card { margin-top: 12px; background: var(--panel2-bg); color: var(--ink); border: 1px solid var(--hero-line); border-radius: 22px; padding: 22px 20px 24px; }
+.hero-a__card h1.display { margin-top: 10px; font-size: clamp(28px, 7vw, 40px); }
+.hero-a__card .sub { margin-top: 14px; }
+.hero-a__card .hero__actions { margin-top: 20px; }
+.hero-a__card .live { margin-top: 18px; background: var(--paper); }
+@media (min-width: 900px) { .hero-a .photo__frame { --ar: 16 / 8; } }
+@media (min-width: 1100px) {
+  .hero-a .photo__frame { border-radius: 32px; --ar: 16 / 9; }
+  .hero-a .photo__cap { top: auto; bottom: 14px; right: 14px; }
+  .hero-a__card { position: absolute; left: 24px; bottom: 24px; width: min(500px, 46%); margin: 0; padding: 26px 28px 28px; box-shadow: 0 10px 34px rgba(12, 27, 42, .18); }
+  .hero-a__card h1.display { font-size: clamp(30px, 2.9vw, 42px); }
+}
+
+/* вариант B: линейка моделей */
+.hero-b__head, .hero-c__head { display: grid; gap: 4px 48px; }
+@media (min-width: 900px) { .hero-b__head, .hero-c__head { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; } .hero-b__head .live, .hero-c__head .live { margin-bottom: 8px; justify-self: end; } }
+.offer { margin-top: 28px; }
+.offer__seg { margin-bottom: 14px; }
+.offer__tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 12px; }
+.mtile { min-width: 0; }
+.mtile__a { display: flex; flex-direction: column; height: 100%; gap: 3px; padding: 12px 12px 18px; background: var(--panel2-bg); border: 1px solid var(--hero-line); border-radius: 22px; color: var(--ink); transition: transform .2s ease, box-shadow .2s ease; }
+.mtile__a:hover, .mtile__a:focus-visible { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(12, 27, 42, .16); }
+.mtile__img { display: block; background: var(--tile-bg); border-radius: 14px; aspect-ratio: 1.15; padding: 8% 8% 3%; }
+.mtile__img svg { width: 100%; height: 100%; }
+.mtile__n { margin-top: 10px; font-size: 19px; font-weight: 500; letter-spacing: -.03em; line-height: 1.2; }
+.mtile__s { font-size: 13px; color: var(--mute); line-height: 1.35; }
+.mtile__p { margin-top: 3px; font-size: 15px; font-weight: 500; letter-spacing: -.01em; }
+.mtile__p b { font-weight: 400; color: var(--mute); margin-right: 4px; }
+.mtile__s + .mtile__p { margin-top: 8px; }
+.offer[data-mode="rent"] .mtile:not([data-offer~="rent"]), .offer[data-mode="sale"] .mtile:not([data-offer~="sale"]) { display: none; }
+.offer[data-mode="rent"] [data-p="sale"], .offer[data-mode="sale"] [data-p="rent"] { display: none; }
+@media (min-width: 640px) { .offer__tiles { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; } }
+
+/* вариант C: какая задача */
+.task-grid { display: grid; gap: 14px; margin-top: 28px; }
+@media (min-width: 900px) { .task-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; } }
+.task-card { position: relative; background: var(--panel2-bg); border: 1px solid var(--hero-line); border-radius: 26px; overflow: hidden; display: flex; flex-direction: column; transition: transform .2s ease, box-shadow .2s ease; }
+.task-card:hover, .task-card:focus-within { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(12, 27, 42, .16); }
+.task-card .photo__frame { border-radius: 0; }
+.task-card .photo__cap { padding: 6px 16px 0; }
+.task-card .photo__cap a { position: relative; z-index: 2; }
+.task-card__b { padding: 16px 84px 22px 20px; display: grid; gap: 6px; }
+.task-card__t { font-size: clamp(24px, 2.4vw, 30px); letter-spacing: -.035em; line-height: 1.1; }
+.task-card__l { font-size: 16px; font-weight: 500; letter-spacing: -.01em; }
+.task-card__d { font-size: 14px; color: var(--mute); }
+.task-card__go { position: absolute; right: 18px; bottom: 20px; width: 48px; height: 48px; border-radius: 50%; background: var(--btn-bg); color: var(--btn-fg); border: 1px solid var(--btn-bd); display: grid; place-items: center; transition: transform .2s ease; }
+.task-card__go .ic { width: 22px; height: 22px; }
+.task-card:hover .task-card__go { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) { .mtile__a, .task-card, .task-card__go { transition: none; } .mtile__a:hover, .task-card:hover { transform: none; } }
+
+.hero--a, .hero--b, .hero--c { padding-top: 20px; }
+@media (min-width: 900px) { .hero--a, .hero--b, .hero--c { padding-top: 28px; } }
+.hero--b h1.display, .hero--c h1.display { font-size: clamp(32px, 4.2vw, 56px); max-width: 17em; }
+.hero--b .sub, .hero--c .sub { margin-top: 16px; }
+
+.tbl--thumbs .num { white-space: normal; }
+.tbl--kit td:last-child { text-align: left; }
+.tbl--kit thead th:last-child { text-align: left; }
+
 /* ТЕМЫ. Два набора токенов на <html data-theme="e|f">. Вся вёрстка в main.css берёт цвета только отсюда.
    Палитры взяты из макетов designs/05-blue/e-svetlo-goluboy.html и f-vozdushnyy.html.
    Принцип: в теме E «тёмные блоки» (карточки, расчёт, отзывы, подвал, бегущая строка) тёмно-синие; в теме F те же блоки светлые.
@@ -818,7 +889,7 @@ p { max-width: 68ch; }
   /* иллюстрации */
   --ph-bg: #E6F1FC; --ph-floor: #CFE4F8; --ph-ink: #5E95CC; --ph-soft: #A9CFF3; --ph-btn: #4A7FB6; --ph-lt: #DCEBFA; --ph-tank: #A9CFF3; --ph-cap: #7FB2E5; --ph-bar: #A9CFF3;
   /* плоская кабина */
-  --front: #7FB2E5; --side: #5E95CC; --roof: #A9CFF3; --roof2: #93C0EC; --rim: #DCEBFA; --rim2: #4F86BF; --door: #4A7FB6; --facet: #9CC9F5; --detail: #2F5F8F;
+  --front: #7FB2E5; --side: #5E95CC; --roof: #A9CFF3; --roof2: #93C0EC; --rim: #DCEBFA; --rim2: #4F86BF; --door: #4A7FB6; --facet: #9CC9F5; --detail: #2F5F8F; --roofl: #EAF3FC; --roofl2: #DCEBFA;
 }
 
 /* ---------- Тема F «воздушный» ---------- */
@@ -849,7 +920,7 @@ p { max-width: 68ch; }
   --ftr-bg: #EAF3FC; --ftr-bd: #D3E4F4; --ftr-h: #0C1B2A; --ftr-link: #4E6278; --ftr-hover: #0C1B2A; --ftr-fg: #0C1B2A; --ftr-line: #CBE3F8; --ftr-soc: #6FA6DB;
   --sticky-bg: #fff; --sticky-bd: #D3E4F4;
   --ph-bg: #DDEDFB; --ph-floor: #CBE3F8; --ph-ink: #5A90C8; --ph-soft: #CBE3F8; --ph-btn: #9CC9F5; --ph-lt: #fff; --ph-tank: #6AA2DA; --ph-cap: #CBE3F8; --ph-bar: #8DBCEB;
-  --front: #8DBCEB; --side: #6AA2DA; --roof: #B8D8F5; --roof2: #A9CFF3; --rim: #4F86BF; --rim2: #4F86BF; --door: #5A90C8; --facet: #A9CFF3; --detail: #2F5F8F;
+  --front: #8DBCEB; --side: #6AA2DA; --roof: #B8D8F5; --roof2: #A9CFF3; --rim: #4F86BF; --rim2: #4F86BF; --door: #5A90C8; --facet: #A9CFF3; --detail: #2F5F8F; --roofl: #fff; --roofl2: #F4F9FE;
 }
 
 /* ---------- Малые отличия, которые нельзя выразить токенами ---------- */

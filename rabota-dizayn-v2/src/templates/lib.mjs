@@ -4,8 +4,7 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 export const NB = ' ';
 
 // Контекст сборки: заполняется build.mjs. prefix: относительный путь до корня сайта ('./', '../', '../../').
-export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), theme: 'e',
-  renders: {}, cabinModels: false, cabinScene: false };  // v2: renders: { 'standart-e': {w,h,has450} }, заполняет build.mjs
+export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), theme: 'e' };
 
 // Ссылки page-relative и с явным index.html, чтобы сайт открывался двойным кликом (file://) без сервера.
 export const u = (path) => {
@@ -22,11 +21,14 @@ export const devTag = (text) => (ctx.production ? '' : `<span class="tag dev-fla
 export const ic = (name, cls = 'ic') => `<svg class="${cls}" aria-hidden="true" focusable="false"><use href="#i-${name}"/></svg>`;
 export const apx = '<span class="apx" aria-hidden="true"></span><span class="visually-hidden">около </span>';
 
-// Плоская иллюстрация кабины из спрайта (m1..m5 из макетов E/F)
-const MODEL_SYM = { standart: 'm1', 's-rukomojnikom': 'm2', 'dlya-malomobilnyh': 'm3', uteplennaya: 'm4', torfyanoj: 'm5' };
-export function illus(slug, label, cls = 'illus') {
-  return `<svg class="${cls}" viewBox="0 0 280 260" role="img" aria-label="${esc(label)}" focusable="false"><use href="#${MODEL_SYM[slug] || 'm1'}"/></svg>`;
+// Плоские иллюстрации моделей из спрайта (src/img/cabins.svg.frag): без 3D и растровых рендеров
+const MODEL_SYM = { standart: 'mS', ekonom: 'mE', komfort: 'mK', vip: 'mV', 'vip-in': 'mVin' };
+const symOf = (id) => { const m = ctx.S && ctx.S.modelById(id); return MODEL_SYM[m ? m.id : id] || 'mS'; };
+export function illus(id, label, cls = 'illus') {
+  return `<svg class="${cls}" viewBox="0 0 280 260" role="img" aria-label="${esc(label)}" focusable="false"><use href="#${symOf(id)}"/></svg>`;
 }
+// маленькая декоративная иллюстрация для таблиц (название модели рядом)
+export const thumb = (id) => `<svg class="thumb" viewBox="0 0 280 260" aria-hidden="true" focusable="false"><use href="#${symOf(id)}"/></svg>`;
 // Иллюстрации для строк процесса (цвета берутся из токенов темы)
 export function illScene(kind) {
   const bg = '<rect width="200" height="200" fill="var(--ph-bg)"/><polygon points="0,150 200,150 200,200 0,200" fill="var(--ph-floor)"/>';
@@ -49,18 +51,6 @@ export function photo(id, o = {}) {
   const cap = `<figcaption class="photo__cap">Фото: ${esc(p.author)}, <a href="${esc(p.source)}" target="_blank" rel="noopener">${esc(p.license)}<span class="visually-hidden"> (источник, откроется в новой вкладке)</span></a></figcaption>`;
   const ar = o.ar ? ` style="--ar:${o.ar}"` : '';
   return `<figure class="photo${o.cls ? ' ' + o.cls : ''}"><div class="photo__frame"${ar}><img src="${small}" srcset="${small} 640w, ${big} 1280w" sizes="${o.sizes || '(min-width:900px) 40vw, 100vw'}" width="${p.w}" height="${p.h}" alt="${esc(o.alt || p.alt)}" loading="${o.eager ? 'eager' : 'lazy'}" decoding="async"></div>${cap}</figure>`;
-}
-
-/* ---------- v2: реалистичные рендеры моделей (shared/renders/{model}-{e|f}.png и -450.png). Нет файла: плоская SVG ---------- */
-const RENDER_KEY = { standart: 'standart', 's-rukomojnikom': 'rukomojnik', 'dlya-malomobilnyh': 'malomobilnye', uteplennaya: 'uteplennaya', torfyanoj: 'torfyanoj' };
-export const modelKey = (slug) => RENDER_KEY[slug] || 'standart';
-export const renderOf = (slug) => ctx.renders[modelKey(slug) + '-' + ctx.theme] || null;
-export function renderImg(slug, { alt, sizes = '(min-width:900px) 50vw, 100vw', cls = 'render', eager = false } = {}) {
-  const r = renderOf(slug); if (!r) return '';
-  const k = modelKey(slug) + '-' + ctx.theme;
-  const big = u('/renders/' + k + '.png'), small = u('/renders/' + k + '-450.png');
-  const set = r.has450 ? ` srcset="${small} 450w, ${big} 900w" sizes="${sizes}"` : '';
-  return `<img class="${cls}" src="${r.has450 ? small : big}"${set} width="${r.w}" height="${r.h}" alt="${esc(alt || '')}" loading="${eager ? 'eager' : 'lazy'}" decoding="async">`;
 }
 
 /* ---------- v2: счётчик: число в тексте анимируется скриптом, без JS остаётся итоговое значение ---------- */
@@ -154,43 +144,71 @@ export function table({ caption, head, rows, numFrom = 99, cls = '', hideCaption
     }).join('');
     return `<tr role="row"${rowAttrs[ri] ? ' ' + rowAttrs[ri] : ''}>${cells}</tr>`;
   }).join('');
-  return `<table class="tbl ${stack ? 'tbl--stack' : ''} ${cls}" role="table"><caption${hideCaption ? ' class="visually-hidden"' : ''}>${caption}</caption><thead role="rowgroup"><tr role="row">${th}</tr></thead><tbody role="rowgroup">${body}</tbody></table>`;
+  return `<div class="tbl-wrap"><table class="tbl ${stack ? 'tbl--stack' : ''} ${cls}" role="table"><caption${hideCaption ? ' class="visually-hidden"' : ''}>${caption}</caption><thead role="rowgroup"><tr role="row">${th}</tr></thead><tbody role="rowgroup">${body}</tbody></table></div>`;
 }
 export function specTable(caption, rows) {
-  return `<table class="tbl tbl--spec"><caption class="visually-hidden">${esc(caption)}</caption><tbody>${rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th><td${r.mono ? ' class="mono"' : ''}>${esc(r.value).replace(/ (л|кг|см|₽)/g, NB + '$1')}</td></tr>`).join('')}</tbody></table>`;
+  return `<table class="tbl tbl--spec"><caption class="visually-hidden">${esc(caption)}</caption><tbody>${rows.map((r) => `<tr><th scope="row">${esc(r.label)}</th><td${r.mono ? ' class="mono"' : ''}>${esc(r.value).replace(/ (л|кг|мм|₽)/g, NB + '$1')}</td></tr>`).join('')}</tbody></table>`;
 }
 export function kvTable(caption, head, rows) { // «Параметр / Условие»
   return `<table class="tbl tbl--kv"><caption class="visually-hidden">${esc(caption)}</caption><thead><tr><th scope="col">${head[0]}</th><th scope="col">${head[1]}</th></tr></thead><tbody>${rows.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table>`;
 }
 
 /* ---------- цены ---------- */
-export function priceTable(caption = 'Аренда: цена за кабину в сутки, ₽', extraRow = true) {
-  const S = ctx.S, rent = S.models.filter((m) => m.kind === 'rent');
-  const head = ['Срок'].concat(rent.map((m) => a('/katalog/' + m.slug + '/', esc(m.name.replace('Кабина для маломобильных посетителей', 'Для маломобильных').replace(' кабина', '')))));
-  const rows = S.rates.rentPerDay.map((t, i) => [S.tierLabel(t)].concat(rent.map((m) => rub(S.modelRate(m, i)))));
-  if (extraRow) {
-    const d = S.rates.sampleDays;
-    rows.push([d + ' суток (за весь срок)'].concat(rent.map((m) => rub(S.modelRateForDays(m, d) * d))));
-  }
+// Стандарт: ступени срока (длительная аренда)
+export function priceTable(caption = 'МТК Стандарт в аренду: цена за кабину в сутки, ₽', extraRow = true) {
+  const S = ctx.S, m = S.modelById('standart');
+  const head = ['Срок', a('/katalog/' + m.slug + '/', esc(m.name))];
+  const rows = S.rates.rentPerDay.map((t, i) => [S.tierLabel(t), rub(S.modelRate(m, i))]);
+  if (extraRow) { const d = S.rates.sampleDays; rows.push([d + ' суток (за весь срок)', rub(S.unitRate(m, d) * d)]); }
   return table({ caption, head, rows, numFrom: 1, cls: 'tbl--price' });
+}
+// Комфорт и VIP: цена за кабину за сутки (мероприятие), без ступеней срока
+export function eventPriceTable(caption = 'Аренда на мероприятие: цена за кабину за сутки, ₽') {
+  const S = ctx.S, ev = S.rentable().filter((m) => m.rent.type === 'event');
+  return table({ caption, head: ['Модель', 'За кабину за сутки (до 24 часов)', 'Что внутри'], numFrom: 1, cls: 'tbl--price tbl--thumbs tbl--kit',
+    rows: ev.map((m) => [thumb(m.id) + a('/katalog/' + m.slug + '/', esc(m.name)), rub(m.rent.perDay), esc(m.cmp.kit)]) });
+}
+// Продажа: Стандарт и Эконом
+export function salePriceTable(caption = 'Продажа: цена кабины, ₽') {
+  const S = ctx.S;
+  return table({ caption, head: ['Модель', 'Цена', 'Комплектация'], numFrom: 1, cls: 'tbl--price tbl--thumbs tbl--kit',
+    rows: S.saleable().map((m) => [thumb(m.id) + a('/katalog/' + m.slug + '/', esc(m.name)), 'от' + NB + rub(S.saleFrom(m)), esc(m.cmp.kit)]) });
+}
+// Сводка по всем моделям: аренда и продажа
+export function priceSummary(caption = 'Все модели: цены на аренду и продажу') {
+  const S = ctx.S;
+  const rentCell = (m) => (!m.rent ? '<span aria-label="не сдаётся">—</span>' : m.rent.type === 'event' ? rub(m.rent.perDay) + '/сутки' : 'от' + NB + rub(S.modelFromPrice(m)) + '/сутки');
+  const saleCell = (m) => (!m.sale ? '<span aria-label="не продаётся">—</span>' : 'от' + NB + rub(m.sale.from));
+  return table({ caption, head: ['Модель', 'Аренда', 'Продажа'], numFrom: 1, cls: 'tbl--price tbl--thumbs',
+    rows: S.models.map((m) => [thumb(m.id) + a('/katalog/' + m.slug + '/', esc(m.name)), rentCell(m), saleCell(m)]) });
 }
 export const priceNote = () => `<p class="small note">Цены ориентировочные. Итоговую стоимость называем до оплаты и фиксируем в договоре или счёте.${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</p>`;
 
 /* ---------- карточка модели (светлая плитка) ---------- */
+// Что делаем с моделью: аренда (на длительный срок или на мероприятие), продажа или и то и другое
+export function offerTags(m) {
+  const t = [];
+  if (m.rent) t.push(m.rent.type === 'event' ? 'Аренда на мероприятие' : 'Аренда на длительный срок');
+  if (m.sale) t.push('Продажа');
+  return t;
+}
+export function priceLines(m) {
+  const S = ctx.S, out = [];
+  if (m.rent) out.push(m.rent.type === 'event' ? `<span class="price"><small>от${NB}</small>${rub(m.rent.perDay)}<small>/сутки</small></span>` : `<span class="price"><small>от${NB}</small>${rub(S.modelFromPrice(m))}<small>/сутки</small></span>`);
+  if (m.sale) out.push(`<span class="price"><small>купить от${NB}</small>${rub(m.sale.from)}</span>`);
+  return out;
+}
 export function modelCard(m, { headingLevel = 3, cta = false } = {}) {
   const S = ctx.S, h = 'h' + headingLevel;
-  const price = m.kind === 'rent'
-    ? `<span class="price"><small>от${NB}</small>${rub(S.modelFromPrice(m))}<small>/сутки</small></span>`
-    : `<span class="price">${rub(S.terms.peatPrice)}</span>`;
-  const note = m.kind === 'rent' ? `<span class="small note">при аренде от ${S.rates.rentPerDay[S.rates.rentPerDay.length - 1].from}${NB}суток</span>` : '<span class="small note">в продаже</span>';
+  const note = m.rent ? (m.rent.type === 'event' ? 'аренда: цена за кабину за сутки' : `аренда от ${S.rates.rentPerDay[S.rates.rentPerDay.length - 1].from}${NB}суток`) : 'продажа';
   return `<article class="model-card" data-filters="${m.filters.join(' ')}">
-<div class="sq${renderOf(m.slug) ? ' sq--r' : ''}">${renderImg(m.slug, { alt: `${m.sku} ${m.name}: 3D-визуализация`, sizes: '(min-width:1100px) 20vw, (min-width:700px) 33vw, 50vw' }) || illus(m.slug, m.name + ': плоская иллюстрация')}</div>
-<div class="model-card__body"><div class="model-card__top"><span class="label">${m.sku}</span><span class="tag${m.kind === 'sale' ? ' tag--sale' : ''}">${m.kind === 'sale' ? 'Продажа' : 'Аренда'}</span></div>
+<div class="sq">${illus(m.id, m.name + ': плоская иллюстрация')}</div>
+<div class="model-card__body"><div class="model-card__top">${offerTags(m).map((t, i) => `<span class="tag${t === 'Продажа' ? ' tag--sale' : ''}">${t}</span>`).join('')}</div>
 <${h} class="model-card__title">${a('/katalog/' + m.slug + '/', esc(m.name), 'stretched')}</${h}>
 <p class="small">${esc(m.short)}</p>
-<ul class="kv kv--list">${m.cardFacts.map((f) => `<li>${esc(f).replace(/ (л|кг|см)/g, NB + '$1')}</li>`).join('')}</ul>
-<div class="model-card__foot"><div>${price}<br>${note}</div></div>
-${cta ? `<a class="btn btn--outline btn--sm model-card__req" href="${u('/katalog/' + m.slug + (m.kind === 'rent' ? '/#raschet' : '/#kupit'))}">Получить расчёт</a>` : ''}</div></article>`;
+<ul class="kv kv--list">${m.cardFacts.map((f) => `<li>${esc(f).replace(/ (л|кг|мм)/g, NB + '$1')}</li>`).join('')}</ul>
+<div class="model-card__foot"><div>${priceLines(m).join('<br>')}<br><span class="small note">${note}</span></div></div>
+${cta ? `<a class="btn btn--outline btn--sm model-card__req" href="${u('/katalog/' + m.slug + (m.rent ? '/#raschet' : '/#kupit'))}">${m.rent ? 'Получить расчёт' : 'Купить'}</a>` : ''}</div></article>`;
 }
 
 /* ---------- процесс: строки с кружком-номером и медиа (фото или плоская иллюстрация) ---------- */
@@ -223,7 +241,7 @@ export function faqBlock(ids, { more = true, title = 'Частые вопрос�
 /* ---------- отзывы: карусель со scroll-snap ---------- */
 const chev = (d) => `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 export function reviewCard(r) {
-  const media = r.photo ? photo(r.photo, { cls: 'photo--slide', ar: '4/3', sizes: '(min-width:900px) 45vw, 90vw' }) : `<div class="ph ph--slide"><svg viewBox="0 0 280 260" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><use href="#m5"/></svg></div>`;
+  const media = r.photo ? photo(r.photo, { cls: 'photo--slide', ar: '4/3', sizes: '(min-width:900px) 45vw, 90vw' }) : `<div class="ph ph--slide"><svg viewBox="0 0 280 260" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><use href="#mE"/></svg></div>`;
   return `<article class="slide"><div class="tx"><div><h3>${esc(r.author)}</h3><p class="who-s">${esc(r.place)} · ${esc(r.task)} · ${r.date}</p><p class="who-t"><span class="tag">${esc(r.typeLabel)}</span></p></div><blockquote><p>«${esc(r.text)}»</p></blockquote></div>${media}</article>`;
 }
 export function reviewsBlock(ids, o = {}) {
@@ -292,7 +310,7 @@ export function calc(mode = 'compact', defaults = { n: 1, d: 3, u: 'none', z: 'c
   const isMonth = def.d >= 30 && def.d % 30 === 0;
   const dval = isMonth ? def.d / 30 : def.d;
   const res = ctx.CALC.calculate(S, def);
-  const modelSel = full ? `<div class="field"><label class="field__label" for="${id}-m">Модель</label><div class="select-wrap"><select class="select" id="${id}-m" data-f="m">${S.models.filter((m) => m.kind === 'rent').map((m) => `<option value="${m.slug}"${m.slug === def.m ? ' selected' : ''}>${esc(m.name)}</option>`).join('')}</select></div></div>` : '';
+  const modelSel = full ? `<div class="field"><label class="field__label" for="${id}-m">Модель</label><div class="select-wrap"><select class="select" id="${id}-m" data-f="m">${S.rentable().map((m) => `<option value="${m.slug}"${m.slug === def.m ? ' selected' : ''}>${esc(m.name)}</option>`).join('')}</select></div><p class="field__hint">МТК Стандарт: цена по ступеням срока. МТК Комфорт и МТК VIP: фиксированная цена за кабину за сутки (мероприятия).</p></div>` : '';
   const dur = `<div class="field calc__dur" data-state="default"><label class="field__label" for="${id}-d">Срок аренды</label><div class="calc__durrow"><input class="input" id="${id}-d" type="text" inputmode="numeric" value="${dval}" data-f="d" aria-describedby="${id}-d-hint ${id}-d-msg"><fieldset class="seg"><legend class="visually-hidden">Единица срока</legend><div class="seg__row"><input type="radio" name="${id}-du" id="${id}-du0" value="day"${isMonth ? '' : ' checked'}><label for="${id}-du0">Сутки</label><input type="radio" name="${id}-du" id="${id}-du1" value="month"${isMonth ? ' checked' : ''}><label for="${id}-du1">Месяцы</label></div></fieldset></div><p class="field__hint" id="${id}-d-hint">Минимум 1 сутки. 1 месяц = ${R.daysInMonth} суток.</p><p class="field__msg" id="${id}-d-msg"></p></div>`;
   const kmField = `<div class="field calc__km" data-state="default"${def.z === 'region' ? '' : ' hidden'}><label class="field__label" for="${id}-km">Расстояние от границы Новосибирска, км</label><input class="input" id="${id}-km" type="text" inputmode="numeric" value="${def.km || ''}" data-f="km" aria-describedby="${id}-km-hint ${id}-km-msg"><p class="field__hint" id="${id}-km-hint">От 1 до ${R.delivery.maxKm} км до места установки.</p><p class="field__msg" id="${id}-km-msg"></p></div>`;
   return `<div class="calc calc--${mode} js-only" data-calc="${mode}" data-defaults="${esc(JSON.stringify(def))}" id="${id}">
@@ -303,6 +321,7 @@ ${dur}
 ${radios(id + '-u', 'Обслуживание', R.serviceOptions, def.u, 'seg--grid')}
 <p class="field__hint calc__hint">Для стройки обычно 1–2 раза в неделю. Для мероприятия на один день обслуживание не нужно.</p>
 ${radios(id + '-z', 'Доставка', [{ id: 'city', label: 'Новосибирск' }, { id: 'region', label: 'Область' }], def.z)}
+<p class="field__hint calc__hint">В одну машину помещается до ${R.delivery.cabinsPerTrip} кабин: один рейс, одна цена доставки.</p>
 ${kmField}</div>
 <aside class="quote" aria-label="Результат расчёта"><div class="quote__head"><h3>${full ? 'Смета' : 'Предварительный расчёт'}</h3></div><div class="quote__body" aria-live="polite">${ctx.CALC.resultHtml(S, res, mode, apx)}</div>
 <p class="small quote__note">${esc(S.forms.calcMessages.note)}</p>

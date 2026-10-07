@@ -192,7 +192,7 @@
     int('n', 1, S.rates.maxCabins); int('d', 1, S.rates.maxDays); int('km', 1, MAXKM);
     if (['none', 'weekly', 'twice', 'daily'].indexOf(p.get('u')) >= 0) o.u = p.get('u');
     if (['city', 'region'].indexOf(p.get('z')) >= 0) o.z = p.get('z');
-    const m = S.modelById(p.get('m') || ''); if (m && m.kind === 'rent') o.m = m.slug;
+    const m = S.modelById(p.get('m') || ''); if (m && m.rent) o.m = m.slug;
     return o;
   }
   const urlP = paramsFromUrl();
@@ -273,7 +273,7 @@
       f.dataset.state = 'default'; m.textContent = ''; g.removeAttribute('aria-invalid');
       const big = r.total > S.rates.maxCabins;
       out.textContent = big ? r.text + ' ' + S.forms.calcMessages.custom : r.text; link.hidden = big;
-      link.href = BASE + '/ceny/index.html?n=' + r.total + '#calc';
+      link.href = BASE + '/ceny/index.html?n=' + r.total + '&m=mtk-komfort&d=1#calc';
     }
     g.addEventListener('input', run); alc.addEventListener('change', run); durs.forEach((d) => d.addEventListener('change', run));
   });
@@ -325,6 +325,18 @@
     }
     chips.addEventListener('click', (e) => { const b = e.target.closest('.chip'); if (b) apply(b.dataset.filter); });
     const reset = $('[data-filter-reset]'); if (reset) reset.addEventListener('click', () => apply('all'));
+  });
+
+  /* ---------- Главная, вариант B: переключатель «Аренда / Купить» (без JS видны все плитки с обеими ценами) ---------- */
+  $$('[data-offer-box]').forEach((box) => {
+    const radios = $$('input[name="offer"]', box), st = $('[data-offer-status]', box);
+    function set(mode) {
+      box.setAttribute('data-mode', mode);
+      const n = $$('.mtile', box).filter((t) => t.dataset.offer.split(' ').indexOf(mode) >= 0).length;
+      if (st) st.textContent = (mode === 'rent' ? 'Аренда' : 'Покупка') + ': моделей ' + n;
+    }
+    radios.forEach((r) => r.addEventListener('change', () => { if (r.checked) set(r.value); }));
+    set((radios.find((r) => r.checked) || { value: 'rent' }).value);
   });
 
   /* ---------- Галерея модели ---------- */

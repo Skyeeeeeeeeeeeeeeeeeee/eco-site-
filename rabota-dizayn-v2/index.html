@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ЭКО СЕРВИС НОВОСИБИРСК: две темы одного сайта, версия 2</title>
+<title>ЭКО СЕРВИС НОВОСИБИРСК: две темы и три варианта главной</title>
 <meta name="robots" content="noindex">
 <style>
 @font-face{font-family:Onest;font-weight:400 600;font-display:swap;src:url(e-svetlo-goluboy/fonts/onest-cyrillic.woff2) format("woff2");unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
@@ -8,27 +8,34 @@
 @font-face{font-family:"Onest Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:109.8%;ascent-override:88.3%;descent-override:27.8%;line-gap-override:0%}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Onest,"Onest Fallback",Arial,sans-serif;background:#F4F9FE;color:#0C1B2A;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-.w{width:min(1120px,100% - 32px);margin-inline:auto;padding:48px 0 64px}
+.w{width:min(1180px,100% - 32px);margin-inline:auto;padding:48px 0 64px}
 h1{font-size:clamp(30px,5vw,56px);font-weight:500;letter-spacing:-.035em;line-height:1.08}
 h1 span{color:#4E6278}
-.lead{margin-top:18px;max-width:38em;color:#4E6278;font-size:17px}
-.grid{margin-top:40px;display:grid;gap:20px;grid-template-columns:1fr}
-@media(min-width:800px){.grid{grid-template-columns:1fr 1fr}}
-.card{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:#fff;border:1px solid #D3E4F4;color:inherit;text-decoration:none}
+h2{font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-height:1.15}
+.lead{margin-top:18px;max-width:40em;color:#4E6278;font-size:17px}
+.theme{margin-top:48px}
+.theme__h{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.theme__h > div{flex:1;min-width:220px}
+.all{min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:999px;border:1px solid #0C1B2A;color:#0C1B2A;text-decoration:none;font-size:14px;font-weight:500}
+.all:hover{background:#0C1B2A;color:#fff}
+.grid{margin-top:20px;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:760px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:20px;background:#fff;border:1px solid #D3E4F4;color:inherit;text-decoration:none}
 .card:hover{border-color:#0C1B2A}
-.card:focus-visible,.go:focus-visible{outline:2px solid #0C1B2A;outline-offset:3px}
-.card__img{display:block;border-radius:14px;overflow:hidden;background:#DDEDFB;aspect-ratio:800/520}
+.card:focus-visible,.all:focus-visible{outline:2px solid #0C1B2A;outline-offset:3px}
+.card__img{display:block;border-radius:12px;overflow:hidden;background:#DDEDFB;aspect-ratio:800/520}
 .card__img img{width:100%;height:100%;object-fit:cover;display:block}
-.card__sw{display:flex;gap:6px}.card__sw i{width:28px;height:28px;border-radius:8px;border:1px solid #D3E4F4}
-.card__t{font-size:24px;font-weight:500;letter-spacing:-.03em}
-.card__d{color:#4E6278;font-size:15px}
-.card__go{align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;padding:0 22px;border-radius:999px;background:#0C1B2A;color:#fff;font-weight:500;font-size:14px}
+.card__sw{display:flex;gap:6px}.card__sw i{width:24px;height:24px;border-radius:8px;border:1px solid #D3E4F4}
+.card__t{font-size:20px;font-weight:500;letter-spacing:-.03em}
+.card__d{color:#4E6278;font-size:14px}
+.card__go{align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;padding:0 20px;border-radius:999px;background:#0C1B2A;color:#fff;font-weight:500;font-size:14px;margin-top:auto}
 .card--f .card__go{background:#9CC9F5;color:#0C1B2A;border:1px solid #6FA6DB}
 .note{margin-top:32px;font-size:14px;color:#4E6278;max-width:46em}
 </style></head><body><main class="w">
-<p style="font-size:13px;color:#4E6278">Версия 2: реалистичнее и живее. Выбор оформления</p>
-<h1>ЭКО СЕРВИС НОВОСИБИРСК: <span>две цветовые темы одного дизайна</span></h1>
-<p class="lead">Структура, тексты, калькулятор и формы одинаковые. Различаются только палитра и несколько блоков: в теме Е тёмно-синие панели, в теме F всё светлое. Оба сайта открываются двойным кликом, без сервера.</p>
-<div class="grid"><a class="card card--e" href="e-svetlo-goluboy/index.html"><span class="card__img"><img src="previews/e-home.jpg" width="800" height="520" alt="Превью главной страницы, тема Е «Светло-голубой»" loading="lazy"></span><span class="card__sw" aria-hidden="true"><i style="background:#CFE4F8"></i><i style="background:#B9D7F4"></i><i style="background:#13263A"></i><i style="background:#0C1B2A"></i><i style="background:#9CC9F5"></i></span><span class="card__t">Е «Светло-голубой»</span><span class="card__d">Голубая шапка и герой, тёмно-синие блоки: карточки, расчёт, отзывы, подвал.</span><span class="card__go">Открыть сайт</span></a><a class="card card--f" href="f-vozdushnyy/index.html"><span class="card__img"><img src="previews/f-home.jpg" width="800" height="520" alt="Превью главной страницы, тема F «Воздушный»" loading="lazy"></span><span class="card__sw" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#F4F9FE"></i><i style="background:#DDEDFB"></i><i style="background:#9CC9F5"></i><i style="background:#2F6FAE"></i></span><span class="card__t">F «Воздушный»</span><span class="card__d">Всё светлое: белый и бледно-голубой, без тёмных блоков.</span><span class="card__go">Открыть сайт</span></a></div>
+<p style="font-size:13px;color:#4E6278">Версия 2, вторая итерация: без 3D, новый ассортимент МТК. Выбор оформления и первого экрана</p>
+<h1>ЭКО СЕРВИС НОВОСИБИРСК: <span>две темы, три варианта первого экрана</span></h1>
+<p class="lead">Структура, тексты, калькулятор и формы одинаковые. Различаются палитра (тема Е тёмно-синие панели, тема F всё светлое) и первый экран главной: A «Фото», B «Линейка моделей», C «Какая задача?». Всё, что ниже первого экрана, у вариантов общее. Сайты открываются двойным кликом, без сервера.</p>
+<section class="theme" aria-labelledby="h-e"><div class="theme__h"><span class="card__sw" aria-hidden="true"><i style="background:#CFE4F8"></i><i style="background:#B9D7F4"></i><i style="background:#13263A"></i><i style="background:#0C1B2A"></i><i style="background:#9CC9F5"></i></span><div><h2 id="h-e">Е «Светло-голубой»</h2><p class="card__d">Голубая шапка и герой, тёмно-синие блоки: карточки, расчёт, отзывы, подвал.</p></div><a class="all" href="e-svetlo-goluboy/index.html">Весь сайт (главная = вариант A)</a></div><div class="grid"><a class="card card--e" href="e-svetlo-goluboy/index-a.html"><span class="card__img"><img src="previews/e-a.jpg" width="800" height="520" alt="Превью главной, тема Е «Светло-голубой», вариант A «Фото»" loading="lazy"></span><span class="card__t">A «Фото»</span><span class="card__d">Крупное фото кабин на объекте, карточка предложения и полоса цифр.</span><span class="card__go">Открыть вариант</span></a><a class="card card--e" href="e-svetlo-goluboy/index-b.html"><span class="card__img"><img src="previews/e-b.jpg" width="800" height="520" alt="Превью главной, тема Е «Светло-голубой», вариант B «Линейка моделей»" loading="lazy"></span><span class="card__t">B «Линейка моделей»</span><span class="card__d">Четыре модели плитками с переключателем «Аренда / Купить».</span><span class="card__go">Открыть вариант</span></a><a class="card card--e" href="e-svetlo-goluboy/index-c.html"><span class="card__img"><img src="previews/e-c.jpg" width="800" height="520" alt="Превью главной, тема Е «Светло-голубой», вариант C «Какая задача?»" loading="lazy"></span><span class="card__t">C «Какая задача?»</span><span class="card__d">Три крупные карточки: стройка, мероприятие, покупка.</span><span class="card__go">Открыть вариант</span></a></div></section>
+<section class="theme" aria-labelledby="h-f"><div class="theme__h"><span class="card__sw" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#F4F9FE"></i><i style="background:#DDEDFB"></i><i style="background:#9CC9F5"></i><i style="background:#2F6FAE"></i></span><div><h2 id="h-f">F «Воздушный»</h2><p class="card__d">Всё светлое: белый и бледно-голубой, без тёмных блоков.</p></div><a class="all" href="f-vozdushnyy/index.html">Весь сайт (главная = вариант A)</a></div><div class="grid"><a class="card card--f" href="f-vozdushnyy/index-a.html"><span class="card__img"><img src="previews/f-a.jpg" width="800" height="520" alt="Превью главной, тема F «Воздушный», вариант A «Фото»" loading="lazy"></span><span class="card__t">A «Фото»</span><span class="card__d">Крупное фото кабин на объекте, карточка предложения и полоса цифр.</span><span class="card__go">Открыть вариант</span></a><a class="card card--f" href="f-vozdushnyy/index-b.html"><span class="card__img"><img src="previews/f-b.jpg" width="800" height="520" alt="Превью главной, тема F «Воздушный», вариант B «Линейка моделей»" loading="lazy"></span><span class="card__t">B «Линейка моделей»</span><span class="card__d">Четыре модели плитками с переключателем «Аренда / Купить».</span><span class="card__go">Открыть вариант</span></a><a class="card card--f" href="f-vozdushnyy/index-c.html"><span class="card__img"><img src="previews/f-c.jpg" width="800" height="520" alt="Превью главной, тема F «Воздушный», вариант C «Какая задача?»" loading="lazy"></span><span class="card__t">C «Какая задача?»</span><span class="card__d">Три крупные карточки: стройка, мероприятие, покупка.</span><span class="card__go">Открыть вариант</span></a></div></section>
 <p class="note">Данные на обоих сайтах помечены «Заглушка». Фотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования указаны под каждым фото и на странице «О компании».</p>
 </main></body></html>
