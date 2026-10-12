@@ -5,24 +5,24 @@
 
 /* ---------- Тема E «светло-голубой» ---------- */
 [data-theme="e"] {
-  --ink: #0C1B2A; --mute: #4E6278; --label: #4E6278; --tail: #4E6278; --line: #D6E3F0; --paper: #F2F7FC;
+  --ink: #0C1B2A; --mute: #3B4F63; --label: #3B4F63; --tail: #1D5FBF; --line: #D6E3F0; --paper: #F2F7FC;
   --focus: #0C1B2A; --focus-halo: #fff; --dfocus: #9CC9F5; --dfocus-halo: #0C1B2A;
   /* кнопки */
-  --btn-bg: #0C1B2A; --btn-fg: #fff; --btn-bd: #0C1B2A; --btn-hover: #1B3047;
+  --btn-bg: #0C1B2A; --btn-fg: #fff; --btn-bd: #0C1B2A; --btn-hover: #FFD34D; --btn-hover-fg: #0C1B2A; --btn-hover-bd: #0C1B2A;
   --bo-bg: transparent; --bo-hover-bg: #0C1B2A; --bo-hover-fg: #fff;
-  --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #9CC9F5; --dbtn-hover: #B9D7F4;
+  --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #9CC9F5; --dbtn-hover: #FFD34D;
   /* шапка */
   --hdr-bds: #A9CFF3; --map-river: #7FB2E5; --tl-fill: #0C1B2A;
   --hdr-bg: #CFE4F8; --hdr-bd: transparent; --hdr-link: #1B3047; --hdr-hover: #B9D7F4; --mnav-bg: #CFE4F8; --mnav-line: #A9CFF3;
   --dd-bd: #D6E3F0; --dd-sh: none; --dd-hover: #F2F7FC; --burger-bd: #0C1B2A;
-  --logo-tile: #0C1B2A; --logo-fg: #9CC9F5; --logo-bg: #0C1B2A;
+  --logo-tile: #0C1B2A; --logo-fg: #FFD34D; --logo-bg: #0C1B2A;
   /* герой */
-  --hero-bg: #CFE4F8; --hero-tail: #3E5A78; --hero-sub: #2B4660; --hero-mute: #3E5A78; --hero-line: #9CC9F5;
+  --hero-bg: #CFE4F8; --hero-tail: #1D5FBF; --hero-sub: #2B4660; --hero-mute: #2B4660; --hero-line: #9CC9F5;
   --stage-bg: #B9D7F4; --stage-bd: #A9CFF3; --stage-bar-bg: #DCEBFA; --stage-bar-fg: #3E5A78;
   --stage-lt1: #DCEBFA; --stage-lt2: #CFE4F8; --stage-floor: #A3C8EE; --stage-tile: #9CC9F5;
   --facts-bg: #B9D7F4; --facts-bd: #A9CFF3; --facts-fg: #2B4660;
   /* бегущая строка */
-  --mq-bg: #0C1B2A; --mq-fg: #DCEBFA; --mq-bd: #1F3A55; --mq-dot: #9CC9F5;
+  --mq-bg: #FFD34D; --mq-fg: #0C1B2A; --mq-bd: #0C1B2A; --mq-dot: #0C1B2A;
   /* светлые панели, плитки, таблицы */
   --panel-bg: #F2F7FC; --panel2-bg: #fff; --panel-bd: #D6E3F0; --panel-sh: none;
   --tile-bg: #E6F1FC; --tile-bd: transparent; --tile-hover: #D6E8F8; --tbl-line: #D6E3F0;
@@ -38,39 +38,51 @@
   --sticky-bg: #CFE4F8; --sticky-bd: #A9CFF3;
   /* иллюстрации */
   --ph-bg: #E6F1FC; --ph-floor: #CFE4F8; --ph-ink: #5E95CC; --ph-soft: #A9CFF3; --ph-btn: #4A7FB6; --ph-lt: #DCEBFA; --ph-tank: #A9CFF3; --ph-cap: #7FB2E5; --ph-bar: #A9CFF3;
+  /* акцент: тёплый жёлтый (текст на нём только тёмно-синий, 12:1), бренд-синий для полос */
+  --acc: #FFD34D; --acc-hover: #FFC52E; --acc-ink: #0C1B2A; --acc-tint: #FFF4CF; --acc-line: #E6CF85;
+  --brand: #1D5FBF; --brand-fg: #fff; --brand-fg2: #DCEBFA; --brand-line: #5F93DE;
+  --lk-free: #34C777; --lk-busy: #FF5A3C; --st-bg: #0C1B2A; --st-fg: #fff; --st-bd: #0C1B2A;
+  --tot-fg: #FFD34D; --tot-mark: transparent; --wm-a: #FFD34D; --wm-b: #9CC9F5;
+  --scene-bg: #DCEBFA; --scene-gr: #A9CFF3;
   /* плоская кабина */
-  --front: #7FB2E5; --side: #5E95CC; --roof: #A9CFF3; --roof2: #93C0EC; --rim: #DCEBFA; --rim2: #4F86BF; --door: #4A7FB6; --facet: #9CC9F5; --detail: #2F5F8F; --roofl: #EAF3FC; --roofl2: #DCEBFA;
+  --inside: #0C1B2A; --front: #7FB2E5; --side: #5E95CC; --roof: #A9CFF3; --roof2: #93C0EC; --rim: #DCEBFA; --rim2: #4F86BF; --door: #4A7FB6; --facet: #9CC9F5; --detail: #2F5F8F; --roofl: #EAF3FC; --roofl2: #DCEBFA;
 }
 
 /* ---------- Тема F «воздушный» ---------- */
 [data-theme="f"] {
-  --ink: #0C1B2A; --mute: #4E6278; --label: #2F6FAE; --tail: #2F6FAE; --line: #D3E4F4; --paper: #F4F9FE;
+  --ink: #0C1B2A; --mute: #3B4F63; --label: #1D5FBF; --tail: #1D5FBF; --line: #D3E4F4; --paper: #F4F9FE;
   --focus: #0C1B2A; --focus-halo: #fff; --dfocus: #0C1B2A; --dfocus-halo: #fff;
-  --btn-bg: #9CC9F5; --btn-fg: #0C1B2A; --btn-bd: #6FA6DB; --btn-hover: #B8D8F5;
+  --btn-bg: #9CC9F5; --btn-fg: #0C1B2A; --btn-bd: #6FA6DB; --btn-hover: #FFD34D; --btn-hover-fg: #0C1B2A; --btn-hover-bd: #0C1B2A;
   --bo-bg: #fff; --bo-hover-bg: #F4F9FE; --bo-hover-fg: #0C1B2A;
-  --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #6FA6DB; --dbtn-hover: #B8D8F5;
+  --dbtn-bg: #9CC9F5; --dbtn-fg: #0C1B2A; --dbtn-bd: #6FA6DB; --dbtn-hover: #FFD34D;
   --hdr-bds: #D3E4F4; --map-river: #8DBCEB; --tl-fill: #6FA6DB;
   --hdr-bg: #fff; --hdr-bd: #D3E4F4; --hdr-link: #0C1B2A; --hdr-hover: #EAF3FC; --mnav-bg: #fff; --mnav-line: #D3E4F4;
   --dd-bd: #D3E4F4; --dd-sh: 0 4px 16px rgba(12, 27, 42, .06); --dd-hover: #EAF3FC; --burger-bd: #0C1B2A;
-  --logo-tile: #9CC9F5; --logo-fg: #0C1B2A; --logo-bg: #9CC9F5;
-  --hero-bg: #F4F9FE; --hero-tail: #2F6FAE; --hero-sub: #4E6278; --hero-mute: #4E6278; --hero-line: #D3E4F4;
+  --logo-tile: #FFD34D; --logo-fg: #0C1B2A; --logo-bg: #FFD34D;
+  --hero-bg: #F4F9FE; --hero-tail: #1D5FBF; --hero-sub: #3B4F63; --hero-mute: #3B4F63; --hero-line: #D3E4F4;
   --stage-bg: #DDEDFB; --stage-bd: #D3E4F4; --stage-bar-bg: #fff; --stage-bar-fg: #4E6278;
   --stage-lt1: #fff; --stage-lt2: #F4F9FE; --stage-floor: #CBE3F8; --stage-tile: #DDEDFB;
   --facts-bg: #fff; --facts-bd: #D3E4F4; --facts-fg: #4E6278;
-  --mq-bg: #fff; --mq-fg: #0C1B2A; --mq-bd: #D3E4F4; --mq-dot: #6AA2DA;
+  --mq-bg: #FFD34D; --mq-fg: #0C1B2A; --mq-bd: #0C1B2A; --mq-dot: #0C1B2A;
   --panel-bg: #fff; --panel2-bg: #fff; --panel-bd: #D3E4F4; --panel-sh: 0 4px 16px rgba(12, 27, 42, .06);
   --tile-bg: #F4F9FE; --tile-bd: #D3E4F4; --tile-hover: #DDEDFB; --tbl-line: #CBE3F8;
   --chip-bg: #DDEDFB; --chip-fg: #0C1B2A; --chip-bd: #6FA6DB; --input-bd: #4F86BF;
   --num-bd: #6FA6DB; --num-fg: #2F6FAE; --num-bg: #fff; --row-alt: #F4F9FE;
-  --d-fg: #0C1B2A; --d-fg2: #0C1B2A; --d-mute: #4E6278; --d-accent: #2F6FAE; --d-line: #D3E4F4; --d-line2: #6FA6DB;
+  --d-fg: #0C1B2A; --d-fg2: #0C1B2A; --d-mute: #3B4F63; --d-accent: #1D5FBF; --d-line: #D3E4F4; --d-line2: #6FA6DB;
   --card-bg: #fff; --card-in: #F4F9FE; --card-in2: #DDEDFB; --card-bd: #D3E4F4; --card-sh: 0 4px 16px rgba(12, 27, 42, .06);
   --sc-bg: #DDEDFB; --sc-floor: #CBE3F8; --sc-lt: #fff;
   --calc-bg: #DDEDFB; --calc-bd: #CBE3F8; --calc-line: #B8D8F5; --calc-line2: #6FA6DB;
   --rev-bg: #F4F9FE; --slide-bg: #fff; --slide-bd: #D3E4F4; --slide-sh: 0 4px 16px rgba(12, 27, 42, .06); --arr-bd: #0C1B2A; --arr-bg: #fff; --arr-fg: #0C1B2A; --arr-hover: #DDEDFB;
-  --ftr-bg: #EAF3FC; --ftr-bd: #D3E4F4; --ftr-h: #0C1B2A; --ftr-link: #4E6278; --ftr-hover: #0C1B2A; --ftr-fg: #0C1B2A; --ftr-line: #CBE3F8; --ftr-soc: #6FA6DB;
+  --ftr-bg: #EAF3FC; --ftr-bd: #D3E4F4; --ftr-h: #0C1B2A; --ftr-link: #3B4F63; --ftr-hover: #0C1B2A; --ftr-fg: #0C1B2A; --ftr-line: #CBE3F8; --ftr-soc: #6FA6DB;
   --sticky-bg: #fff; --sticky-bd: #D3E4F4;
+  /* акцент: тёплый жёлтый (текст на нём только тёмно-синий, 12:1), бренд-синий для полос */
+  --acc: #FFD34D; --acc-hover: #FFC52E; --acc-ink: #0C1B2A; --acc-tint: #FFF4CF; --acc-line: #E6CF85;
+  --brand: #1D5FBF; --brand-fg: #fff; --brand-fg2: #DCEBFA; --brand-line: #5F93DE;
+  --lk-free: #1E9E57; --lk-busy: #D6402B; --st-bg: #fff; --st-fg: #0C1B2A; --st-bd: #0C1B2A;
+  --tot-fg: #0C1B2A; --tot-mark: #FFD34D; --wm-a: #FFD34D; --wm-b: #0C1B2A;
+  --scene-bg: #DDEDFB; --scene-gr: #CBE3F8;
   --ph-bg: #DDEDFB; --ph-floor: #CBE3F8; --ph-ink: #5A90C8; --ph-soft: #CBE3F8; --ph-btn: #9CC9F5; --ph-lt: #fff; --ph-tank: #6AA2DA; --ph-cap: #CBE3F8; --ph-bar: #8DBCEB;
-  --front: #8DBCEB; --side: #6AA2DA; --roof: #B8D8F5; --roof2: #A9CFF3; --rim: #4F86BF; --rim2: #4F86BF; --door: #5A90C8; --facet: #A9CFF3; --detail: #2F5F8F; --roofl: #fff; --roofl2: #F4F9FE;
+  --inside: #0C1B2A; --front: #8DBCEB; --side: #6AA2DA; --roof: #B8D8F5; --roof2: #A9CFF3; --rim: #4F86BF; --rim2: #4F86BF; --door: #5A90C8; --facet: #A9CFF3; --detail: #2F5F8F; --roofl: #fff; --roofl2: #F4F9FE;
 }
 
 /* ---------- Малые отличия, которые нельзя выразить токенами ---------- */

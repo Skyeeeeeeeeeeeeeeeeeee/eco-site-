@@ -22,7 +22,7 @@ function header(page) {
   return `<header class="site-header" id="top"><div class="mainbar"><div class="container mainbar__in">
 ${logo(S)}
 <nav class="nav" aria-label="Основная"><ul class="nav__list">${items}</ul></nav>
-<div class="mainbar__r"><a class="mainbar__tel tel" href="${C.phoneHref}">${esc(C.phone).replace(/ /g, NB)}</a><a class="btn btn--primary btn--sm nav__cta" href="${u('/ceny/')}">Рассчитать</a>
+<div class="mainbar__r"><a class="mainbar__tel tel" href="${C.phoneHref}">${esc(C.phone).replace(/ /g, NB)}</a><a class="btn btn--primary btn--cta btn--sm nav__cta" href="${u('/ceny/')}">Рассчитать</a>
 <a class="icon-btn mainbar__ico" href="${C.phoneHref}" aria-label="Позвонить: ${esc(C.phone)}">${ic('phone')}</a>
 <button class="burger" type="button" aria-expanded="false" aria-controls="m-menu" aria-label="Меню"><span class="burger__ico" aria-hidden="true"></span></button></div></div></div>
 <div class="m-menu" id="m-menu"><div class="m-menu__in container"><nav aria-label="Мобильное меню">${mob}</nav><div class="m-menu__foot"><a class="btn btn--primary" href="${C.phoneHref}">${ic('phone')} ${esc(C.phone).replace(/ /g, NB)}</a><a class="btn btn--outline" href="${u('/#podbor')}">Подобрать кабину</a><a class="btn btn--outline" href="${u('/ceny/')}">Рассчитать стоимость</a></div></div></div></header>`;
@@ -35,6 +35,8 @@ function footer() {
 <div class="footer__col footer__brand">${logo(S)}<p class="footer__d">${esc(K.tagline)}</p><p class="footer__d">${esc(K.legalName)}, ИНН${NB}${K.inn}</p></div>
 <nav class="footer__nav" aria-label="Подвал">${S.nav.footer.map(col).join('')}</nav>
 <div class="footer__col"><h2 class="footer__h">Контакты</h2><ul><li>${tel()}</li><li><a href="${C.telegramUrl}" rel="noopener">Telegram</a></li><li><a href="${C.whatsappUrl}" rel="noopener">WhatsApp</a></li><li><span class="footer__txt">${esc(C.address)}</span></li><li><span class="footer__txt">${cap(esc(C.hours))}</span></li><li>${a('/o-kompanii/', 'О компании')}</li></ul></div></div>
+<p class="footer__joke">${esc(S.humor.footer)}</p>
+<div class="footer__mark" aria-hidden="true"><span class="footer__mk-a">эко</span> <span class="footer__mk-b">сервис</span></div>
 <div class="site-footer__bottom"><span>© ${S.site.year} ${esc(K.name)}</span>${a('/politika-konfidencialnosti/', 'Конфиденциальность')}${a('/o-kompanii/#rekvizity', 'Реквизиты')}${a('/o-kompanii/#istochniki-foto', 'Источники фото')}</div></div></footer>`;
 }
 
@@ -91,7 +93,7 @@ ${og}
 <meta name="theme-color" content="${ctx.theme === 'e' ? '#CFE4F8' : '#FFFFFF'}">
 <link rel="icon" href="${u('/img/favicon.svg')}" type="image/svg+xml">
 <link rel="stylesheet" href="${u('/css/main.css')}">
-<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}.sticky-cta{display:none!important}.mq__t{animation:none}.live{display:none}.offer__seg{display:none}</style></noscript>
+<noscript><style>.js-only{display:none!important}.site-header{position:static}.burger{display:none}.m-menu{position:static;visibility:visible;opacity:1;transform:none;overflow:visible;padding:0;border:0}.m-sub[hidden]{display:block!important}.m-group .chev{display:none}.nav__panel{transition:none}.nav__item:hover .nav__panel,.nav__item:focus-within .nav__panel{opacity:1;visibility:visible;transform:none}.sticky-cta{display:none!important}.mq__t{animation:none;width:auto;display:block}.mq__l[aria-hidden]{display:none}.mq__l{flex-wrap:wrap;justify-content:center}.mq li{white-space:normal}.sp__truck{display:none!important}.live{display:none}.offer__seg{display:none}</style></noscript>
 <script defer src="${u('/js/content.js')}"></script>
 <script defer src="${u('/js/calc.js')}"></script>
 <script defer src="${u('/js/main.js')}"></script>
