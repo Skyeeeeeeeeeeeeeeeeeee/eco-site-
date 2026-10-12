@@ -96,7 +96,7 @@ ${office()}<rect class="zmap__base" x="243" y="243" width="14" height="14" rx="3
 
 /* ---------- v2: галерея «Кабины в работе»: все фото, scroll-snap, стрелки, drag ---------- */
 export function workGallery({ id = 'rabota', title = 'Кабины в работе', tag = 'Фотографии' } = {}) {
-  const ids = Object.keys(ctx.S.photos);
+  const ids = Object.keys(ctx.S.photos).filter((id) => ctx.S.photos[id].gallery !== false);
   ctx.secN += 1;
   return `<section class="section section--paper gal" id="${id}" aria-labelledby="${id}-h" data-carousel><div class="container gal__h"><header class="sec-head"><p class="label">${tag}</p><h2 id="${id}-h">${title}</h2></header>
 <div class="arrows js-only"><button class="arr" type="button" data-prev aria-label="Предыдущее фото">${chev('M10 3 5 8l5 5')}</button><button class="arr" type="button" data-next aria-label="Следующее фото">${chev('m6 3 5 5-5 5')}</button></div></div>
@@ -281,7 +281,16 @@ export function ctaBlock() {
 <div class="cta__text"><p class="label">Связаться</p><h2 id="cta-h">Позвоните или напишите. <span class="g">Назовём цену и сроки под вашу задачу.</span></h2>
 <p class="cta__sub">Мы не просим оставлять данные на сайте: вы сами звоните или пишете, когда вам удобно.</p><p class="cta__sub small">${esc(C.address)}</p>
 <p class="more">${btn('/#podbor', 'Подобрать кабину за 3 шага', 'link')}${btn('/ceny/', 'Или посчитайте самостоятельно', 'link')}</p></div>
-<div class="cta__form">${contactPanel({ cls: 'cpanel--big' })}</div></div></section>`;
+<div class="cta__form">${contactPanel({ cls: 'cpanel--big' })}</div></div>${officeMap()}</section>`;
+}
+
+/* ---------- «Как нас найти»: своя схема улиц (OSM), живая карта Яндекса только по клику ---------- */
+export function officeMap() {
+  const C = ctx.S.contacts;
+  return `<div class="container omap" id="kak-nas-nayti"><div class="omap__info"><h3 class="h4">Как нас найти</h3><p class="omap__addr">${esc(C.address)}</p><p class="small">${esc(C.officeHow)}</p><p class="small">${esc(capFirst(C.hours))}. Перед визитом позвоните, чтобы мы точно были на месте.</p>
+<p class="omap__btns"><a class="btn btn--primary btn--sm" href="${C.yandexRouteUrl}" target="_blank" rel="noopener">${ic('arrow')} Маршрут в Яндекс Картах</a><a class="btn btn--outline btn--sm" href="${C.yandexUrl}" target="_blank" rel="noopener">Открыть в Яндекс Картах</a><a class="btn btn--outline btn--sm" href="${C.gisUrl}" target="_blank" rel="noopener">Открыть в 2ГИС</a></p></div>
+<div class="omap__map" data-ymap="${esc(C.yandexWidget)}"><img class="omap__img" src="${u('/img/office-map.svg')}" width="800" height="500" alt="Схема: офис на улице Советской, 64/1, рядом Красный проспект, улицы Писарева и Железнодорожная" loading="lazy" decoding="async">
+<div class="omap__over js-only"><button class="btn btn--outline btn--sm omap__load" type="button" data-ymap-load>Показать карту Яндекса</button></div><p class="omap__cap">Схема: © участники <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>. Живая карта загружается с Яндекса только после нажатия.</p></div></div>`;
 }
 
 /* ---------- v2u: сравнение моделей (Эконом / Стандарт / Комфорт / VIP) ---------- */

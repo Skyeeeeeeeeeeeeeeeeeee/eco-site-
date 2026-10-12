@@ -1024,6 +1024,9 @@ html:has(.msum) { scroll-padding-top: 150px; }
 .hero-d__stage.is-drag { cursor: grabbing; }
 .hero-d__stage:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .hero-d__poster, .hero-d__canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.hero-d__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; }
+.hero-d__credit { margin: 8px 4px 0; color: var(--hero-mute); font-size: 12px; line-height: 1.4; }
+.hero-d__credit a { text-decoration: underline; }
 .hero-d__canvas { opacity: 0; transition: opacity .6s ease; }
 .hero-d__stage.is-3d .hero-d__canvas { opacity: 1; }
 .hero-d__stage.is-3d .hero-d__poster { opacity: 0; transition: opacity .6s ease .15s; }
@@ -1038,6 +1041,20 @@ html:has(.msum) { scroll-padding-top: 150px; }
   .hero-d__stage { aspect-ratio: auto; height: min(640px, 72vh); max-height: none; }
 }
 @media (prefers-reduced-motion: reduce) { .hero-d__canvas, .hero-d__stage.is-3d .hero-d__poster { transition: none; } }
+
+/* «Как нас найти» (внизу каждой страницы) */
+.omap { display: grid; gap: 20px; margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
+.omap__addr { margin-top: 8px; font-size: 18px; font-weight: 500; color: var(--ink); }
+.omap__info .small { margin-top: 8px; color: var(--mute); max-width: 36em; }
+.omap__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.omap__map { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--panel-bd); background: #EEF3F8; aspect-ratio: 8 / 5; }
+.omap__img, .omap__map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
+.omap__over { position: absolute; left: 12px; bottom: 40px; }
+.omap__over .btn { background: #fff; }
+.omap__cap { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 6px 12px; background: rgba(255, 255, 255, .86); font-size: 11px; color: var(--mute); }
+.omap__cap a { text-decoration: underline; }
+.omap__map.is-live .omap__over, .omap__map.is-live .omap__cap { display: none; }
+@media (min-width: 900px) { .omap { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 40px; align-items: start; } }
 
 /* ТЕМЫ. Два набора токенов на <html data-theme="e|f">. Вся вёрстка в main.css берёт цвета только отсюда.
    Палитры взяты из макетов designs/05-blue/e-svetlo-goluboy.html и f-vozdushnyy.html.

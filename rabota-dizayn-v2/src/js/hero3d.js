@@ -75,14 +75,15 @@
         var w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
         r.setSize(w, h, false); cam.aspect = w / h;
         // вписываем кабину по высоте и по ширине кадра
-        var fit = Math.max(1.32, 0.78 / cam.aspect + 0.3);
+        var fit = Math.max(1.62, 0.95 / cam.aspect + 0.45); // запас по краям: виден фон
         var d = fit / (2 * Math.tan(cam.fov * Math.PI / 360));
         cam.position.set(0, 0.62 + d * 0.16, d); cam.lookAt(0, 0.5, 0); cam.updateProjectionMatrix();
       }
       frame();
 
       // вращение: медленно само, пальцем или мышью по горизонтали; с инерцией
-      var yaw = -0.55, vel = 0, auto = reduce ? 0 : 0.0035, drag = false, lx = 0, idleT = 0;
+      // авто: ~0.1 рад/с, один оборот примерно за минуту; при reduced motion не крутится сама
+      var yaw = -0.55, vel = 0, auto = reduce ? 0 : 0.1, drag = false, lx = 0, idleT = 0, last = 0;
       el.addEventListener('pointerdown', function (e) { drag = true; lx = e.clientX; vel = 0; el.classList.add('is-drag'); try { el.setPointerCapture(e.pointerId); } catch (_) {} });
       el.addEventListener('pointermove', function (e) { if (!drag) return; var dx = e.clientX - lx; lx = e.clientX; vel = dx * 0.008; yaw += vel; kick(); });
       function up() { if (!drag) return; drag = false; idleT = performance.now(); el.classList.remove('is-drag'); el.classList.add('is-touched'); }
@@ -94,14 +95,15 @@
       var on = true, raf = 0;
       function tick(t) {
         raf = 0;
+        var dt = last ? Math.min((t - last) / 1000, 0.05) : 0; last = t;
         if (!drag) {
           vel *= 0.94; yaw += vel;
-          if (Math.abs(vel) < 0.0005 && t - idleT > 1800) yaw += auto;
+          if (Math.abs(vel) < 0.0005 && t - idleT > 1800) yaw += auto * dt;
         }
         pivot.rotation.y = yaw;
         r.render(scene, cam);
         var moving = drag || Math.abs(vel) > 0.0005 || auto;
-        if (on && moving) raf = requestAnimationFrame(tick);
+        if (on && moving) raf = requestAnimationFrame(tick); else last = 0;
       }
       function kick() { if (on && !raf) raf = requestAnimationFrame(tick); }
 

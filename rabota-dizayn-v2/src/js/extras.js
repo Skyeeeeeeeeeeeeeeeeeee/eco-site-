@@ -260,3 +260,16 @@
     input.addEventListener('keydown', (e) => { if (e.key === 'Escape' && input.value) { input.value = ''; run(); } });
   });
 })();
+
+/* «Как нас найти»: живая карта Яндекса подгружается только по нажатию (до этого — своя схема, без запросов к Яндексу) */
+(function () {
+  document.querySelectorAll('[data-ymap-load]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var box = b.closest('[data-ymap]'); if (!box) return;
+      var f = document.createElement('iframe');
+      f.src = box.getAttribute('data-ymap'); f.title = 'Офис на Яндекс Картах'; f.loading = 'lazy'; f.allowFullscreen = true;
+      f.referrerPolicy = 'no-referrer-when-downgrade';
+      box.appendChild(f); box.classList.add('is-live');
+    });
+  });
+})();
