@@ -42,15 +42,15 @@
     // Сцена в метрах и в перспективе фотографии фона (img.hero-d__bg): камера на высоте глаз 1,6 м,
     // горизонт фото совмещён с горизонтом камеры (HZ от верха сцены), кабина 2,3 м стоит на площади в ~8 м от камеры.
     var C = {}; try { C = JSON.parse(el.getAttribute('data-cfg') || '{}'); } catch (e) {}
-    var HZ = C.hz || 0.62, EYE = 1.6, DIST = C.dist || 8.2, X = C.x || 0, SUN = C.sun || [-9, 6.5, 1.5]; // параметры из SITE.hero3d
+    var HZ = C.hz || 0.62, EYE = C.eye || 1.6, DIST = C.dist || 8.2, X = C.x || 0, SUN = C.sun || [-9, 6.5, 1.5]; // параметры из SITE.hero3d
     var scene = new T.Scene();
     var pm = new T.PMREMGenerator(r);
     scene.environment = pm.fromScene(new T.RoomEnvironment(), 0.04).texture;
-    scene.add(new T.HemisphereLight(0xcfe3ff, 0x8a8170, 0.3));          // небо сверху, тёплый отсвет плитки снизу
-    var sun = new T.DirectionalLight(new T.Color(C.sunColor || '#fff1dc'), 2.6);                    // солнце как на фото: слева-спереди, высоко
+    scene.add(new T.HemisphereLight(0xc9d8ee, 0xb08a5a, 0.45));          // небо сверху, тёплый отсвет плитки снизу
+    var sun = new T.DirectionalLight(new T.Color(C.sunColor || '#fff1dc'), C.sunI || 3.4);                    // солнце как на фото: слева-спереди, высоко
     sun.position.set(X + SUN[0], SUN[1], -DIST + SUN[2]); sun.target.position.set(X, 0, -DIST);
-    sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024); sun.shadow.radius = 4; sun.shadow.bias = -0.0005;
-    var sc0 = sun.shadow.camera; sc0.left = -4; sc0.right = 4; sc0.top = 4; sc0.bottom = -4; sc0.near = 1; sc0.far = 30;
+    sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.radius = 4; sun.shadow.bias = -0.0005;
+    var sc0 = sun.shadow.camera; sc0.left = -12; sc0.right = 12; sc0.top = 12; sc0.bottom = -12; sc0.near = 0.5; sc0.far = 60;
     scene.add(sun, sun.target);
 
     var cs = getComputedStyle(el);
@@ -74,7 +74,7 @@
       var pivot = new T.Group(); pivot.add(model); pivot.position.set(X, 0, -DIST); scene.add(pivot);
 
       // земля: принимает только тень (прозрачная), плюс тёмное пятно контакта под кабиной
-      var ground = new T.Mesh(new T.PlaneGeometry(30, 30), new T.ShadowMaterial({ opacity: 0.6 }));
+      var ground = new T.Mesh(new T.PlaneGeometry(60, 60), new T.ShadowMaterial({ opacity: 0.6 }));
       ground.rotation.x = -Math.PI / 2; ground.position.set(X, 0, -DIST); ground.receiveShadow = true; scene.add(ground);
       var sc = document.createElement('canvas'); sc.width = sc.height = 128;
       var x = sc.getContext('2d'), gr = x.createRadialGradient(64, 64, 10, 64, 64, 64);

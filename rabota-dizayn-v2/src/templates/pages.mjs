@@ -100,7 +100,7 @@ ${statStrip()}</div><div class="hero-end"></div></header>`;
 
 function heroD(page) {
   const std = M('standart'), H3 = S().hero3d, bg = S().photos[H3.photo];
-  const top = (H3.hz - H3.hzImg * H3.scale) * 100, cfg = esc(JSON.stringify({ hz: H3.hz, dist: H3.dist, x: H3.x, sun: H3.sun, sunColor: H3.sunColor }));
+  const top = (H3.hz - H3.hzImg * H3.scale) * 100, cfg = esc(JSON.stringify({ hz: H3.hz, eye: H3.eye, dist: H3.dist, x: H3.x, sun: H3.sun, sunColor: H3.sunColor }));
   return `<header class="hero hero--home hero--d" data-hero><div class="container">${variantBar('d')}
 <div class="hero-d"><div class="hero-d__text"><p class="label">Новосибирск и область</p>${homeH1(page)}<p class="sub">${HOME_SUB}</p>${homeActions()}</div>
 <div class="hero-d__side"><figure class="hero-d__stage" data-cab3d data-cfg="${cfg}" style="--bg-top:${top.toFixed(1)}%;--bg-h:${(H3.scale * 100).toFixed(0)}%;--bg-x:${H3.posX}%;--grade:${H3.grade}" data-lib="${u('/js/vendor/three-gltf.min.js')}" data-model="${u('/js/cabin-model.js')}" aria-label="3D-модель кабины ${esc(std.name)}, можно повернуть стрелками влево и вправо">
