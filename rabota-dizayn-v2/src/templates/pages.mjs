@@ -1,7 +1,7 @@
 // Шаблоны страниц. Каждый возвращает HTML содержимого <main>. Тексты берутся из structure.md, числа из content.js.
 import { ctx, esc, u, a, btn, tel, ic, illus, thumb, illScene, photo, apx, section, table, specTable, kvTable, priceTable, eventPriceTable, salePriceTable, priceSummary, priceNote, modelCard, offerTags, priceLines, steps, processSteps,
   faqBlock, faqItem, reviewCard, reviewsBlock, ctaBlock, calc, checkList, dev, devTag, rub, tailText, lead, NB,
-  countVal, liveWidget, deliveryMap, workGallery, photoPair, contactPanel, contactBtns, compareTable, picker, stepsRow, spTruck, ticker, modelPager, modelSummary, shareActions, cabinHelper } from './lib.mjs';
+  countVal, liveWidget, deliveryMap, workGallery, photoPair, contactPanel, contactBtns, compareTable, picker, stepsRow, modelPager, modelSummary, shareActions, cabinHelper } from './lib.mjs';
 
 const S = () => ctx.S;
 
@@ -19,7 +19,7 @@ function heroInner(page, { eyebrow, lead: ld, actions = '', side = '', note = ''
   return `<header class="hero hero--inner" data-hero><div class="container">${noCrumbs ? '' : crumbs(page)}<div class="hero__grid${side ? ' hero__grid--side' : ''}"><div class="hero__main"><p class="label">${eyebrow}</p><h1>${tailText(esc(page.h1), tail)}</h1>${ld ? `<p class="sub">${ld}</p>` : ''}${actions ? `<div class="hero__actions">${actions}</div>` : ''}${extra}${note ? `<p class="small note">${note}</p>` : ''}</div>${side ? `<div class="hero__side">${side}</div>` : ''}</div>${factsRow}</div><div class="hero-end"></div></header>`;
 }
 const stdFacts = () => facts([['срок аренды', 'от ' + S().terms.minDays + NB + 'суток'], ['документы', 'договор, счёт, акты'], ['оплата', 'по условиям заказа']], 'hero-meta--row');
-const reqBtn = (t = 'Позвонить') => `<a class="btn btn--primary btn--cta" href="${S().contacts.phoneHref}">${ic('phone')} ${t}</a>`;
+const reqBtn = (t = 'Позвонить') => `<a class="btn btn--primary" href="${S().contacts.phoneHref}">${ic('phone')} ${t}</a>`;
 const msgBtn = (t = 'Написать в мессенджер') => btn('#kontakt', t, 'outline');
 const calcBtn = (t, href = '#calc') => btn(href, t, 'outline');
 
@@ -62,7 +62,7 @@ function variantBar(cur) {
   if (ctx.production) return '';
   return `<nav class="vbar" aria-label="Варианты первого экрана"><span class="vbar__t">Вариант первого экрана (для выбора):</span>${S().heroVariants.map((v) => `<a href="${esc(u('/' + v.file))}"${v.id === cur ? ' aria-current="page"' : ''}>${esc(v.name)}</a>`).join('')}</nav>`;
 }
-const homeActions = (lg = true) => `<p class="hero__actions">${btn('#podbor', 'Подобрать кабину за 3 шага', 'cta', lg ? 'data-size="lg"' : '')}<a class="btn btn--outline" href="${S().contacts.phoneHref}"${lg ? ' data-size="lg"' : ''}>${ic('phone')} Позвонить</a></p>`;
+const homeActions = (lg = true) => `<p class="hero__actions">${btn('#podbor', 'Подобрать кабину за 3 шага', 'primary', lg ? 'data-size="lg"' : '')}<a class="btn btn--outline" href="${S().contacts.phoneHref}"${lg ? ' data-size="lg"' : ''}>${ic('phone')} Позвонить</a></p>`;
 const homeH1 = (page) => `<h1 class="display">${tailText(esc(page.h1), 'в Новосибирске и области')}</h1>`;
 const HOME_SUB = 'Аренда МТК для строек и мероприятий, продажа кабин. Доставляем, устанавливаем, обслуживаем по графику и забираем.';
 const statStrip = () => `<dl class="hero-meta hero-meta--row hero-meta--4">${S().stats.map((x) => `<div><dt>${esc(x.label)}</dt><dd>${countVal(x.value)}</dd></div>`).join('')}</dl>`;
@@ -146,12 +146,11 @@ export const templates = {
     const s = S(), D = s.rates.delivery;
     const hero = { a: heroA, b: heroB, c: heroC }[variant](page);
     const m = [];
-    m.push(ticker());
     m.push(picker());
     m.push(section({ id: 'modeli', title: 'Четыре модели под вашу задачу', tag: 'Кабины и цены', center: true },
-      `<p class="kicker"><span class="kicker__dot" aria-hidden="true"></span>${esc(s.humor.models)}</p><p class="mod-btns">${btn('#podbor', 'Подобрать кабину', 'primary')}${btn('/katalog/#sravnenie', 'Каталог и полное сравнение', 'outline')}</p><div class="tiles">${s.models.map((x) => modelCard(x)).join('')}</div><h3 class="h2 sub-h">Сравнение моделей</h3>${compareTable({ compact: true, id: 'cmp-home' })}${priceNote()}`));
-    m.push(`<section class="section section--brand" id="poryadok" aria-labelledby="poryadok-h"><div class="container"><header class="sec-head"><p class="label">Простой процесс</p><h2 id="poryadok-h">Как мы работаем</h2><p class="lead">${lead('Четыре шага от звонка до вывоза. Вы называете адрес и даты, остальное берём на себя.')}</p></header>${spTruck}${stepsRow(s.steps)}<p class="sp__joke">${esc(s.humor.steps)}</p></div></section>`);
-    m.push(`<section class="section section--warm" id="zony" aria-labelledby="zony-h"><div class="container"><p class="label">Доставка и вывоз</p><div class="dl-g"><div><h2 class="lead" id="zony-h">${lead(`Три зоны, цена за рейс заранее. В одну машину помещается до ${D.cabinsPerTrip} кабин.`)}</h2><p class="joke">${ic('truck')}<span>${esc(s.humor.delivery)}</span></p>${liveWidget()}<div class="zmap-wrap">${deliveryMap()}</div></div><div>${zonesList()}<p class="zone-note">${truckNote()} Пример: 100 км от города = ${rub(D.nearPerTrip)} + ${100 - D.nearKm} км × ${rub(D.perKmOver)} = ${rub(D.nearPerTrip + (100 - D.nearKm) * D.perKmOver)} за рейс. Вывоз считаем по тем же зонам. ${a('/dostavka/', 'Подробнее о зонах и сроках')}</p></div></div></div></section>`);
+      `<p class="mod-btns">${btn('#podbor', 'Подобрать кабину', 'primary')}${btn('/katalog/#sravnenie', 'Каталог и полное сравнение', 'outline')}</p><div class="tiles">${s.models.map((x) => modelCard(x)).join('')}</div><h3 class="h2 sub-h">Сравнение моделей</h3>${compareTable({ compact: true, id: 'cmp-home' })}${priceNote()}`));
+    m.push(`<section class="section section--flush" id="poryadok" aria-labelledby="poryadok-h"><div class="container"><header class="sec-head"><p class="label">Простой процесс</p><h2 id="poryadok-h">Как мы работаем</h2><p class="lead">${lead('Четыре шага от звонка до вывоза. Вы называете адрес и даты, остальное берём на себя.')}</p></header>${stepsRow(s.steps)}</div></section>`);
+    m.push(`<section class="section section--paper" id="zony" aria-labelledby="zony-h"><div class="container"><p class="label">Доставка и вывоз</p><div class="dl-g"><div><h2 class="lead" id="zony-h">${lead(`Три зоны, цена за рейс заранее. В одну машину помещается до ${D.cabinsPerTrip} кабин.`)}</h2>${liveWidget()}<div class="zmap-wrap">${deliveryMap()}</div></div><div>${zonesList()}<p class="zone-note">${truckNote()} Пример: 100 км от города = ${rub(D.nearPerTrip)} + ${100 - D.nearKm} км × ${rub(D.perKmOver)} = ${rub(D.nearPerTrip + (100 - D.nearKm) * D.perKmOver)} за рейс. Вывоз считаем по тем же зонам. ${a('/dostavka/', 'Подробнее о зонах и сроках')}</p></div></div></div></section>`);
     m.push(workGallery());
     m.push(faqBlock(homeFaqIds(), {}));
     return hero + '<div class="body">' + m.join('') + '</div>';
@@ -472,7 +471,7 @@ ${shareActions({ attr: 'data-share="event"' })}
 
   notfound(page) {
     const s = S();
-    return `<div class="section nf"><div class="container"><div class="grid"><div class="lg-8"><p class="nf__code mono" aria-hidden="true"><span class="g">404</span><span class="nf__lock"><i></i>Занято</span></p><p class="kicker"><span class="kicker__dot kicker__dot--busy" aria-hidden="true"></span>${esc(s.humor.notFound)}</p><h1>${esc(page.h1)}</h1>
+    return `<div class="section nf"><div class="container"><div class="grid"><div class="lg-8"><p class="nf__code mono" aria-hidden="true"><span class="g">404</span></p><h1>${esc(page.h1)}</h1>
 <p class="lead">Адрес введён с ошибкой или страница удалена. Перейдите в нужный раздел или позвоните: ${tel()}.</p>
 <p class="hero__actions">${btn('/', 'На главную', 'primary')}${btn('/katalog/', 'Каталог', 'outline')}${btn('/ceny/', 'Цены и калькулятор', 'outline')}${btn('/kontakty/', 'Контакты', 'outline')}</p>
 <p class="small note">Если вы перешли по ссылке с нашего сайта, сообщите нам: исправим.</p></div></div></div></div>`;

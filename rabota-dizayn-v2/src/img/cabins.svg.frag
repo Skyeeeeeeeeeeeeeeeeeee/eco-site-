@@ -9,17 +9,13 @@
       <polygon points="126,30 186,44 186,46 126,32" fill="var(--rim2)"/>
       <rect x="20" y="44" width="2" height="200" fill="var(--rim)"/>
       <rect x="178" y="58" width="2" height="174" fill="var(--rim2)"/>
-      <rect x="34" y="70" width="72" height="162" fill="var(--inside)"/>
-      <g style="transform-box:fill-box;transform-origin:0 50%;transform:var(--dr-t,none);transition:transform .35s cubic-bezier(.3,.7,.3,1)">
-        <rect x="34" y="70" width="72" height="162" fill="var(--door)"/>
-        <polygon points="34,70 72,70 34,158" fill="var(--facet)"/>
-        <rect x="40" y="224" width="60" height="2" fill="var(--rim2)"/>
-        <rect x="85" y="124" width="18" height="12" rx="3" fill="#0C1B2A"/><circle cx="94" cy="130" r="3.6" fill="var(--lock,var(--detail))"/>
-        <rect x="93" y="142" width="6" height="20" rx="1" fill="var(--detail)"/>
-      </g>
+      <rect x="34" y="70" width="72" height="162" fill="var(--door)"/>
+      <polygon points="34,70 72,70 34,158" fill="var(--facet)"/>
       <rect x="44" y="50" width="52" height="2" fill="var(--detail)"/>
       <rect x="44" y="55" width="52" height="2" fill="var(--detail)"/>
       <rect x="44" y="60" width="52" height="2" fill="var(--detail)"/>
+      <rect x="93" y="142" width="6" height="20" rx="1" fill="var(--detail)"/>
+      <rect x="40" y="224" width="60" height="2" fill="var(--rim2)"/>
       <polygon points="136,86 172,94 172,98 136,90" fill="var(--detail)"/>
       <polygon points="136,100 160,106 160,109 136,103" fill="var(--rim2)"/>
       <rect x="20" y="244" width="100" height="3" fill="#2F5F8F"/>
@@ -35,12 +31,8 @@
       <polygon points="154,66 210,78 210,90 154,78" fill="var(--roof2)"/>
       <rect x="56" y="66" width="98" height="2" fill="var(--rim)"/>
       <rect x="62" y="78" width="2" height="166" fill="var(--rim)"/>
-      <rect x="74" y="94" width="62" height="140" fill="var(--inside)"/>
-      <g style="transform-box:fill-box;transform-origin:0 50%;transform:var(--dr-t,none);transition:transform .35s cubic-bezier(.3,.7,.3,1)">
-        <rect x="74" y="94" width="62" height="140" fill="var(--door)"/>
-        <rect x="114" y="138" width="18" height="12" rx="3" fill="#0C1B2A"/><circle cx="123" cy="144" r="3.6" fill="var(--lock,var(--detail))"/>
-        <rect x="124" y="156" width="5" height="16" rx="1" fill="var(--detail)"/>
-      </g>
+      <rect x="74" y="94" width="62" height="140" fill="var(--door)"/>
+      <rect x="124" y="156" width="5" height="16" rx="1" fill="var(--detail)"/>
       <rect x="62" y="244" width="86" height="3" fill="#2F5F8F"/>
     </g>
     <!-- МТК Комфорт: шире, светлая крыша со световой полосой, боковые вентиляционные окна -->
@@ -53,16 +45,11 @@
       <rect x="30" y="31" width="128" height="8" fill="var(--rim2)" opacity=".35"/>
       <rect x="16" y="44" width="160" height="2" fill="var(--rim2)"/>
       <rect x="24" y="46" width="2" height="198" fill="var(--rim)"/>
-      <rect x="40" y="68" width="112" height="164" fill="var(--inside)"/>
-      <g style="transform-box:fill-box;transform-origin:0 50%;transform:var(--dr-t,none);transition:transform .35s cubic-bezier(.3,.7,.3,1)">
-        <rect x="40" y="68" width="112" height="164" fill="var(--door)"/>
-        <polygon points="40,68 96,68 40,168" fill="var(--facet)"/>
-        <rect x="127" y="124" width="18" height="12" rx="3" fill="#0C1B2A"/><circle cx="136" cy="130" r="3.6" fill="var(--lock,var(--detail))"/>
-        <rect x="136" y="144" width="6" height="22" rx="1" fill="var(--detail)"/>
-        <g style="display:var(--vip,none)"><rect x="62" y="96" width="68" height="30" rx="6" fill="var(--detail)"/><rect x="62" y="96" width="68" height="30" rx="6" fill="none" stroke="#fff" stroke-width="2"/><text x="96" y="118" text-anchor="middle" font-size="19" font-weight="600" font-family="Onest,Arial,sans-serif" letter-spacing="1" fill="#fff">VIP</text></g>
-      </g>
+      <rect x="40" y="68" width="112" height="164" fill="var(--door)"/>
+      <polygon points="40,68 96,68 40,168" fill="var(--facet)"/>
       <rect x="50" y="52" width="92" height="3" fill="var(--detail)"/>
       <rect x="50" y="58" width="92" height="3" fill="var(--detail)"/>
+      <rect x="136" y="144" width="6" height="22" rx="1" fill="var(--detail)"/>
       <polygon points="180,84 232,94 232,100 180,90" fill="var(--detail)"/>
       <polygon points="180,106 232,116 232,122 180,112" fill="var(--detail)"/>
       <polygon points="180,128 232,138 232,144 180,134" fill="var(--detail)"/>
@@ -70,7 +57,10 @@
     </g>
     <!-- МТК VIP: тот же корпус, что у Комфорта, и табличка VIP на двери -->
     <g id="mV">
-      <g style="--vip:inline"><use href="#mK"/></g>
+      <use href="#mK"/>
+      <rect x="62" y="96" width="68" height="30" rx="6" fill="var(--detail)"/>
+      <rect x="62" y="96" width="68" height="30" rx="6" fill="none" stroke="#fff" stroke-width="2"/>
+      <text x="96" y="118" text-anchor="middle" font-size="19" font-weight="600" font-family="Onest,Arial,sans-serif" letter-spacing="1" fill="#fff">VIP</text>
     </g>
     <!-- МТК VIP внутри: зеркало, рукомойник с педалью, бак воды, диспенсер мыла, полотенцедержатель -->
     <g id="mVin">

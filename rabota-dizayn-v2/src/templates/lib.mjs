@@ -108,7 +108,7 @@ export function a(href, text, cls = '', extra = '') {
   return `<a${cls ? ` class="${cls}"` : ''} href="${esc(u(href))}"${extra ? ' ' + extra : ''}>${text}</a>`;
 }
 export function btn(href, text, kind = 'primary', extra = '') {
-  const k = { primary: 'btn btn--primary', cta: 'btn btn--primary btn--cta', outline: 'btn btn--outline', link: 'btn btn--link', dark: 'btn btn--primary', plain: 'btn btn--primary' }[kind];
+  const k = { primary: 'btn btn--primary', outline: 'btn btn--outline', link: 'btn btn--link', dark: 'btn btn--primary', plain: 'btn btn--primary' }[kind];
   return `<a class="${k}" href="${esc(u(href))}"${extra ? ' ' + extra : ''}>${text}</a>`;
 }
 export const tel = (cls = '') => `<a class="${cls || 'tel'}" href="${ctx.S.contacts.phoneHref}">${ctx.S.contacts.phone.replace(/ /g, NB)}</a>`;
@@ -131,7 +131,7 @@ export function lead(text) {
 // o: id, title, tag (метка над заголовком), lead, paper (светлый фон), cls, bleed (контент на всю ширину после заголовка), center
 export function section(o, inner) {
   ctx.secN += 1;
-  const cls = ['section', o.paper ? 'section--paper' : '', o.band ? 'section--' + o.band : '', o.cls || ''].filter(Boolean).join(' ');
+  const cls = ['section', o.paper ? 'section--paper' : '', o.cls || ''].filter(Boolean).join(' ');
   const hid = o.id ? o.id + '-h' : 'h' + ctx.secN;
   const head = o.title
     ? `<header class="sec-head${o.center ? ' sec-head--c' : ''}">${o.tag ? `<p class="label">${esc(o.tag)}</p>` : ''}<h2 id="${hid}">${o.title}</h2>${o.lead ? `<p class="lead">${lead(o.lead)}</p>` : ''}</header>`
@@ -209,7 +209,7 @@ export function modelCard(m, { headingLevel = 3, cta = false } = {}) {
   const S = ctx.S, h = 'h' + headingLevel;
   const note = m.rent ? (m.rent.type === 'event' ? 'аренда: цена за кабину за сутки' : `аренда от ${S.rates.rentPerDay[S.rates.rentPerDay.length - 1].from}${NB}суток`) : 'продажа';
   return `<article class="model-card" data-filters="${m.filters.join(' ')}">
-<div class="sq">${illus(m.id, m.name + ': плоская иллюстрация')}<span class="sq__st" aria-hidden="true"><i></i><span class="st-free">Свободно</span><span class="st-busy">Занято</span></span></div>
+<div class="sq">${illus(m.id, m.name + ': плоская иллюстрация')}</div>
 <div class="model-card__body"><div class="model-card__top">${offerTags(m).map((t, i) => `<span class="tag${t === 'Продажа' ? ' tag--sale' : ''}">${t}</span>`).join('')}</div>
 <${h} class="model-card__title">${a('/katalog/' + m.slug + '/', esc(m.name), 'stretched')}</${h}>
 <p class="small">${esc(m.short)}</p>
@@ -265,7 +265,7 @@ export function reviewsBlock(ids, o = {}) {
 const capFirst = (x) => x.charAt(0).toUpperCase() + x.slice(1);
 export const contactBtns = (o = {}) => {
   const C = ctx.S.contacts, sm = o.sm ? ' btn--sm' : '';
-  return `<a class="btn btn--primary btn--cta${sm}" href="${C.phoneHref}">${ic('phone')} Позвонить</a><a class="btn btn--outline${sm}" href="${C.telegramUrl}" target="_blank" rel="noopener">${ic('telegram')} Telegram</a><a class="btn btn--outline${sm}" href="${C.whatsappUrl}" target="_blank" rel="noopener">${ic('whatsapp')} WhatsApp</a>`;
+  return `<a class="btn btn--primary${sm}" href="${C.phoneHref}">${ic('phone')} Позвонить</a><a class="btn btn--outline${sm}" href="${C.telegramUrl}" target="_blank" rel="noopener">${ic('telegram')} Telegram</a><a class="btn btn--outline${sm}" href="${C.whatsappUrl}" target="_blank" rel="noopener">${ic('whatsapp')} WhatsApp</a>`;
 };
 // Блок связи: большой телефон, три кнопки, часы работы и короткая строка
 export function contactPanel({ title = '', line, cls = '' } = {}) {
@@ -310,30 +310,6 @@ export function cabinHelper(m, page = false) {
 }
 export const chelpText = (r) => `≈ ${r.total} ${ctx.CALC.plural(r.total, 'кабина', 'кабины', 'кабин')} (из них VIP ${r.vip})`;
 
-/* ---------- сцены для карточек шага 1: плоские, 3 цвета палитры (синий, тёмно-синий, акцент) ---------- */
-export function pkScene(kind) {
-  const cab = (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})"><use href="#cabg"/></g>`;
-  const ground = '<rect y="116" width="240" height="24" fill="var(--scene-gr)"/><rect y="115" width="240" height="3" fill="var(--ink)"/>';
-  const sc = {
-    stroyka: ground
-      + '<rect x="38" y="20" width="12" height="96" fill="var(--acc)" stroke="var(--ink)" stroke-width="2.5"/><path d="M38 116 50 96 38 76 50 56 38 36 50 20M50 116 38 96 50 76 38 56 50 36" fill="none" stroke="var(--ink)" stroke-width="1.6"/>'
-      + '<rect x="6" y="14" width="124" height="9" fill="var(--acc)" stroke="var(--ink)" stroke-width="2.5"/><rect x="8" y="23" width="18" height="14" fill="var(--ink)"/><path d="M44 14 44 6M44 6 12 14M44 6 118 14" fill="none" stroke="var(--ink)" stroke-width="1.6"/>'
-      + '<path d="M112 23V62" stroke="var(--ink)" stroke-width="2"/><rect x="100" y="62" width="24" height="16" fill="var(--door)" stroke="var(--ink)" stroke-width="2.5"/><path d="M100 70h24" stroke="var(--ink)" stroke-width="1.6"/>'
-      + '<path d="M72 116a15 15 0 0 1 30 0z" fill="var(--acc)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><rect x="68" y="113" width="38" height="5" rx="2.5" fill="var(--ink)"/><path d="M87 101v10" stroke="var(--ink)" stroke-width="2"/>'
-      + cab(146, 8, .41),
-    event: ground
-      + (() => { const P = [[-6, 14], [120, 52], [246, 14]]; const at = (t) => [0, 1].map((k) => (1 - t) * (1 - t) * P[0][k] + 2 * (1 - t) * t * P[1][k] + t * t * P[2][k]); let f = ''; for (let i = 0; i < 10; i++) { const [x, y] = at(0.07 + i * 0.095); f += `<path d="M${(x - 7).toFixed(1)} ${(y - 1).toFixed(1)}h14l-7 16z" fill="${['var(--acc)', '#fff', 'var(--door)'][i % 3]}" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>`; } return `<path d="M-6 14Q120 52 246 14" fill="none" stroke="var(--ink)" stroke-width="2.5"/>${f}`; })()
-      + '<circle cx="34" cy="78" r="12" fill="var(--acc)" stroke="var(--ink)" stroke-width="2.5"/><path d="M34 90q-4 12 2 25" fill="none" stroke="var(--ink)" stroke-width="2"/><circle cx="62" cy="88" r="10" fill="var(--door)" stroke="var(--ink)" stroke-width="2.5"/><path d="M62 98q-3 9 1 17" fill="none" stroke="var(--ink)" stroke-width="2"/>'
-      + '<path d="M96 108l4-4M104 98l3 5M88 96l5 2" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/>'
-      + cab(152, 36, .34),
-    buy: ground
-      + '<path d="M18 74 62 38l44 36z" fill="var(--door)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><rect x="26" y="74" width="72" height="42" fill="#fff" stroke="var(--ink)" stroke-width="2.5"/><rect x="72" y="42" width="9" height="16" fill="var(--ink)"/><rect x="50" y="90" width="17" height="26" fill="var(--acc)" stroke="var(--ink)" stroke-width="2.5"/><rect x="75" y="84" width="15" height="15" fill="var(--roof)" stroke="var(--ink)" stroke-width="2.5"/><rect x="33" y="84" width="11" height="11" fill="var(--roof)" stroke="var(--ink)" stroke-width="2.5"/>'
-      + cab(146, 8, .41)
-      + '<path d="M168 38 132 46" stroke="var(--ink)" stroke-width="2"/><g transform="rotate(-12 124 56)"><path d="M108 44h30a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4h-30l-10-12z" fill="var(--acc)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/><circle cx="106" cy="56" r="2.6" fill="var(--ink)"/><text x="123" y="63" text-anchor="middle" font-family="Onest,Arial,sans-serif" font-size="17" font-weight="600" fill="var(--ink)">₽</text></g>'
-  }[kind];
-  return `<svg viewBox="0 0 240 140" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">${sc}</svg>`;
-}
-
 /* ---------- v2u: подбор кабины за 3 шага ---------- */
 function pkRadios(name, legend, opts, checked, cls = '') {
   return `<fieldset class="seg ${cls}"><legend class="field__label">${legend}</legend><div class="seg__row">${opts.map((o, i) => `<input type="radio" name="${name}" id="${name}-${i}" value="${o.id}"${o.id === checked ? ' checked' : ''}><label for="${name}-${i}">${o.label}</label>`).join('')}</div></fieldset>`;
@@ -343,8 +319,7 @@ export function picker({ id = 'podbor', heading = 'Подобрать кабин
   const S = ctx.S, E = S.eventRules, W = S.picker.workersPerCabin, C = S.contacts;
   const std = S.modelById('standart'), eco = S.modelById('ekonom'), kom = S.modelById('komfort'), vip = S.modelById('vip');
   const task = [['stroyka', 'Стройка / объект', 'Длительная аренда МТК Стандарт'], ['event', 'Мероприятие', 'МТК Комфорт и МТК VIP на сутки'], ['buy', 'Купить кабину', 'МТК Стандарт или МТК Эконом']];
-  const kinds = { stroyka: 'stroyka', event: 'event', buy: 'buy' };
-  const tasks = task.map(([v, t, d], i) => `<input type="radio" name="pk-task" id="pk-task-${i}" value="${v}"><label for="pk-task-${i}"><span class="pk__sc">${pkScene(kinds[v])}</span><b>${t}</b><span>${d}</span></label>`).join('');
+  const tasks = task.map(([v, t, d], i) => `<input type="radio" name="pk-task" id="pk-task-${i}" value="${v}"><label for="pk-task-${i}"><b>${t}</b><span>${d}</span></label>`).join('');
   const dur = E.durations.map((d) => ({ id: d.id, label: d.label }));
   const sub = {
     stroyka: `<div class="pk__sub" data-pk-sub="stroyka" hidden><div class="pk__two">${pkNum('pk-days', 'Срок аренды', 60, 'Минимум 1 сутки')}${pkRadios('pk-du', 'Единица срока', [{ id: 'day', label: 'Сутки' }, { id: 'month', label: 'Месяцы' }], 'month')}</div>${pkNum('pk-workers', 'Сколько рабочих на объекте', 30, `Ориентир: 1 кабина на ${S.terms.workersPerCabin} рабочих.${ctx.production ? '' : ' ЗАГЛУШКА'}`)}</div>`,
@@ -363,23 +338,14 @@ export function picker({ id = 'podbor', heading = 'Подобрать кабин
 <div class="pk__step" data-pk-step="3" hidden><p class="pk__q">Куда везти кабины?</p>${zone}</div>
 </div>
 <p class="pk__err" data-pk-err role="alert"></p>
-<div class="pk__nav"><button class="btn btn--outline" type="button" data-pk-back hidden>Назад</button><button class="btn btn--primary btn--cta" type="button" data-pk-next disabled>Далее</button></div>
+<div class="pk__nav"><button class="btn btn--outline" type="button" data-pk-back hidden>Назад</button><button class="btn btn--primary" type="button" data-pk-next disabled>Далее</button></div>
 <div class="pk__res quote" data-pk-result tabindex="-1" aria-live="polite" hidden></div>
 </div>${stat}</div></section>`;
 }
 
-/* ---------- «Как мы работаем»: дорожка с точками и грузовиком; иконки: звонок, договор, доставка, мойка ---------- */
+/* ---------- v2u: компактный процесс, 4 шага в одну строку ---------- */
 export function stepsRow(items) {
-  const icons = ['phone', 'doc', 'truck', 'broom'];
-  return `<ol class="sp" data-steps-path>${items.map((s, i) => `<li class="sp__i"><span class="sp__ic" aria-hidden="true">${ic(icons[i % icons.length], 'ic sp__svg')}<span class="sp__n">${i + 1}</span></span><h3>${s.t}</h3><p>${s.text}</p></li>`).join('')}</ol>`;
-}
-export const spTruck = '<svg class="sp__truck" viewBox="0 0 56 30" aria-hidden="true" focusable="false"><rect x="1" y="4" width="32" height="18" rx="3" fill="var(--acc)" stroke="var(--ink)" stroke-width="2"/><path d="M33 9h10l7 8v5H33z" fill="#fff" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/><rect x="39" y="12" width="6" height="5" fill="var(--ink)"/><circle cx="12" cy="24" r="4.5" fill="var(--ink)"/><circle cx="43" cy="24" r="4.5" fill="var(--ink)"/><circle cx="12" cy="24" r="1.6" fill="#fff"/><circle cx="43" cy="24" r="1.6" fill="#fff"/></svg>';
-
-/* ---------- бегущая строка под героем ---------- */
-export function ticker() {
-  const items = ctx.S.ticker;
-  const ul = (hid) => `<ul class="mq__l"${hid ? ' aria-hidden="true"' : ''}>${items.map((t) => `<li><span>${esc(t).replace(/ /g, NB)}</span><svg class="mq__g" viewBox="0 0 12 16" aria-hidden="true" focusable="false"><use href="#i-cabglyph"/></svg></li>`).join('')}</ul>`;
-  return `<div class="mq" role="region" aria-label="Коротко о нас"><div class="mq__t">${ul(false)}${ul(true)}${ul(true)}${ul(true)}</div></div>`;
+  return `<ol class="sr">${items.map((s, i) => `<li class="sr__i"><span class="sr__n" aria-hidden="true">${i + 1}</span><h3>${s.t}</h3><p>${s.text}</p></li>`).join('')}</ol>`;
 }
 
 /* ---------- v2u: страницы моделей: предыдущая и следующая, плавающая сводка ---------- */
