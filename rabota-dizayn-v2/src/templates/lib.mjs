@@ -284,13 +284,12 @@ export function ctaBlock() {
 <div class="cta__form">${contactPanel({ cls: 'cpanel--big' })}</div></div>${officeMap()}</section>`;
 }
 
-/* ---------- «Как нас найти»: своя схема улиц (OSM), живая карта Яндекса только по клику ---------- */
+/* ---------- «Как нас найти»: карта Яндекса (виджет), кнопки маршрута и 2ГИС ---------- */
 export function officeMap() {
   const C = ctx.S.contacts;
   return `<div class="container omap" id="kak-nas-nayti"><div class="omap__info"><h3 class="h4">Как нас найти</h3><p class="omap__addr">${esc(C.address)}</p><p class="small">${esc(C.officeHow)}</p><p class="small">${esc(capFirst(C.hours))}. Перед визитом позвоните, чтобы мы точно были на месте.</p>
 <p class="omap__btns"><a class="btn btn--primary btn--sm" href="${C.yandexRouteUrl}" target="_blank" rel="noopener">${ic('arrow')} Маршрут в Яндекс Картах</a><a class="btn btn--outline btn--sm" href="${C.yandexUrl}" target="_blank" rel="noopener">Открыть в Яндекс Картах</a><a class="btn btn--outline btn--sm" href="${C.gisUrl}" target="_blank" rel="noopener">Открыть в 2ГИС</a></p></div>
-<div class="omap__map" data-ymap="${esc(C.yandexWidget)}"><img class="omap__img" src="${u('/img/office-map.svg')}" width="800" height="500" alt="Схема: офис на улице Советской, 64/1, рядом Красный проспект, улицы Писарева и Железнодорожная" loading="lazy" decoding="async">
-<div class="omap__over js-only"><button class="btn btn--outline btn--sm omap__load" type="button" data-ymap-load>Показать карту Яндекса</button></div><p class="omap__cap">Схема: © участники <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>. Живая карта загружается с Яндекса только после нажатия.</p></div></div>`;
+<div class="omap__map"><iframe src="${esc(C.yandexWidget)}" title="Офис ЭКО СЕРВИС на Яндекс Картах: ${esc(C.address)}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div></div></div>`;
 }
 
 /* ---------- v2u: сравнение моделей (Эконом / Стандарт / Комфорт / VIP) ---------- */

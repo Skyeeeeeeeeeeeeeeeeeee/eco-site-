@@ -37,15 +37,24 @@
     r.toneMapping = T.ACESFilmicToneMapping;
     r.toneMappingExposure = 1.05;
 
+    r.shadowMap.enabled = true; r.shadowMap.type = T.PCFSoftShadowMap;
+
+    // Сцена в метрах и в перспективе фотографии фона (img.hero-d__bg): камера на высоте глаз 1,6 м,
+    // горизонт фото совмещён с горизонтом камеры (HZ от верха сцены), кабина 2,3 м стоит на площади в ~8 м от камеры.
+    var HZ = 0.62, EYE = 1.6, DIST = 8.2, X = -0.4; // X: кабина чуть левее центра, чтобы тень справа была в кадре
     var scene = new T.Scene();
     var pm = new T.PMREMGenerator(r);
     scene.environment = pm.fromScene(new T.RoomEnvironment(), 0.04).texture;
-    scene.add(new T.HemisphereLight(0xffffff, 0xb9cbe0, 0.6));
-    var sun = new T.DirectionalLight(0xffffff, 1.6); sun.position.set(2, 4, 3); scene.add(sun);
+    scene.add(new T.HemisphereLight(0xcfe3ff, 0x8a8170, 0.3));          // небо сверху, тёплый отсвет плитки снизу
+    var sun = new T.DirectionalLight(0xfff1dc, 2.6);                    // солнце как на фото: слева-спереди, высоко
+    sun.position.set(X - 9, 6.5, -DIST + 1.5); sun.target.position.set(X, 0, -DIST);
+    sun.castShadow = true; sun.shadow.mapSize.set(1024, 1024); sun.shadow.radius = 4; sun.shadow.bias = -0.0005;
+    var sc0 = sun.shadow.camera; sc0.left = -4; sc0.right = 4; sc0.top = 4; sc0.bottom = -4; sc0.near = 1; sc0.far = 30;
+    scene.add(sun, sun.target);
 
     var cs = getComputedStyle(el);
-    var blue = new T.MeshStandardMaterial({ color: new T.Color((cs.getPropertyValue('--cab-body') || '#2F86D6').trim()), roughness: 0.42, metalness: 0 });
-    var white = new T.MeshStandardMaterial({ color: new T.Color((cs.getPropertyValue('--cab-roof') || '#F3F6F9').trim()), roughness: 0.5, metalness: 0, side: T.DoubleSide });
+    var blue = new T.MeshStandardMaterial({ color: new T.Color((cs.getPropertyValue('--cab-body') || '#2F86D6').trim()), roughness: 0.45, metalness: 0, envMapIntensity: 0.32 });
+    var white = new T.MeshStandardMaterial({ color: new T.Color((cs.getPropertyValue('--cab-roof') || '#F3F6F9').trim()), roughness: 0.5, metalness: 0, side: T.DoubleSide, envMapIntensity: 0.38 });
     var grey = new T.MeshStandardMaterial({ color: 0x9aa7b4, roughness: 0.35, metalness: 0.4 });
 
     new T.GLTFLoader().parse(buf.buffer, '', function (g) {
@@ -54,30 +63,36 @@
         if (!o.isMesh) return;
         var n = (o.material && o.material.name) || '';
         o.material = /Matesdf/.test(n) ? (/Plane005/.test(o.name) ? grey : white) : blue;
+        o.castShadow = true;
       });
-      // центр и масштаб: высота кабины = 1 единица, низ на нуле
+      // масштаб в метрах: высота кабины 2,3 м, низ на земле, центр на оси вращения
       var box = new T.Box3().setFromObject(model), size = box.getSize(new T.Vector3()), c = box.getCenter(new T.Vector3());
-      var k = 1 / size.y;
+      var k = 2.3 / size.y;
       model.scale.setScalar(k);
       model.position.set(-c.x * k, -box.min.y * k, -c.z * k);
-      var pivot = new T.Group(); pivot.add(model); scene.add(pivot);
+      var pivot = new T.Group(); pivot.add(model); pivot.position.set(X, 0, -DIST); scene.add(pivot);
 
-      // мягкая тень на «полу»
+      // земля: принимает только тень (прозрачная), плюс тёмное пятно контакта под кабиной
+      var ground = new T.Mesh(new T.PlaneGeometry(30, 30), new T.ShadowMaterial({ opacity: 0.6 }));
+      ground.rotation.x = -Math.PI / 2; ground.position.set(X, 0, -DIST); ground.receiveShadow = true; scene.add(ground);
       var sc = document.createElement('canvas'); sc.width = sc.height = 128;
-      var x = sc.getContext('2d'), gr = x.createRadialGradient(64, 64, 4, 64, 64, 64);
-      gr.addColorStop(0, 'rgba(12,27,42,.34)'); gr.addColorStop(1, 'rgba(12,27,42,0)');
+      var x = sc.getContext('2d'), gr = x.createRadialGradient(64, 64, 10, 64, 64, 64);
+      gr.addColorStop(0, 'rgba(20,18,14,.55)'); gr.addColorStop(1, 'rgba(20,18,14,0)');
       x.fillStyle = gr; x.fillRect(0, 0, 128, 128);
-      var shadow = new T.Mesh(new T.PlaneGeometry(1.05, 1.05), new T.MeshBasicMaterial({ map: new T.CanvasTexture(sc), transparent: true, depthWrite: false }));
-      shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.002; scene.add(shadow);
+      var ao = new T.Mesh(new T.PlaneGeometry(1.9, 1.9), new T.MeshBasicMaterial({ map: new T.CanvasTexture(sc), transparent: true, depthWrite: false }));
+      ao.rotation.x = -Math.PI / 2; ao.position.set(X, 0.003, -DIST); scene.add(ao);
 
-      var cam = new T.PerspectiveCamera(26, 1, 0.05, 20);
+      var cam = new T.PerspectiveCamera(40, 1, 0.1, 100);
+      cam.position.set(0, EYE, 0); cam.lookAt(0, EYE, -1);               // взгляд строго горизонтально
       function frame() {
         var w = el.clientWidth, h = el.clientHeight; if (!w || !h) return;
-        r.setSize(w, h, false); cam.aspect = w / h;
-        // вписываем кабину по высоте и по ширине кадра
-        var fit = Math.max(1.62, 0.95 / cam.aspect + 0.45); // запас по краям: виден фон
-        var d = fit / (2 * Math.tan(cam.fov * Math.PI / 360));
-        cam.position.set(0, 0.62 + d * 0.16, d); cam.lookAt(0, 0.5, 0); cam.updateProjectionMatrix();
+        r.setSize(w, h, false);
+        // кадр — окно в «полном» кадре высотой F, где горизонт посередине: так горизонт оказывается на HZ высоты сцены
+        var F = 2 * HZ * h, f = h / (2 * Math.tan(17 * Math.PI / 180)); // ~34° по вертикали в видимом окне
+        cam.fov = 2 * Math.atan((F / 2) / f) * 180 / Math.PI;
+        cam.aspect = w / F;
+        cam.setViewOffset(w, F, 0, 0, w, h);
+        cam.updateProjectionMatrix();
       }
       frame();
 

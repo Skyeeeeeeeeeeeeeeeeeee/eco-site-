@@ -1024,13 +1024,14 @@ html:has(.msum) { scroll-padding-top: 150px; }
 .hero-d__stage.is-drag { cursor: grabbing; }
 .hero-d__stage:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .hero-d__poster, .hero-d__canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-.hero-d__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; }
+/* фон: горизонт фото (69,3% высоты снимка) совмещён с горизонтом 3D-камеры (62% высоты сцены, HZ в js/hero3d.js) */
+.hero-d__bg { position: absolute; left: 50%; top: -28.1%; height: 130%; width: auto; min-width: 100%; max-width: none; object-fit: cover; transform: translateX(-50%); }
 .hero-d__credit { margin: 8px 4px 0; color: var(--hero-mute); font-size: 12px; line-height: 1.4; }
 .hero-d__credit a { text-decoration: underline; }
 .hero-d__canvas { opacity: 0; transition: opacity .6s ease; }
 .hero-d__stage.is-3d .hero-d__canvas { opacity: 1; }
 .hero-d__stage.is-3d .hero-d__poster { opacity: 0; transition: opacity .6s ease .15s; }
-.hero-d__cap { position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: center; font-size: 13px; color: var(--mute); pointer-events: none; }
+.hero-d__cap { position: absolute; left: 14px; right: 14px; top: 12px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: center; font-size: 13px; color: var(--mute); pointer-events: none; }
 .hero-d__cap b { padding: 5px 12px; border-radius: 999px; background: #fff; color: var(--ink); font-weight: 600; border: 1px solid var(--hero-line); }
 .hero-d__hint { display: none; padding: 5px 12px; border-radius: 999px; background: rgba(255, 255, 255, .8); transition: opacity .3s; }
 .hero-d__stage.is-3d .hero-d__hint { display: inline-block; }
@@ -1048,10 +1049,5 @@ html:has(.msum) { scroll-padding-top: 150px; }
 .omap__info .small { margin-top: 8px; color: var(--mute); max-width: 36em; }
 .omap__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .omap__map { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--panel-bd); background: #EEF3F8; aspect-ratio: 8 / 5; }
-.omap__img, .omap__map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
-.omap__over { position: absolute; left: 12px; bottom: 40px; }
-.omap__over .btn { background: #fff; }
-.omap__cap { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding: 6px 12px; background: rgba(255, 255, 255, .86); font-size: 11px; color: var(--mute); }
-.omap__cap a { text-decoration: underline; }
-.omap__map.is-live .omap__over, .omap__map.is-live .omap__cap { display: none; }
+.omap__map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
 @media (min-width: 900px) { .omap { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 40px; align-items: start; } }

@@ -103,7 +103,7 @@ function heroD(page) {
   return `<header class="hero hero--home hero--d" data-hero><div class="container">${variantBar('d')}
 <div class="hero-d"><div class="hero-d__text"><p class="label">Новосибирск и область</p>${homeH1(page)}<p class="sub">${HOME_SUB}</p>${homeActions()}</div>
 <div class="hero-d__side"><figure class="hero-d__stage" data-cab3d data-lib="${u('/js/vendor/three-gltf.min.js')}" data-model="${u('/js/cabin-model.js')}" aria-label="3D-модель кабины ${esc(std.name)}, можно повернуть стрелками влево и вправо">
-<img class="hero-d__bg" src="${u('/img/hero-d-bg.jpg')}" width="1150" height="910" alt="" decoding="async">
+<img class="hero-d__bg" src="${u('/img/hero-d-bg.jpg')}" width="1026" height="1310" alt="" decoding="async">
 <img class="hero-d__poster" src="${u('/img/cabin-3d.png')}" width="900" height="1000" alt="Туалетная кабина ${esc(std.name)}" fetchpriority="high">
 <figcaption class="hero-d__cap"><b>${esc(std.name)}</b><span class="hero-d__hint js-only">Потяните, чтобы повернуть</span></figcaption>
 </figure><p class="hero-d__credit">Фон: театр оперы и балета, центр Новосибирска. Фото: ${esc(bg.author)}, <a href="${esc(bg.source)}" target="_blank" rel="noopener">${esc(bg.license)}</a></p></div></div>
