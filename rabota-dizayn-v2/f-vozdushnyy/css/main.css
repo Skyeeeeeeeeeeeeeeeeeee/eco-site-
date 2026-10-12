@@ -1025,11 +1025,7 @@ html:has(.msum) { scroll-padding-top: 150px; }
 .hero-d__stage:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .hero-d__poster, .hero-d__canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 /* фон: горизонт фото (69,3% высоты снимка) совмещён с горизонтом 3D-камеры (62% высоты сцены, HZ в js/hero3d.js) */
-.hero-d__bg { position: absolute; left: var(--bg-x, 50%); top: var(--bg-top, -28%); height: var(--bg-h, 130%); width: auto; min-width: 100%; max-width: none; object-fit: cover; transform: translateX(-50%); }
-.hero-d__canvas { filter: var(--grade, none); }
-/* общее «плёночное» зерно поверх фото и 3D — склеивает их в один снимок */
-.hero-d__grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .07; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-.hero-d__cap { z-index: 2; }
+.hero-d__bg { position: absolute; left: 50%; top: -28.1%; height: 130%; width: auto; min-width: 100%; max-width: none; object-fit: cover; transform: translateX(-50%); }
 .hero-d__credit { margin: 8px 4px 0; color: var(--hero-mute); font-size: 12px; line-height: 1.4; }
 .hero-d__credit a { text-decoration: underline; }
 .hero-d__canvas { opacity: 0; transition: opacity .6s ease; }
