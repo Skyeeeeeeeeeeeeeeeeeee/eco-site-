@@ -712,7 +712,8 @@ p { max-width: 68ch; }
 .zmap__river { font-size: 17px; font-style: italic; fill: var(--ink); text-anchor: middle; pointer-events: none; }
 .zmap__route { fill: none; stroke: var(--ink); stroke-width: 3; stroke-dasharray: 3 9; stroke-linecap: round; pointer-events: none; }
 .zmap__dest { fill: var(--ink); }
-.zmap__base { fill: var(--ink); } .zmap__bt { font-size: 17px; fill: var(--ink); font-weight: 500; }
+.zmap__base { fill: var(--ink); }
+.zmap__offr { fill: var(--panel2-bg, #fff); stroke: var(--ink); stroke-width: 3; } .zmap__offd { fill: var(--ink); } .zmap__bt { font-size: 17px; fill: var(--ink); font-weight: 500; }
 .zmap__truck { fill: var(--ink); offset-rotate: auto; offset-distance: 0%; opacity: 0; animation: truckGo 14s linear infinite; pointer-events: none; }
 .zmap__truck circle { fill: var(--panel2-bg); stroke: var(--ink); stroke-width: 2; }
 @keyframes truckGo { 0% { offset-distance: 0%; opacity: 0; } 5% { opacity: 1; } 72% { offset-distance: 100%; opacity: 1; } 80% { offset-distance: 100%; opacity: 0; } 100% { offset-distance: 0%; opacity: 0; } }
@@ -731,7 +732,7 @@ p { max-width: 68ch; }
 .row:first-child::before, .row:first-child::after { top: var(--nc); }
 .row:last-child::before, .row:last-child::after { bottom: calc(100% - var(--nc)); }
 .row .num { position: relative; z-index: 2; background: var(--paper); transition: background .3s ease, color .3s ease, border-color .3s ease; }
-.section:not(.section--paper) .row:nth-child(even) .num { background: #fff; }
+.section:not(.section--paper) .row:nth-child(even):not(.is-on) .num { background: #fff; }
 .row.is-on .num, html:not(.js) .row .num { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bd); }
 @media (max-width: 899.98px) { .row__m, .row__p { margin-left: 50px; } }
 @media (min-width: 900px) { .row { --nc: 50%; } }
@@ -997,6 +998,46 @@ html:has(.msum) { scroll-padding-top: 150px; }
 /* заметка о конфиденциальности */
 .policy { display: grid; gap: 4px; }
 .policy .cpanel { margin-top: 28px; }
+
+/* «О компании»: цифры */
+.stats-wrap { width: min(var(--maxw), 100% - 2 * var(--pad)); margin-inline: auto; padding-block: clamp(28px, 4vw, 48px); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 0; margin: 0; border-top: 1px solid var(--line); }
+.stats > div { padding: 20px 20px 4px 0; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 6px; }
+.stats dt { color: var(--mute); }
+.stats dd { margin: 0; font-size: clamp(32px, 4vw, 48px); line-height: 1.05; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+
+/* списки с галочками (были в v1, потерялись в v2) */
+.checks { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 46em; }
+.checks li { display: flex; gap: 12px; }
+.checks li::before { content: ""; flex: none; width: 18px; height: 18px; margin-top: 3px; background: var(--label); -webkit-mask: var(--i-check) center / contain no-repeat; mask: var(--i-check) center / contain no-repeat; }
+.checks--plus li::before { -webkit-mask-image: var(--i-plus); mask-image: var(--i-plus); }
+.checks a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ============================================================
+   Вариант D первого экрана: 3D-модель кабины (js/hero3d.js)
+   ============================================================ */
+.hero-d { display: grid; gap: 24px; align-items: center; }
+.hero-d__text h1.display { font-size: clamp(32px, 8vw, 60px); }
+.hero-d__text .sub { margin-top: 16px; max-width: 34em; }
+.hero-d__text .hero__actions { margin-top: 24px; }
+.hero-d__stage { --cab-body: #2F86D6; --cab-roof: #F3F6F9; position: relative; margin: 0; aspect-ratio: 9 / 10; max-height: 74vh; width: 100%; border-radius: 28px; overflow: hidden; background: var(--panel2-bg); border: 1px solid var(--hero-line); touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.hero-d__stage.is-drag { cursor: grabbing; }
+.hero-d__stage:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.hero-d__poster, .hero-d__canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.hero-d__canvas { opacity: 0; transition: opacity .6s ease; }
+.hero-d__stage.is-3d .hero-d__canvas { opacity: 1; }
+.hero-d__stage.is-3d .hero-d__poster { opacity: 0; transition: opacity .6s ease .15s; }
+.hero-d__cap { position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; align-items: center; font-size: 13px; color: var(--mute); pointer-events: none; }
+.hero-d__cap b { padding: 5px 12px; border-radius: 999px; background: #fff; color: var(--ink); font-weight: 600; border: 1px solid var(--hero-line); }
+.hero-d__hint { display: none; padding: 5px 12px; border-radius: 999px; background: rgba(255, 255, 255, .8); transition: opacity .3s; }
+.hero-d__stage.is-3d .hero-d__hint { display: inline-block; }
+.hero-d__stage.is-touched .hero-d__hint { opacity: 0; }
+.hero--d .hero-meta { margin-top: 28px; }
+@media (min-width: 900px) {
+  .hero-d { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; }
+  .hero-d__stage { aspect-ratio: auto; height: min(640px, 72vh); max-height: none; }
+}
+@media (prefers-reduced-motion: reduce) { .hero-d__canvas, .hero-d__stage.is-3d .hero-d__poster { transition: none; } }
 
 /* ТЕМЫ. Два набора токенов на <html data-theme="e|f">. Вся вёрстка в main.css берёт цвета только отсюда.
    Палитры взяты из макетов designs/05-blue/e-svetlo-goluboy.html и f-vozdushnyy.html.

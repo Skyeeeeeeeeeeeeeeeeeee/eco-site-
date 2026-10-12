@@ -98,6 +98,16 @@ function heroC(page) {
 ${statStrip()}</div><div class="hero-end"></div></header>`;
 }
 
+function heroD(page) {
+  const std = M('standart');
+  return `<header class="hero hero--home hero--d" data-hero><div class="container">${variantBar('d')}
+<div class="hero-d"><div class="hero-d__text"><p class="label">Новосибирск и область</p>${homeH1(page)}<p class="sub">${HOME_SUB}</p>${homeActions()}</div>
+<figure class="hero-d__stage" data-cab3d data-lib="${u('/js/vendor/three-gltf.min.js')}" data-model="${u('/js/cabin-model.js')}" aria-label="3D-модель кабины ${esc(std.name)}, можно повернуть стрелками влево и вправо">
+<img class="hero-d__poster" src="${u('/img/cabin-3d.png')}" width="900" height="1000" alt="Туалетная кабина ${esc(std.name)}" fetchpriority="high">
+<figcaption class="hero-d__cap"><b>${esc(std.name)}</b><span class="hero-d__hint js-only">Потяните, чтобы повернуть</span></figcaption></figure></div>
+${statStrip()}</div><div class="hero-end"></div></header><script defer src="${u('/js/hero3d.js')}"></script>`;
+}
+
 function whatWeDo() {
     const s = S(), C = s.contacts, D = s.rates.delivery, E = s.eventRules, sc = (extra) => `<rect width="300" height="330" fill="var(--sc-bg)"/><polygon points="0,236 300,236 300,330 0,330" fill="var(--sc-floor)"/>${extra}`;
     const std = M('standart'), eco = M('ekonom'), kom = M('komfort'), vip = M('vip');
@@ -144,7 +154,7 @@ export const templates = {
   home(page, variant = 'a') {
     // Главная: 8 блоков: герой, подбор, модели + сравнение, как работаем, доставка + виджет, «Кабины в работе», FAQ, связь (ctaBlock из layout)
     const s = S(), D = s.rates.delivery;
-    const hero = { a: heroA, b: heroB, c: heroC }[variant](page);
+    const hero = { a: heroA, b: heroB, c: heroC, d: heroD }[variant](page);
     const m = [];
     m.push(picker());
     m.push(section({ id: 'modeli', title: 'Четыре модели под вашу задачу', tag: 'Кабины и цены', center: true },
@@ -204,8 +214,8 @@ export const templates = {
     m.push(`<div class="section section--tight">${photoPair('stroyka-sinyaya', 'meropriyatie-pole')}</div>`);
     m.push(section({ id: 'calc', title: 'Рассчитайте стоимость', tag: 'Калькулятор' }, calc('compact', { n: 1, d: 3, u: 'none', z: 'city', km: 0 })));
     m.push(section({ id: 'oformlenie', title: 'Порядок оформления', tag: 'Порядок', paper: true, bleed: true },
-      steps([{ t: 'Звонок или сообщение', text: 'Звоните или пишете в мессенджер.' }, { t: 'Стоимость и место', text: 'Называем стоимость и согласуем дату, время и место установки.' }, { t: 'Предоплата', text: `Вносите предоплату (${s.terms.prepayPct}%).` }, { t: 'Доставка', text: 'Привозим кабину. Остаток оплачивается по факту доставки.' }], { media: ['ill:form', 'ill:doc', 'ill:doc', 'ill:cab'] })
-      + `<p class="small note">Договор на 20 страниц не нужен: условия фиксируем в счёте и подтверждении заказа.${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка: согласовать с юристом</span>'}</p>`));
+      steps([{ t: 'Звонок или сообщение', text: 'Звоните или пишете в мессенджер.' }, { t: 'Стоимость и место', text: 'Называем стоимость и согласуем дату, время и место установки.' }, { t: 'Предоплата', text: `Вносите предоплату (${s.terms.prepayPct}%).` }, { t: 'Доставка', text: 'Привозим кабину. Остаток оплачивается по факту доставки.' }], { media: ['ill:chat', 'ill:doc', 'ill:doc', 'ill:cab'] })
+      + `<div class="container"><p class="small note">Договор на 20 страниц не нужен: условия фиксируем в счёте и подтверждении заказа.${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка: согласовать с юристом</span>'}</p></div>`));
     m.push(section({ id: 'mesto', title: 'Как подготовить место', tag: 'Памятка' },
       `<div class="grid"><div class="lg-6">${checkList(['Ровная площадка', 'Подъезд для машины', 'Расстояние от жилых построек', 'Доступ в день доставки'])}</div><div class="lg-6"><p>Мы позвоним за ${s.terms.callBefore} до приезда. Вам не обязательно находиться на месте, если вы заранее указали, где ставить кабину.</p></div></div>`));
     m.push(reviewsBlock(['anna', 'sergey', 'olga'], { paper: true, id: 'otzyvy-blok' }));
@@ -387,7 +397,7 @@ ${shareActions({ attr: 'data-share="event"' })}
       table({ caption: 'Рекомендуемая частота обслуживания', head: ['Ситуация', 'Рекомендуемая частота'], rows: [[`Стройплощадка на ${s.terms.workersPerCabin} рабочих`, '1–2 раза в неделю'], ['Дача, редкое использование', 'Раз в 1–2 недели'], ['Мероприятие до одного дня', 'Перед началом и после; при длительном событии в течение'], ['Постоянный объект с большим потоком', 'Каждый день']] })
       + '<p class="small note">Точный график согласуем при заказе и фиксируем в договоре или заказе.</p>'));
     m.push(section({ id: 'grafik', title: 'Как организован график', tag: 'График', bleed: true },
-      steps([{ t: 'Согласуем дни', text: 'Выбираем дни визитов под ваш режим работы.' }, { t: 'Напоминаем', text: 'За день до визита напоминаем.' }, { t: 'Выполняем и отчитываемся', text: 'Проводим обслуживание и отправляем отчёт.' }, { t: 'Корректируем', text: 'При необходимости меняем частоту.' }], { media: ['ill:doc', 'ill:form', 'ill:service', 'ill:load'] })));
+      steps([{ t: 'Согласуем дни', text: 'Выбираем дни визитов под ваш режим работы.' }, { t: 'Напоминаем', text: 'За день до визита напоминаем.' }, { t: 'Выполняем и отчитываемся', text: 'Проводим обслуживание и отправляем отчёт.' }, { t: 'Корректируем', text: 'При необходимости меняем частоту.' }], { media: ['ill:doc', 'ill:chat', 'ill:service', 'ill:load'] })));
     m.push(section({ id: 'utilizaciya', title: 'Куда отправляются отходы', tag: 'Утилизация', paper: true }, '<p>Откачку выполняет наш спецтранспорт. Отходы вывозятся в согласованные для этого места. Детали и документы по запросу.</p>'));
     m.push(section({ id: 'calc', title: 'Рассчитайте стоимость с обслуживанием', tag: 'Калькулятор' }, calc('compact', { n: 2, d: 30, u: 'weekly', z: 'city', km: 0 })));
     m.push(faqBlock(groupIds('obsluzhivanie'), { title: 'Вопросы об обслуживании', paper: true }));
@@ -413,7 +423,7 @@ ${shareActions({ attr: 'data-share="event"' })}
     const s = S(), K = s.company;
     const hero = heroInner(page, { eyebrow: 'О компании', lead: `Мы сдаём в аренду, продаём и обслуживаем туалетные кабины в Новосибирске и области с ${K.founded} года. Работаем с частными клиентами и организациями: стройки, мероприятия, дачи, производственные объекты.` });
     const m = [];
-    m.push(`<div class="stats-wrap"><dl class="stats stats--5">${s.companyStats.map((x) => `<div><dt class="small">${esc(x.label)}</dt><dd class="stat">${countVal(x.value)}</dd></div>`).join('')}</dl></div>`);
+    m.push(`<div class="stats-wrap"><dl class="stats">${s.companyStats.map((x) => `<div><dt class="small">${esc(x.label)}</dt><dd class="stat">${countVal(x.value)}</dd></div>`).join('')}</dl></div>`);
     m.push(whatWeDo());
     m.push(section({ id: 'printsipy', title: 'Принципы работы', tag: 'Принципы' },
       checkList(['Стоимость называем до оплаты и фиксируем в договоре или счёте.', 'Кабины моем и дезинфицируем перед каждой выдачей.', 'Обслуживание ведём по графику, график согласуем заранее.', 'Условия ответственности прописаны в договоре.', 'Для организаций оформляем договор и закрывающие документы.'])));
@@ -451,7 +461,7 @@ ${shareActions({ attr: 'data-share="event"' })}
     m.push(section({ id: 'svyaz', title: 'Как с нами связаться', tag: 'Связь' },
       `<div class="grid"><div class="lg-5"><dl class="contact-dl"><div><dt class="label">Телефон</dt><dd>${tel('tel tel--xl')}</dd></div>
 <div><dt class="label">Telegram и WhatsApp</dt><dd><a class="btn btn--contact btn--sm" href="${C.telegramUrl}" rel="noopener">${ic('telegram')} Telegram</a> <a class="btn btn--contact btn--sm" href="${C.whatsappUrl}" rel="noopener">${ic('whatsapp')} WhatsApp</a><br><span class="small">${esc(C.telegram)}</span></dd></div>
-<div><dt class="label">Адрес</dt><dd>${esc(C.address)}<br><span class="small">${esc(C.officeNote)}</span></dd></div>
+<div><dt class="label">Адрес</dt><dd>${esc(C.address)}<br><span class="small">${esc(C.officeNote)}</span><br><a class="small" href="${C.gisUrl}" rel="noopener" target="_blank">Открыть в 2ГИС</a></dd></div>
 <div><dt class="label">Часы работы</dt><dd>${esc(C.hours.charAt(0).toUpperCase() + C.hours.slice(1))}<br><span class="small">Офис не работает в выходные: напишите в мессенджер, ответим в ближайший рабочий день.</span></dd></div></dl>${dev('Все контакты, адрес и режим работы заполнит клиент.')}</div>
 <div class="lg-7">${contactPanel({ title: 'Позвоните или напишите', cls: 'cpanel--big' })}</div></div>`));
     m.push(section({ id: 'karta', title: 'Карта', tag: 'Карта', paper: true }, `<div class="map-ph map-ph--wide" role="img" aria-label="Схема расположения офиса и склада"><span class="map-ph__pin"></span>${ctx.production ? '' : '<span class="map-ph__cap">Заглушка: карта подключается позже, Яндекс.Карты</span>'}</div>`));

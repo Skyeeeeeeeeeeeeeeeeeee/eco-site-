@@ -81,14 +81,14 @@ function buildTheme(theme, data) {
   Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id });
   const sprite = makeSprite();
 
-  // 1. рендер: каждая страница; главная ещё в трёх вариантах первого экрана (index-a/b/c.html), index.html = вариант A
+  // 1. рендер: каждая страница; главная ещё в трёх вариантах первого экрана (index-a/b/c/d.html), index.html = вариант SITE.homeVariant
   const pages = [...Object.values(SITE.pages), SITE.notFound];
   const out = new Map();
   const meta = [];
   const jobs = [];
   for (const page of pages) {
     const file = page.path === '/' ? 'index.html' : page.path === '/404.html' ? '404.html' : page.path.slice(1) + 'index.html';
-    jobs.push({ page, file, variant: page.template === 'home' ? 'a' : null });
+    jobs.push({ page, file, variant: page.template === 'home' ? (SITE.homeVariant || 'a') : null });
     if (page.template === 'home') for (const v of SITE.heroVariants) jobs.push({ page: Object.assign({}, page, { index: false }), file: v.file, variant: v.id, isVariant: true });
   }
   for (const { page, file, variant, isVariant } of jobs) {
@@ -102,7 +102,7 @@ function buildTheme(theme, data) {
   const urls = pages.filter((p) => p.index !== false).map((p) => p.path);
   out.set('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((p) => `  <url><loc>${SITE.site.domain}${p}</loc><lastmod>${SITE.site.lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   out.set('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE.site.domain}/sitemap.xml\n`);
-  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Варианты первого экрана главной: \`index-a.html\`, \`index-b.html\`, \`index-c.html\` (\`index.html\` = вариант A). Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и фото \`rabota-dizayn/shared/photos/\`.\n\nФотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования: страница «О компании», раздел «Источники фото».\n`);
+  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Варианты первого экрана главной: ${SITE.heroVariants.map((v) => '\`' + v.file + '\`').join(', ')} (\`index.html\` = вариант ${(SITE.homeVariant || 'a').toUpperCase()}). Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и фото \`rabota-dizayn/shared/photos/\`.\n\nФотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования: страница «О компании», раздел «Источники фото».\n`);
 
   // 2. запись
   rmrf(OUT);
@@ -112,7 +112,8 @@ function buildTheme(theme, data) {
   fs.writeFileSync(path.join(OUT, 'css/main.css'), css);
   for (const f of ['content.js', 'calc.js', 'main.js', 'life.js', 'extras.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
   for (const f of fs.readdirSync(path.join(SRC, 'fonts'))) cp(path.join(SRC, 'fonts', f), path.join(OUT, 'fonts', f));
-  for (const f of ['favicon.svg', 'og.svg']) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
+  for (const f of ['favicon.svg', 'og.svg', 'cabin-3d.png']) if (fs.existsSync(path.join(SRC, 'img', f))) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
+  for (const f of ['hero3d.js', 'cabin-model.js', 'vendor/three-gltf.min.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f)); // 3D только на варианте D первого экрана
   for (const id of Object.keys(SITE.photos)) for (const f of [id + '.jpg', id + '-640.jpg']) cp(path.join(SHARED, 'photos', f), path.join(OUT, 'photos', f)); // только используемые фото
 
   // 3. проверки
@@ -186,7 +187,8 @@ function buildTheme(theme, data) {
         if ((html.match(/data-p="rent"/g) || []).length !== 3 || (html.match(/data-p="sale"/g) || []).length !== 2) err(`${file}: в герое B цены аренды (3) и продажи (2)`);
       }
       if (variant === 'c' && (html.match(/class="task-card"/g) || []).length !== 3) err(`${file}: в герое C должно быть 3 карточки`);
-      if (/three|cabin3d/.test(html)) err(`${file}: 3D на главной`);
+      if (variant !== 'd' && /three|cabin3d|data-cab3d/.test(html)) err(`${file}: 3D только в варианте D первого экрана`);
+      if (variant === 'd' && !/data-cab3d/.test(html)) err(`${file}: в герое D нет сцены 3D`);
       if (isVariant && !/name="robots" content="noindex/.test(html)) err(`${file}: вариант главной должен быть noindex`);
     }
     if (p === '/ceny/' && (!/data-picker/.test(html) || !/data-subnav/.test(html))) err(`${file}: на /ceny/ нужны подбор и якорная навигация`);
@@ -250,7 +252,7 @@ function chooser(data) {
   const T = [{ id: 'e', dir: 'e-svetlo-goluboy', name: 'Е «Светло-голубой»', note: 'Голубая шапка и герой, тёмно-синие блоки: карточки, расчёт, отзывы, подвал.', sw: ['#CFE4F8', '#B9D7F4', '#13263A', '#0C1B2A', '#9CC9F5'] },
     { id: 'f', dir: 'f-vozdushnyy', name: 'F «Воздушный»', note: 'Всё светлое: белый и бледно-голубой, без тёмных блоков.', sw: ['#FFFFFF', '#F4F9FE', '#DDEDFB', '#9CC9F5', '#2F6FAE'] }];
   const vcard = (t, v) => `<a class="card card--${t.id}" href="${t.dir}/${v.file}"><span class="card__img"><img src="previews/${t.id}-${v.id}.jpg" width="800" height="520" alt="Превью главной, тема ${t.name}, вариант ${v.name}" loading="lazy"></span><span class="card__t">${v.name}</span><span class="card__d">${v.note}</span><span class="card__go">Открыть вариант</span></a>`;
-  const sect = (t) => `<section class="theme" aria-labelledby="h-${t.id}"><div class="theme__h"><span class="card__sw" aria-hidden="true">${t.sw.map((c) => `<i style="background:${c}"></i>`).join('')}</span><div><h2 id="h-${t.id}">${t.name}</h2><p class="card__d">${t.note}</p></div><a class="all" href="${t.dir}/index.html">Весь сайт (главная = вариант A)</a></div><div class="grid">${S.heroVariants.map((v) => vcard(t, v)).join('')}</div></section>`;
+  const sect = (t) => `<section class="theme" aria-labelledby="h-${t.id}"><div class="theme__h"><span class="card__sw" aria-hidden="true">${t.sw.map((c) => `<i style="background:${c}"></i>`).join('')}</span><div><h2 id="h-${t.id}">${t.name}</h2><p class="card__d">${t.note}</p></div><a class="all" href="${t.dir}/index.html">Весь сайт (главная = вариант ${(S.homeVariant || 'a').toUpperCase()})</a></div><div class="grid">${S.heroVariants.map((v) => vcard(t, v)).join('')}</div></section>`;
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${S.company.name}: две темы и три варианта главной</title>

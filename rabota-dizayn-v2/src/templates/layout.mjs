@@ -51,7 +51,7 @@ function jsonLd(page) {
   const out = [];
   if (page.path === '/' || page.path === '/kontakty/') {
     out.push({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: K.name, url: abs('/'), telephone: C.phoneE164, image: abs(S.site.ogImage),
-      address: { '@type': 'PostalAddress', streetAddress: 'ул. Примерная, 1', addressLocality: 'Новосибирск', addressCountry: 'RU' },
+      address: { '@type': 'PostalAddress', streetAddress: C.street, addressLocality: 'Новосибирск', addressCountry: 'RU' },
       geo: { '@type': 'GeoCoordinates', latitude: C.geo.lat, longitude: C.geo.lon },
       openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: C.hoursSchema.days, opens: C.hoursSchema.opens, closes: C.hoursSchema.closes }],
       areaServed: 'Новосибирская область' });
