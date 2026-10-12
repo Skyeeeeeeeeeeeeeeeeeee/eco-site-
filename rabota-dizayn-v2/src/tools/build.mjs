@@ -112,7 +112,7 @@ function buildTheme(theme, data) {
   fs.writeFileSync(path.join(OUT, 'css/main.css'), css);
   for (const f of ['content.js', 'calc.js', 'main.js', 'life.js', 'extras.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f));
   for (const f of fs.readdirSync(path.join(SRC, 'fonts'))) cp(path.join(SRC, 'fonts', f), path.join(OUT, 'fonts', f));
-  for (const f of ['favicon.svg', 'og.svg', 'cabin-3d.png', 'hero-d-bg.jpg']) if (fs.existsSync(path.join(SRC, 'img', f))) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
+  for (const f of ['favicon.svg', 'og.svg', 'cabin-3d.png']) if (fs.existsSync(path.join(SRC, 'img', f))) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
   for (const f of ['hero3d.js', 'cabin-model.js', 'vendor/three-gltf.min.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f)); // 3D только на варианте D первого экрана
   for (const id of Object.keys(SITE.photos)) for (const f of [id + '.jpg', id + '-640.jpg']) cp(path.join(SHARED, 'photos', f), path.join(OUT, 'photos', f)); // только используемые фото
 
