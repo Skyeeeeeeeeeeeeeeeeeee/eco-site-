@@ -1,5 +1,5 @@
 // Шаблоны страниц. Каждый возвращает HTML содержимого <main>. Тексты берутся из structure.md, числа из content.js.
-import { ctx, esc, u, a, btn, tel, ic, illus, thumb, illScene, pic, apx, section, table, specTable, kvTable, priceTable, eventPriceTable, salePriceTable, priceSummary, priceNote, modelCard, offerTags, priceLines, steps, processSteps,
+import { photo, ctx, esc, u, a, btn, tel, ic, illus, thumb, illScene, pic, apx, section, table, specTable, kvTable, priceTable, eventPriceTable, salePriceTable, priceSummary, priceNote, modelCard, offerTags, priceLines, steps, processSteps,
   faqBlock, faqItem, reviewCard, reviewsBlock, ctaBlock, calc, checkList, dev, devTag, rub, tailText, lead, NB,
   countVal, liveWidget, deliveryMap, contactPanel, contactBtns, compareTable, picker, stepsRow, modelPager, modelSummary, shareActions, cabinHelper } from './lib.mjs';
 
@@ -153,6 +153,8 @@ export const templates = {
     m.push(picker());
     m.push(section({ id: 'modeli', title: 'Четыре модели под вашу задачу', tag: 'Кабины и цены', center: true },
       `<p class="mod-btns">${btn('#podbor', 'Подобрать кабину', 'primary')}${btn('/katalog/#sravnenie', 'Каталог и полное сравнение', 'outline')}</p><div class="tiles">${s.models.map((x) => modelCard(x)).join('')}</div><h3 class="h2 sub-h">Сравнение моделей</h3>${compareTable({ compact: true, id: 'cmp-home' })}${priceNote()}`));
+    m.push(section({ id: 'v-rabote', title: 'Кабины в работе', tag: 'Фото', paper: true },
+      `<div class="inwork"><div class="inwork__a">${photo('arena-ryad', { cls: 'photo--wide', sizes: '(min-width:900px) 700px, 100vw' })}</div><div class="inwork__b">${photo('park-para', { cls: 'photo--tall', sizes: '(min-width:900px) 420px, 100vw' })}</div></div>`));
     m.push(`<section class="section section--flush" id="poryadok" aria-labelledby="poryadok-h"><div class="container"><header class="sec-head"><p class="label">Простой процесс</p><h2 id="poryadok-h">Как мы работаем</h2><p class="lead">${lead('Четыре шага от звонка до вывоза. Вы называете адрес и даты, остальное берём на себя.')}</p></header>${stepsRow(s.steps)}</div></section>`);
     m.push(`<section class="section section--paper" id="zony" aria-labelledby="zony-h"><div class="container"><p class="label">Доставка и вывоз</p><div class="dl-g"><div><h2 class="lead" id="zony-h">${lead(`Три зоны, цена за рейс заранее. В одну машину помещается до ${D.cabinsPerTrip} кабин.`)}</h2>${liveWidget()}<div class="zmap-wrap">${deliveryMap()}</div></div><div>${zonesList()}<p class="zone-note">${truckNote()} Пример: 100 км от города = ${rub(D.nearPerTrip)} + ${100 - D.nearKm} км × ${rub(D.perKmOver)} = ${rub(D.nearPerTrip + (100 - D.nearKm) * D.perKmOver)} за рейс. Вывоз считаем по тем же зонам. ${a('/dostavka/', 'Подробнее о зонах и сроках')}</p></div></div></div></section>`);
     m.push(faqBlock(homeFaqIds(), {}));
@@ -242,12 +244,14 @@ export const templates = {
   meropriyatiya(page) {
     const s = S(), E = s.eventRules, G = E.guestsPerCabin, kom = M('komfort'), vip = M('vip');
     const hero = heroInner(page, { eyebrow: 'Аренда · Для мероприятий', tail: 'в Новосибирске и области', lead: 'МТК Комфорт и МТК VIP на сутки. Рассчитаем, сколько кабин нужно, доставим и установим к началу. После мероприятия заберём.',
-      actions: reqBtn() + btn('#raschet', 'Рассчитать количество кабин', 'outline') });
+      actions: reqBtn() + btn('#raschet', 'Рассчитать количество кабин', 'outline'),
+      side: photo('arena-ryad', { cls: 'photo--hero', sizes: '(min-width:900px) 560px, 100vw', eager: true }) });
     const m = [];
     m.push(section({ id: 'modeli', title: 'Какие кабины для мероприятия', tag: 'Модели' },
       `<div class="grid grid--2"><article class="svc-card"><div class="evmodel">${illus('komfort', kom.name + ': плоская иллюстрация', 'illus evmodel__i')}<div><h3 class="h4">${a('/katalog/' + kom.slug + '/', 'МТК Комфорт')}</h3><p>${esc(kom.purpose)}</p><p class="price"><small>от${NB}</small>${rub(kom.rent.perDay)}<small>/сутки</small></p></div></div></article>
 <article class="svc-card"><div class="evmodel">${illus('vip', vip.name + ': плоская иллюстрация', 'illus evmodel__i')}<div><h3 class="h4">${a('/katalog/' + vip.slug + '/', 'МТК VIP')}</h3><p>${esc(vip.purpose)}</p><p class="price"><small>от${NB}</small>${rub(vip.rent.perDay)}<small>/сутки</small></p></div></div></article></div>
-<p class="small note">${eventScheme()}</p>`));
+<div class="colors">${photo('cveta', { cls: 'photo--bare', sizes: '(min-width:900px) 640px, 100vw', caption: false })}<div class="colors__t"><p class="colors__c">${esc(s.photos.cveta.caption)}</p>${dev('Уточнить, какие цвета корпуса есть.')}<p class="small note">${eventScheme()}</p></div></div>
+`));
     m.push(section({ id: 'tipy', title: 'Какие мероприятия обслуживаем', tag: 'Типы', paper: true }, `<ul class="event-types">${s.eventTypes.map((t) => `<li><b>${t.title}</b><span>${t.hint}</span></li>`).join('')}</ul>${ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Ориентиры подтвердить с клиентом.</p>'}`));
     const dur = E.durations.map((d, i) => `<input type="radio" name="evdur" id="evdur-${i}" value="${d.id}"${d.id === 'to8h' ? ' checked' : ''}><label for="evdur-${i}">${d.label}</label>`).join('');
     const defEv = ctx.CALC.events(s, { guests: 100, dur: 'to8h', alcohol: false });
@@ -294,6 +298,18 @@ ${shareActions({ attr: 'data-share="event"' })}
     const s = S(), m = s.modelById(page.model), rent = !!m.rent, sale = !!m.sale, ev = rent && m.rent.type === 'event';
     const slides = [`<figure class="gallery__slide" data-slide>${illus(m.id, m.name + ': плоская иллюстрация, вид снаружи', 'illus illus--big')}<figcaption class="gallery__cap">${m.id === 'vip' ? 'Вид снаружи: корпус МТК Комфорт и табличка VIP.' : 'Схематичная иллюстрация модели.'}</figcaption></figure>`];
     const thumbs = ['Снаружи'];
+    if (m.id === 'ekonom') {
+      slides.length = 0; thumbs.length = 0;
+      slides.push(`<figure class="gallery__slide gallery__slide--yard" data-slide>${photo('ekonom', { cls: 'photo--bare', sizes: '(min-width:900px) 620px, 100vw', eager: true, caption: false })}<figcaption class="gallery__cap">Вид в три четверти.</figcaption></figure>`);
+      slides.push(`<figure class="gallery__slide gallery__slide--yard" data-slide hidden>${photo('ekonom-front', { cls: 'photo--bare', sizes: '(min-width:900px) 620px, 100vw', caption: false })}<figcaption class="gallery__cap">Вид спереди.</figcaption></figure>`);
+      thumbs.push('Снаружи', 'Спереди');
+    }
+    if (m.id === 'komfort') {
+      slides.length = 0;
+      slides.push(`<figure class="gallery__slide gallery__slide--photo" data-slide>${photo('kabina', { cls: 'photo--bare', sizes: '(min-width:900px) 620px, 100vw', eager: true, caption: false })}<figcaption class="gallery__cap">Вид снаружи.</figcaption></figure>`);
+      slides.push(`<figure class="gallery__slide gallery__slide--photo gallery__slide--tint" data-slide hidden>${photo('kabina-vnutri', { cls: 'photo--bare', sizes: '(min-width:900px) 620px, 100vw', caption: false })}<figcaption class="gallery__cap">Внутри: сиденье, вентиляционная решётка.</figcaption></figure>`);
+      thumbs.push('Внутри');
+    }
     if (m.id === 'vip') {
       slides.push(`<figure class="gallery__slide" data-slide hidden>${illus('vip-in', 'МТК VIP внутри: зеркало, рукомойник с педалью, бак воды, диспенсер мыла и полотенцедержатель', 'illus illus--big')}<figcaption class="gallery__cap">Внутри: зеркало, рукомойник с ножной помпой, бак воды 20 л, диспенсер мыла, полотенцедержатель.</figcaption></figure>`);
       thumbs.push('Внутри');
@@ -309,7 +325,7 @@ ${shareActions({ attr: 'data-share="event"' })}
     const uses = checkList(m.useCases.map((x) => esc(x.charAt(0).toUpperCase() + x.slice(1))));
     const inclRent = ev ? s.rentIncludesEvent : s.rentIncludes;
     const incl = (rent ? `<div class="grid"><div class="lg-6"><h3 class="h4">Входит в аренду</h3>${checkList(inclRent.included)}</div><div class="lg-6"><h3 class="h4">Рассчитывается отдельно</h3>${checkList(inclRent.extra, 'checks checks--plus')}</div></div>` : '')
-      + (sale ? `<h3 class="h4 sub-h">Покупка</h3><ol class="num-list"><li>Звоните или пишете в мессенджер: называем цену и срок поставки.</li><li>Согласуем оплату и доставку.</li><li>Привозим и устанавливаем кабину на вашем участке. Гарантия ${s.terms.warrantyMonths} месяцев.</li></ol>${ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Условия поставки и гарантии подтвердить с клиентом.</p>'}` : '');
+      + (sale ? `<h3 class="h4 sub-h">Покупка</h3><ol class="num-list"><li>Звоните или пишете в мессенджер: называем цену и срок поставки.</li><li>Согласуем оплату и доставку.</li><li>Привозим и устанавливаем кабину на вашем участке. Гарантия ${s.warrTxt(m)}.</li></ol>${ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Условия поставки и гарантии подтвердить с клиентом.</p>'}` : '');
     const deliv = `<p>Доставка по Новосибирску и области. В одну машину помещается до ${s.rates.delivery.cabinsPerTrip} кабин. Цена зависит от расстояния.</p><p>${btn('/dostavka/', 'Зона доставки и цены', 'link')}</p>`;
     const stdSpec = specs + (ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Характеристики ориентировочные, их подтвердит клиент.</p>');
     body.push(section({ id: 'harakteristiki', title: 'Характеристики', tag: 'Паспорт' },
@@ -328,7 +344,7 @@ ${shareActions({ attr: 'data-share="event"' })}
         `${priceBlock}${priceNote()}<h3 class="h2 sub-h">Рассчитать с доставкой и обслуживанием</h3>${calc('compact', { n: ev ? 4 : 1, d: ev ? 1 : 3, u: 'none', z: 'city', km: 0, m: m.slug })}`));
     }
     if (sale) {
-      body.push(section({ id: 'kupit', title: 'Купить ' + m.name, tag: 'Покупка', paper: rent }, `<div class="grid"><div class="lg-5"><p class="price">${fromSale(m)}</p><p>Купить можно по телефону или через мессенджер: корзины на сайте нет. Цена зависит от доставки и комплектации. Гарантия ${s.terms.warrantyMonths} месяцев.</p>${priceNote()}</div><div class="lg-7">${contactPanel({ title: 'Как купить ' + m.name, line: 'Звоните или пишите в мессенджер — назовём цену, срок поставки и доставку.' })}</div></div>`));
+      body.push(section({ id: 'kupit', title: 'Купить ' + m.name, tag: 'Покупка', paper: rent }, `<div class="grid"><div class="lg-5"><p class="price">${fromSale(m)}</p><p>Купить можно по телефону или через мессенджер: корзины на сайте нет. Цена зависит от доставки и комплектации. Гарантия ${s.warrTxt(m)}.</p>${priceNote()}</div><div class="lg-7">${contactPanel({ title: 'Как купить ' + m.name, line: 'Звоните или пишите в мессенджер — назовём цену, срок поставки и доставку.' })}</div></div>`));
     }
     body.push(section({ id: 'pohozhie', title: 'Другие модели', tag: 'Родственные', paper: !sale || !rent ? true : false },
       `<div class="grid grid--cards cards-2">${m.related.slice(0, 2).map((id) => modelCard(s.modelById(id))).join('')}</div><p class="more">${btn('/ceny/', 'Цены', 'link')} ${btn('/dostavka/', 'Зона доставки', 'link')}${sale ? ' ' + btn('/prodazha/', 'Условия покупки', 'link') : ''}</p>`));
@@ -341,12 +357,12 @@ ${shareActions({ attr: 'data-share="event"' })}
     const s = S(), T = s.terms, std = M('standart'), eco = M('ekonom');
     const hero = heroInner(page, { eyebrow: 'Продажа', tail: 'в Новосибирске', lead: 'Продаём мобильные туалетные кабины МТК Стандарт и МТК Эконом для дач, участков и объектов. Поможем с выбором, доставим, расскажем об эксплуатации.' });
     const m = [];
-    const card = (x) => `<article class="svc-card"><div class="sq sq--sale">${illus(x.id, x.name + ': плоская иллюстрация')}</div><h3>${a('/katalog/' + x.slug + '/', esc(x.name), 'stretched')}</h3><p class="price"><small>от${NB}</small>${rub(x.sale.from)}</p><p>${esc(x.short)}. Гарантия ${T.warrantyMonths} месяцев.</p><p class="hero__actions">${btn('/katalog/' + x.slug + '/', 'Подробнее', 'outline')}${btn('/katalog/' + x.slug + '/#kupit', 'Купить', 'primary')}</p></article>`;
+    const card = (x) => `<article class="svc-card">${x.id === 'ekonom' ? `<div class="sq sq--sale sq--photo sq--yard">${photo('ekonom', { sizes: '240px', caption: false })}</div>` : `<div class="sq sq--sale">${illus(x.id, x.name + ': плоская иллюстрация')}</div>`}<h3>${a('/katalog/' + x.slug + '/', esc(x.name), 'stretched')}</h3><p class="price"><small>от${NB}</small>${rub(x.sale.from)}</p><p>${esc(x.short)}. Гарантия ${s.warrTxt(x)}.</p><p class="hero__actions">${btn('/katalog/' + x.slug + '/', 'Подробнее', 'outline')}${btn('/katalog/' + x.slug + '/#kupit', 'Купить', 'primary')}</p></article>`;
     m.push(section({ id: 'chto', title: 'Что продаём', tag: 'Товары' }, `<div class="grid grid--2">${card(std)}${card(eco)}</div>${salePriceTable()}${priceNote()}`));
     m.push(section({ id: 'arenda-ili-pokupka', title: 'Аренда или покупка', tag: 'Выбор', paper: true },
       kvTable('Что выбрать', ['Ситуация', 'Что выбрать'], [['Мероприятие на несколько дней', a('/meropriyatiya/', 'Аренда МТК Комфорт или VIP')], ['Стройка на срок от месяца с обслуживанием', a('/organizaciyam/', 'Аренда МТК Стандарт')], ['Дача, постоянное использование', 'Покупка МТК Эконом или МТК Стандарт'], ['Собственная площадка с обслуживанием своими силами', 'Покупка МТК Стандарт']])));
     m.push(section({ id: 'usloviya', title: 'Условия покупки', tag: 'Условия' },
-      checkList(['Оплата картой, переводом, по счёту для организаций', `Доставка по Новосибирску и области, стоимость по тарифам ${a('/dostavka/', 'доставки')}, в одну машину помещается до ${s.rates.delivery.cabinsPerTrip} кабин`, `Гарантия ${T.warrantyMonths} месяцев`, 'Документы: чек или договор и закрывающие документы для организаций']) + (ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Условия подтвердить с клиентом.</p>')));
+      checkList(['Оплата картой, переводом, по счёту для организаций', `Доставка по Новосибирску и области, стоимость по тарифам ${a('/dostavka/', 'доставки')}, в одну машину помещается до ${s.rates.delivery.cabinsPerTrip} кабин`, `Гарантия: МТК Эконом ${s.warrTxt(eco)}, МТК Стандарт ${s.warrTxt(std)}`, 'Документы: чек или договор и закрывающие документы для организаций']) + (ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Условия подтвердить с клиентом.</p>')));
     m.push(faqBlock(groupIds('pokupka').concat(['m-sale-delivery', 'm-sale-warranty']), { paper: true }));
     return hero + '<div class="body">' + m.join('') + '</div>';
   },

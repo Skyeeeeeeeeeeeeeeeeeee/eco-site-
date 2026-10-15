@@ -5,7 +5,7 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 export const NB = ' ';
 
 // Контекст сборки: заполняется build.mjs. prefix: относительный путь до корня сайта ('./', '../', '../../').
-export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, uidN: 0, faqUsed: [], theme: 'e' };
+export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, uidN: 0, faqUsed: [], theme: 'e', usedPhotos: new Set() };
 
 // Ссылки page-relative и с явным index.html, чтобы сайт открывался двойным кликом (file://) без сервера.
 export const u = (path) => {
@@ -54,6 +54,22 @@ export function pic(kind, ar = '3/2', cls = '') {
     park: `${cab('mE', -4, 36, .4)}${cab('mS', 66, 36, .4)}${cab('mK', 140, 30, .42)}${cab('mV', 212, 36, .4)}`
   }[kind];
   return `<div class="pic${cls ? ' ' + cls : ''}" style="--ar:${ar}"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><rect width="300" height="200" fill="var(--ph-bg)"/><polygon points="0,150 300,150 300,200 0,200" fill="var(--ph-floor)"/>${body}</svg></div>`;
+}
+
+/* ---------- фото клиента: <figure class="photo"> с srcset 640w / полный размер; eager только для первого экрана ---------- */
+export function photo(id, { cls = '', sizes = '100vw', eager = false, caption = true, fit = '' } = {}) {
+  const P = ctx.S.photos[id];
+  if (!P) throw new Error('нет фото ' + id + ' в SITE.photos');
+  ctx.usedPhotos.add(id);
+  const src = ctx.prefix + 'photos/' + id;
+  const img = `<img src="${src}.jpg" srcset="${src}-640.jpg 640w, ${src}.jpg ${P.w}w" sizes="${sizes}" width="${P.w}" height="${P.h}" alt="${esc(P.alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy" decoding="async"'}>`;
+  return `<figure class="photo${cls ? ' ' + cls : ''}">${img}${caption && P.caption ? `<figcaption class="photo__cap">${esc(P.caption)}</figcaption>` : ''}</figure>`;
+}
+// Картинка модели в карточке: у МТК Комфорт фото, у остальных плоская иллюстрация
+export function modelPic(m) {
+  if (m.id === 'komfort') return `<div class="sq sq--photo">${photo('kabina', { sizes: '(min-width:760px) 280px, 46vw', caption: false })}</div>`;
+  if (m.id === 'ekonom') return `<div class="sq sq--photo sq--yard">${photo('ekonom', { sizes: '(min-width:760px) 280px, 46vw', caption: false })}</div>`;
+  return `<div class="sq">${illus(m.id, m.name + ': плоская иллюстрация')}</div>`;
 }
 
 /* ---------- v2: счётчик: число в тексте анимируется скриптом, без JS остаётся итоговое значение ---------- */
@@ -201,7 +217,7 @@ export function modelCard(m, { headingLevel = 3, cta = false } = {}) {
   const S = ctx.S, h = 'h' + headingLevel;
   const note = m.rent ? (m.rent.type === 'event' ? 'аренда: цена за кабину за сутки' : `аренда от ${S.rates.rentPerDay[S.rates.rentPerDay.length - 1].from}${NB}суток`) : 'продажа';
   return `<article class="model-card" data-filters="${m.filters.join(' ')}">
-<div class="sq">${illus(m.id, m.name + ': плоская иллюстрация')}</div>
+${modelPic(m)}
 <div class="model-card__body"><div class="model-card__top">${offerTags(m).map((t, i) => `<span class="tag${t === 'Продажа' ? ' tag--sale' : ''}">${t}</span>`).join('')}</div>
 <${h} class="model-card__title">${a('/katalog/' + m.slug + '/', esc(m.name), 'stretched')}</${h}>
 <p class="small">${esc(m.short)}</p>

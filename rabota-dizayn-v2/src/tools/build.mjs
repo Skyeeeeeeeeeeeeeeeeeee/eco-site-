@@ -4,14 +4,14 @@
 //   node rabota-dizayn-v2/src/tools/build.mjs                 собрать оба сайта и страницу выбора (rabota-dizayn-v2/index.html)
 //   node rabota-dizayn-v2/src/tools/build.mjs --theme=e       только одну тему (e | f)
 //   node rabota-dizayn-v2/src/tools/build.mjs --production    падает, пока в content.js остались «ЗАГЛУШКА»; метки не выводятся
-// Фотографий на сайтах нет (решение клиента): ни `photos/`, ни <img> с .jpg; сборка проверяет это.
+// Фото: только собственные фото клиента из src/photos (id в SITE.photos); чужие и внешние изображения сборка не пропускает.
 // 3D и растровых рендеров нет: изображения моделей плоские SVG из src/img/cabins.svg.frag.
 // Главная собирается в трёх вариантах первого экрана: index-b.html, index-c.html, index-d.html; index.html = копия варианта SITE.homeVariant (d).
 //
 // Каждый сайт самодостаточен и открывается двойным кликом (file://): ссылки page-relative и с явным index.html,
 // SVG-спрайт встроен в страницу, нет preload шрифтов с crossorigin, нет ES-модулей, нет fetch/XHR.
 // После сборки запускаются проверки (title ≤60, description ≤160, один H1, ссылки и якоря, JSON-LD, примеры калькулятора,
-// отсутствие фото, снятых моделей и 3D вне варианта D). При ошибках код выхода 1.
+// только фото клиента, снятых моделей и 3D вне варианта D). При ошибках код выхода 1.
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -63,7 +63,7 @@ function buildTheme(theme, data) {
   const OUT = path.join(OUTROOT, theme.dir);
   const errors = [], warns = [];
   const err = (m) => errors.push(`[${theme.id}] ${m}`);
-  Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id });
+  Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id, usedPhotos: new Set() });
   const sprite = makeSprite();
 
   // 1. рендер: каждая страница; главная ещё в трёх вариантах первого экрана (index-b/c/d.html), index.html = вариант SITE.homeVariant
@@ -87,7 +87,7 @@ function buildTheme(theme, data) {
   const urls = pages.filter((p) => p.index !== false).map((p) => p.path);
   out.set('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((p) => `  <url><loc>${SITE.site.domain}${p}</loc><lastmod>${SITE.site.lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   out.set('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE.site.domain}/sitemap.xml\n`);
-  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Варианты первого экрана главной: ${SITE.heroVariants.map((v) => '\`' + v.file + '\`').join(', ')} (\`index.html\` = вариант ${(SITE.homeVariant || 'd').toUpperCase()}). Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и фото \`rabota-dizayn/shared/photos/\`.\n\nФотографий на сайте нет (решение клиента).\n`);
+  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Варианты первого экрана главной: ${SITE.heroVariants.map((v) => '\`' + v.file + '\`').join(', ')} (\`index.html\` = вариант ${(SITE.homeVariant || 'd').toUpperCase()}). Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\`.\n\nФото на сайте: собственные фото клиента (\`src/photos/\`).\n`);
 
   // 2. запись
   rmrf(OUT);
@@ -99,6 +99,10 @@ function buildTheme(theme, data) {
   for (const f of fs.readdirSync(path.join(SRC, 'fonts'))) cp(path.join(SRC, 'fonts', f), path.join(OUT, 'fonts', f));
   for (const f of ['favicon.svg', 'og.svg', 'cabin-3d.png']) if (fs.existsSync(path.join(SRC, 'img', f))) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
   for (const f of ['hero3d.js', 'cabin-model.js', 'vendor/three-gltf.min.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f)); // 3D только на варианте D первого экрана
+
+  // фото клиента: копируются только использованные id
+  const photoFiles = new Set(fs.readdirSync(path.join(SRC, 'photos')));
+  for (const id of lib.ctx.usedPhotos) for (const f of [id + '.jpg', id + '-640.jpg']) { if (!photoFiles.has(f)) err(`нет файла src/photos/${f}`); else cp(path.join(SRC, 'photos', f), path.join(OUT, 'photos', f)); }
 
   // 3. проверки
   const textOf = (h) => h.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
@@ -138,9 +142,21 @@ function buildTheme(theme, data) {
     if (/<input\b[^>]*type="search"/.test(html) && /<form\b/.test(html)) err(`${file}: поиск не должен лежать в form`);
     // 3D снят полностью
     if (/three\.min\.js|cabin3d|cabin-init|data-cabin3d|stage-3d/.test(html)) err(`${file}: остатки 3D`);
-    // Решение клиента: фотографий на сайте нет вообще
-    if (/\/photos\/|class="photo|<img\b[^>]*\.jpe?g/i.test(html)) err(`${file}: найдено фото (/photos/, class="photo или <img> с .jpg)`);
-    for (const m of html.matchAll(/<img\b[^>]*>/g)) if (/src="[^"]*\.(jpe?g|webp|avif)"/i.test(m[0])) err(`${file}: <img> с растровым фото ${m[0].slice(0, 80)}`);
+    // Только собственные фото клиента: каждый ресурс photos/<id>[-640].jpg есть в src/photos и описан в SITE.photos; у любого <img> есть width, height, alt
+    for (const m of html.matchAll(/<img\b[^>]*>/g)) {
+      const t = m[0];
+      if (!/\swidth="\d+"/.test(t) || !/\sheight="\d+"/.test(t)) err(`${file}: <img> без width/height ${t.slice(0, 80)}`);
+      if (!/\salt="/.test(t)) err(`${file}: <img> без alt ${t.slice(0, 80)}`);
+      for (const r of t.matchAll(/(?:src|srcset)="([^"]+)"/g)) for (const part of r[1].split(',')) {
+        const url = part.trim().split(/\s+/)[0];
+        if (/\.(jpe?g|png|webp|avif|gif)$/i.test(url) && !/\/img\/cabin-3d\.png$/.test(url)) {
+          const mm = url.match(/(?:^|\/)photos\/([a-z0-9-]+?)(-640)?\.jpg$/);
+          if (!mm || !SITE.photos[mm[1]] || !photoFiles.has(path.basename(url))) err(`${file}: недопустимое изображение ${url}`);
+        }
+      }
+      if (/\ssrc="https?:/.test(t)) err(`${file}: внешнее изображение`);
+    }
+    if (/class="photo\b/.test(html) && !/<img\b[^>]*photos\//.test(html)) err(`${file}: .photo без изображения`);
   }
   // «живые» блоки и варианты главной
   for (const { page, file, html, variant, isVariant } of meta) {
@@ -175,13 +191,13 @@ function buildTheme(theme, data) {
       if (!/data-msum/.test(html) || !/class="mpager"/.test(html)) err(`${file}: нет сводки или навигации по моделям`);
       const m = SITE.modelById(page.model);
       if (m.id === 'vip' && !/#mVin/.test(html)) err(`${file}: на странице VIP нет иллюстрации «внутри»`);
-      if (!new RegExp(`<use href="#${{ standart: 'mS', ekonom: 'mE', komfort: 'mK', vip: 'mV' }[m.id]}"`).test(html)) err(`${file}: нет SVG модели`);
+      if (['komfort', 'ekonom'].includes(m.id)) { if (!/<img[^>]*photos\/(kabina|ekonom)\.jpg/.test(html)) err(`${file}: нет фото модели`); }
+      else if (!new RegExp(`<use href="#${{ standart: 'mS', vip: 'mV' }[m.id]}"`).test(html)) err(`${file}: нет SVG модели`);
     }
   }
   // старые страницы моделей не должны существовать
   for (const old of ['standart', 's-rukomojnikom', 'dlya-malomobilnyh', 'uteplennaya', 'torfyanoj']) if (fs.existsSync(path.join(OUT, 'katalog', old))) err(`остался старый каталог /katalog/${old}/`);
-  // папки photos/ в сборке быть не должно
-  if (fs.existsSync(path.join(OUT, 'photos'))) err('в сборке осталась папка photos/');
+  if (fs.existsSync(path.join(OUT, 'photos'))) for (const f of fs.readdirSync(path.join(OUT, 'photos'))) if (!photoFiles.has(f)) err('в photos/ лишний файл ' + f);
   // калькулятор: два эталонных примера (см. EXAMPLES выше)
   const c1 = CALC.calculate(SITE, { n: 2, d: 10, u: 'weekly', z: 'city', m: 'standart' }).total;
   const ev = CALC.events(SITE, { guests: 300, dur: 'to8h', alcohol: true }), q = ev.quote || {};
@@ -263,7 +279,7 @@ h2{font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-hei
 <h1>${S.company.name}: <span>две темы, три варианта первого экрана</span></h1>
 <p class="lead">Структура, тексты и калькулятор одинаковые, форм и сбора персональных данных нет. Различаются палитра (тема Е тёмно-синие панели, тема F всё светлое) и первый экран главной: B «Линейка моделей», C «Какая задача?», D «3D-модель». Всё, что ниже первого экрана, у вариантов общее. Сайты открываются двойным кликом, без сервера.</p>
 ${T.map(sect).join('\n')}
-<p class="note">Данные на обоих сайтах помечены «Заглушка». Фотографий на сайтах пока нет: решение клиента, сначала структура и тексты.</p>
+<p class="note">Данные на обоих сайтах помечены «Заглушка». Фото на сайтах: собственные фото клиента (арена, парк, МТК Комфорт).</p>
 </main></body></html>
 `;
 }
