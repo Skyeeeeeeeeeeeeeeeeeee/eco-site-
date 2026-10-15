@@ -4,14 +4,14 @@
 //   node rabota-dizayn-v2/src/tools/build.mjs                 собрать оба сайта и страницу выбора (rabota-dizayn-v2/index.html)
 //   node rabota-dizayn-v2/src/tools/build.mjs --theme=e       только одну тему (e | f)
 //   node rabota-dizayn-v2/src/tools/build.mjs --production    падает, пока в content.js остались «ЗАГЛУШКА»; метки не выводятся
-// Фото лежат в ../rabota-dizayn/shared/photos (только чтение, v1 не трогаем) и копируются в каждый сайт при сборке (только используемые).
+// Фотографий на сайтах нет (решение клиента): ни `photos/`, ни <img> с .jpg; сборка проверяет это.
 // 3D и растровых рендеров нет: изображения моделей плоские SVG из src/img/cabins.svg.frag.
-// Главная собирается в трёх вариантах первого экрана: index-a.html, index-b.html, index-c.html; index.html = копия варианта A.
+// Главная собирается в трёх вариантах первого экрана: index-b.html, index-c.html, index-d.html; index.html = копия варианта SITE.homeVariant (d).
 //
 // Каждый сайт самодостаточен и открывается двойным кликом (file://): ссылки page-relative и с явным index.html,
 // SVG-спрайт встроен в страницу, нет preload шрифтов с crossorigin, нет ES-модулей, нет fetch/XHR.
 // После сборки запускаются проверки (title ≤60, description ≤160, один H1, ссылки и якоря, JSON-LD, примеры калькулятора,
-// размеры и подписи фото, отсутствие снятых моделей и 3D). При ошибках код выхода 1.
+// отсутствие фото, снятых моделей и 3D вне варианта D). При ошибках код выхода 1.
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -19,7 +19,6 @@ import { fileURLToPath } from 'node:url';
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT = path.resolve(SRC, '..');           // rabota-dizayn-v2/
-const SHARED = process.env.ECO_SHARED ? path.resolve(process.env.ECO_SHARED) : path.resolve(ROOT, '../rabota-dizayn/shared'); // общие ресурсы v1, только чтение
 const OUTROOT = process.env.ECO_OUT ? path.resolve(process.env.ECO_OUT) : ROOT;
 const args = process.argv.slice(2);
 const PROD = args.includes('--production') || process.env.NODE_ENV === 'production';
@@ -35,26 +34,12 @@ const { templates } = await import('../templates/pages.mjs');
 const { layout } = await import('../templates/layout.mjs');
 
 /* ---------- данные ---------- */
-const credits = JSON.parse(fs.readFileSync(path.join(SHARED, 'photos/credits.json'), 'utf8'));
 function loadData() {
-  const sandbox = vm.createContext({ __PHOTO_CREDITS__: credits });
+  const sandbox = vm.createContext({});
   const contentSrc = fs.readFileSync(path.join(SRC, 'js/content.js'), 'utf8');
   vm.runInContext(contentSrc, sandbox, { filename: 'content.js' });
   vm.runInContext(fs.readFileSync(path.join(SRC, 'js/calc.js'), 'utf8'), sandbox, { filename: 'calc.js' });
   return { SITE: sandbox.SITE, CALC: sandbox.SITE_CALC, contentSrc };
-}
-
-/* ---------- JPEG: размеры из заголовка ---------- */
-function jpegSize(file) {
-  const b = fs.readFileSync(file);
-  let i = 2;
-  while (i < b.length) {
-    if (b[i] !== 0xff) { i++; continue; }
-    const m = b[i + 1];
-    if (m >= 0xc0 && m <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(m)) return { h: b.readUInt16BE(i + 5), w: b.readUInt16BE(i + 7) };
-    i += 2 + b.readUInt16BE(i + 2);
-  }
-  return null;
 }
 
 /* ---------- спрайт: иконки и плоские кабины, встраивается в каждую страницу ---------- */
@@ -81,28 +66,28 @@ function buildTheme(theme, data) {
   Object.assign(lib.ctx, { S: SITE, CALC, production: PROD, theme: theme.id });
   const sprite = makeSprite();
 
-  // 1. рендер: каждая страница; главная ещё в трёх вариантах первого экрана (index-a/b/c/d.html), index.html = вариант SITE.homeVariant
+  // 1. рендер: каждая страница; главная ещё в трёх вариантах первого экрана (index-b/c/d.html), index.html = вариант SITE.homeVariant
   const pages = [...Object.values(SITE.pages), SITE.notFound];
   const out = new Map();
   const meta = [];
   const jobs = [];
   for (const page of pages) {
     const file = page.path === '/' ? 'index.html' : page.path === '/404.html' ? '404.html' : page.path.slice(1) + 'index.html';
-    jobs.push({ page, file, variant: page.template === 'home' ? (SITE.homeVariant || 'a') : null });
+    jobs.push({ page, file, variant: page.template === 'home' ? (SITE.homeVariant || 'd') : null });
     if (page.template === 'home') for (const v of SITE.heroVariants) jobs.push({ page: Object.assign({}, page, { index: false }), file: v.file, variant: v.id, isVariant: true });
   }
   for (const { page, file, variant, isVariant } of jobs) {
     const depth = file.split('/').length - 1;
-    Object.assign(lib.ctx, { page, secN: 0, uidN: 0, calcN: 0, faqUsed: [], photosUsed: new Set(), prefix: depth ? '../'.repeat(depth) : './' });
+    Object.assign(lib.ctx, { page, secN: 0, uidN: 0, calcN: 0, faqUsed: [], prefix: depth ? '../'.repeat(depth) : './' });
     const main = templates[page.template](page, variant);
     const html = layout(page, main, sprite);
     out.set(file, html);
-    meta.push({ page, file, html, variant, isVariant: !!isVariant, photos: new Set(lib.ctx.photosUsed) });
+    meta.push({ page, file, html, variant, isVariant: !!isVariant });
   }
   const urls = pages.filter((p) => p.index !== false).map((p) => p.path);
   out.set('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((p) => `  <url><loc>${SITE.site.domain}${p}</loc><lastmod>${SITE.site.lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`);
   out.set('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE.site.domain}/sitemap.xml\n`);
-  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Варианты первого экрана главной: ${SITE.heroVariants.map((v) => '\`' + v.file + '\`').join(', ')} (\`index.html\` = вариант ${(SITE.homeVariant || 'a').toUpperCase()}). Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и фото \`rabota-dizayn/shared/photos/\`.\n\nФотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования: страница «О компании», раздел «Источники фото».\n`);
+  out.set('README.md', `# ЭКО СЕРВИС НОВОСИБИРСК, версия 2: тема ${theme.name}\n\nГотовый сайт, открывайте \`index.html\` двойным кликом, сервер не нужен. Варианты первого экрана главной: ${SITE.heroVariants.map((v) => '\`' + v.file + '\`').join(', ')} (\`index.html\` = вариант ${(SITE.homeVariant || 'd').toUpperCase()}). Не правьте файлы здесь: они создаются командой \`node rabota-dizayn-v2/src/tools/build.mjs\` из \`rabota-dizayn-v2/src/\` и фото \`rabota-dizayn/shared/photos/\`.\n\nФотографий на сайте нет (решение клиента).\n`);
 
   // 2. запись
   rmrf(OUT);
@@ -114,12 +99,11 @@ function buildTheme(theme, data) {
   for (const f of fs.readdirSync(path.join(SRC, 'fonts'))) cp(path.join(SRC, 'fonts', f), path.join(OUT, 'fonts', f));
   for (const f of ['favicon.svg', 'og.svg', 'cabin-3d.png']) if (fs.existsSync(path.join(SRC, 'img', f))) cp(path.join(SRC, 'img', f), path.join(OUT, 'img', f));
   for (const f of ['hero3d.js', 'cabin-model.js', 'vendor/three-gltf.min.js']) cp(path.join(SRC, 'js', f), path.join(OUT, 'js', f)); // 3D только на варианте D первого экрана
-  for (const id of Object.keys(SITE.photos)) for (const f of [id + '.jpg', id + '-640.jpg']) cp(path.join(SHARED, 'photos', f), path.join(OUT, 'photos', f)); // только используемые фото
 
   // 3. проверки
   const textOf = (h) => h.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
   const idsOf = new Map(meta.map((m) => [m.file, new Set([...m.html.matchAll(/\sid="([^"]+)"/g)].map((x) => x[1]))]));
-  for (const { page, file, html, photos } of meta) {
+  for (const { page, file, html } of meta) {
     const t = page.title, d = page.description;
     if (t.length > 60) err(`${page.path}: title ${t.length} > 60`);
     if (d.length > 160) err(`${page.path}: description ${d.length} > 160`);
@@ -154,22 +138,17 @@ function buildTheme(theme, data) {
     if (/<input\b[^>]*type="search"/.test(html) && /<form\b/.test(html)) err(`${file}: поиск не должен лежать в form`);
     // 3D снят полностью
     if (/three\.min\.js|cabin3d|cabin-init|data-cabin3d|stage-3d/.test(html)) err(`${file}: остатки 3D`);
-    // каждое фото: figure с подписью автор + лицензия + ссылка на источник
-    const figs = [...html.matchAll(/<figure class="photo[^"]*">[\s\S]*?<\/figure>/g)].map((x) => x[0]);
-    for (const f of figs) if (!/<figcaption class="photo__cap">Фото: [^<]+, <a href="https:\/\/commons\.wikimedia\.org[^"]+"/.test(f) || !/loading="(lazy|eager)"/.test(f) || !/width="\d+" height="\d+"/.test(f) || !/srcset="[^"]+640w, [^"]+1280w"/.test(f)) err(`${file}: фото без подписи/srcset/размеров`);
-    const imgCount = (html.match(/<img\b[^>]*src="[^"]*photos\//g) || []).length;
-    const thumbCount = (html.match(/class="credits__th"/g) || []).length;
-    if (imgCount - thumbCount !== figs.length) err(`${file}: <img> с фото (${imgCount - thumbCount}) не равно числу подписанных figure (${figs.length})`);
+    // Решение клиента: фотографий на сайте нет вообще
+    if (/\/photos\/|class="photo|<img\b[^>]*\.jpe?g/i.test(html)) err(`${file}: найдено фото (/photos/, class="photo или <img> с .jpg)`);
+    for (const m of html.matchAll(/<img\b[^>]*>/g)) if (/src="[^"]*\.(jpe?g|webp|avif)"/i.test(m[0])) err(`${file}: <img> с растровым фото ${m[0].slice(0, 80)}`);
   }
   // «живые» блоки и варианты главной
-  const nPhotos = Object.values(SITE.photos).filter((p) => p.gallery !== false).length; // фон 3D-сцены не в галерее
   for (const { page, file, html, variant, isVariant } of meta) {
     const p = page.path;
     if (['/', '/dostavka/'].includes(p)) {
       if (!/data-live[\s>]/.test(html) || !/aria-live="polite"/.test(html)) err(`${file}: нет виджета «успеваем сегодня» с aria-live`);
       if (!/data-zmap/.test(html) || (html.match(/data-zrow="/g) || []).length < 3) err(`${file}: нет схемы зон или строк data-zrow`);
     } else if (/data-live[\s>]/.test(html)) err(`${file}: виджет не должен быть на этой странице`);
-    if (['/', '/o-kompanii/'].includes(p) && (html.match(/class="photo photo--gal"/g) || []).length !== nPhotos) err(`${file}: в галерее не все ${nPhotos} фото`);
     if (['/', '/o-kompanii/'].includes(p) && !/data-count/.test(html)) err(`${file}: нет счётчиков`);
     if (!/<html[^>]*>[\s\S]*?<script>document\.documentElement\.className\+=" js"<\/script>/.test(html)) err(`${file}: нет класса .js в head`);
     if (/data-timeline/.test(html) && (html.match(/<li class="row">/g) || []).length < 3) err(`${file}: таймлайн без шагов`);
@@ -179,8 +158,6 @@ function buildTheme(theme, data) {
       if (/class="slide"|class="rev"|data-carousel[^>]*>.*Отзывы/.test(html)) err(`${file}: на главной не должно быть отзывов`);
       if (!/data-picker/.test(html) || !/id="podbor"/.test(html)) err(`${file}: нет подбора кабины`);
       if (!/data-cmp/.test(html)) err(`${file}: нет таблицы сравнения`);
-      if (variant === 'a' && !/class="hero-a"/.test(html)) err(`${file}: нет героя A`);
-      if (variant === 'a' && !/class="photo photo--heroa"[\s\S]*?Фото: /.test(html)) err(`${file}: в герое A нет подписи автора фото`);
       if (variant === 'b') {
         const tiles = (html.match(/class="mtile"/g) || []).length;
         if (tiles !== 4 || !/data-offer-box/.test(html) || !/id="offer-rent"/.test(html) || !/id="offer-sale"/.test(html)) err(`${file}: в герое B должно быть 4 плитки и переключатель Аренда/Купить`);
@@ -203,13 +180,8 @@ function buildTheme(theme, data) {
   }
   // старые страницы моделей не должны существовать
   for (const old of ['standart', 's-rukomojnikom', 'dlya-malomobilnyh', 'uteplennaya', 'torfyanoj']) if (fs.existsSync(path.join(OUT, 'katalog', old))) err(`остался старый каталог /katalog/${old}/`);
-  // размеры фото соответствуют файлам
-  for (const [id, p] of Object.entries(SITE.photos)) {
-    const sz = jpegSize(path.join(SHARED, 'photos', id + '.jpg'));
-    if (!sz || sz.w !== p.w || sz.h !== p.h) err(`фото ${id}: в content.js ${p.w}x${p.h}, файл ${sz ? sz.w + 'x' + sz.h : '?'}`);
-    if (!p.author || !p.license || !p.source) err(`фото ${id}: нет автора/лицензии/источника в credits.json`);
-  }
-  for (const c of credits) if (!SITE.photos[c.file.replace(/\.jpg$/, '')]) warns.push(`фото ${c.file} из credits.json не используется (не копируется)`);
+  // папки photos/ в сборке быть не должно
+  if (fs.existsSync(path.join(OUT, 'photos'))) err('в сборке осталась папка photos/');
   // калькулятор: два эталонных примера (см. EXAMPLES выше)
   const c1 = CALC.calculate(SITE, { n: 2, d: 10, u: 'weekly', z: 'city', m: 'standart' }).total;
   const ev = CALC.events(SITE, { guests: 300, dur: 'to8h', alcohol: true }), q = ev.quote || {};
@@ -242,7 +214,7 @@ function buildTheme(theme, data) {
   } else warns.push(`заглушек в content.js: ${phLines} (в dev-режиме разрешены)`);
 
   warns.forEach((w) => console.log(`[${theme.id}] внимание: ${w}`));
-  console.log(`[${theme.id}] ${theme.dir}: файлов ${out.size + 1}, страниц ${pages.length} + 3 варианта главной, калькулятор ${c1}, мероприятие ${ev.komfort}+${ev.vip} кабин = ${q.total}`);
+  console.log(`[${theme.id}] ${theme.dir}: файлов ${out.size + 1}, страниц ${pages.length} + ${SITE.heroVariants.length} варианта главной, калькулятор ${c1}, мероприятие ${ev.komfort}+${ev.vip} кабин = ${q.total}`);
   return errors;
 }
 
@@ -252,7 +224,7 @@ function chooser(data) {
   const T = [{ id: 'e', dir: 'e-svetlo-goluboy', name: 'Е «Светло-голубой»', note: 'Голубая шапка и герой, тёмно-синие блоки: карточки, расчёт, отзывы, подвал.', sw: ['#CFE4F8', '#B9D7F4', '#13263A', '#0C1B2A', '#9CC9F5'] },
     { id: 'f', dir: 'f-vozdushnyy', name: 'F «Воздушный»', note: 'Всё светлое: белый и бледно-голубой, без тёмных блоков.', sw: ['#FFFFFF', '#F4F9FE', '#DDEDFB', '#9CC9F5', '#2F6FAE'] }];
   const vcard = (t, v) => `<a class="card card--${t.id}" href="${t.dir}/${v.file}"><span class="card__img"><img src="previews/${t.id}-${v.id}.jpg" width="800" height="520" alt="Превью главной, тема ${t.name}, вариант ${v.name}" loading="lazy"></span><span class="card__t">${v.name}</span><span class="card__d">${v.note}</span><span class="card__go">Открыть вариант</span></a>`;
-  const sect = (t) => `<section class="theme" aria-labelledby="h-${t.id}"><div class="theme__h"><span class="card__sw" aria-hidden="true">${t.sw.map((c) => `<i style="background:${c}"></i>`).join('')}</span><div><h2 id="h-${t.id}">${t.name}</h2><p class="card__d">${t.note}</p></div><a class="all" href="${t.dir}/index.html">Весь сайт (главная = вариант ${(S.homeVariant || 'a').toUpperCase()})</a></div><div class="grid">${S.heroVariants.map((v) => vcard(t, v)).join('')}</div></section>`;
+  const sect = (t) => `<section class="theme" aria-labelledby="h-${t.id}"><div class="theme__h"><span class="card__sw" aria-hidden="true">${t.sw.map((c) => `<i style="background:${c}"></i>`).join('')}</span><div><h2 id="h-${t.id}">${t.name}</h2><p class="card__d">${t.note}</p></div><a class="all" href="${t.dir}/index.html">Весь сайт (главная = вариант ${(S.homeVariant || 'd').toUpperCase()})</a></div><div class="grid">${S.heroVariants.map((v) => vcard(t, v)).join('')}</div></section>`;
   return `<!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${S.company.name}: две темы и три варианта главной</title>
@@ -289,9 +261,9 @@ h2{font-size:clamp(22px,3vw,32px);font-weight:500;letter-spacing:-.03em;line-hei
 </style></head><body><main class="w">
 <p style="font-size:13px;color:#4E6278">Версия 2, вторая итерация: без 3D, новый ассортимент МТК. Выбор оформления и первого экрана</p>
 <h1>${S.company.name}: <span>две темы, три варианта первого экрана</span></h1>
-<p class="lead">Структура, тексты и калькулятор одинаковые, форм и сбора персональных данных нет. Различаются палитра (тема Е тёмно-синие панели, тема F всё светлое) и первый экран главной: A «Фото», B «Линейка моделей», C «Какая задача?». Всё, что ниже первого экрана, у вариантов общее. Сайты открываются двойным кликом, без сервера.</p>
+<p class="lead">Структура, тексты и калькулятор одинаковые, форм и сбора персональных данных нет. Различаются палитра (тема Е тёмно-синие панели, тема F всё светлое) и первый экран главной: B «Линейка моделей», C «Какая задача?», D «3D-модель». Всё, что ниже первого экрана, у вариантов общее. Сайты открываются двойным кликом, без сервера.</p>
 ${T.map(sect).join('\n')}
-<p class="note">Данные на обоих сайтах помечены «Заглушка». Фотографии иллюстративные (стоковые, Wikimedia Commons), их нужно заменить снимками компании. Авторы и условия использования указаны под каждым фото и на странице «О компании».</p>
+<p class="note">Данные на обоих сайтах помечены «Заглушка». Фотографий на сайтах пока нет: решение клиента, сначала структура и тексты.</p>
 </main></body></html>
 `;
 }

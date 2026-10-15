@@ -35,7 +35,7 @@ function footer() {
 <div class="footer__col footer__brand">${logo(S)}<p class="footer__d">${esc(K.tagline)}</p><p class="footer__d">${esc(K.legalName)}, ИНН${NB}${K.inn}</p></div>
 <nav class="footer__nav" aria-label="Подвал">${S.nav.footer.map(col).join('')}</nav>
 <div class="footer__col"><h2 class="footer__h">Контакты</h2><ul><li>${tel()}</li><li><a href="${C.telegramUrl}" rel="noopener">Telegram</a></li><li><a href="${C.whatsappUrl}" rel="noopener">WhatsApp</a></li><li><span class="footer__txt">${esc(C.address)}</span></li><li><span class="footer__txt">${cap(esc(C.hours))}</span></li><li>${a('/o-kompanii/', 'О компании')}</li></ul></div></div>
-<div class="site-footer__bottom"><span>© ${S.site.year} ${esc(K.name)}</span>${a('/politika-konfidencialnosti/', 'Конфиденциальность')}${a('/o-kompanii/#rekvizity', 'Реквизиты')}${a('/o-kompanii/#istochniki-foto', 'Источники фото')}</div></div></footer>`;
+<div class="site-footer__bottom"><span>© ${S.site.year} ${esc(K.name)}</span>${a('/politika-konfidencialnosti/', 'Конфиденциальность')}${a('/o-kompanii/#rekvizity', 'Реквизиты')}</div></div></footer>`;
 }
 
 function sticky(page) {

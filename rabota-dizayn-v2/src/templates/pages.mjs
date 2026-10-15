@@ -1,7 +1,7 @@
 // Шаблоны страниц. Каждый возвращает HTML содержимого <main>. Тексты берутся из structure.md, числа из content.js.
-import { ctx, esc, u, a, btn, tel, ic, illus, thumb, illScene, photo, apx, section, table, specTable, kvTable, priceTable, eventPriceTable, salePriceTable, priceSummary, priceNote, modelCard, offerTags, priceLines, steps, processSteps,
+import { ctx, esc, u, a, btn, tel, ic, illus, thumb, illScene, pic, apx, section, table, specTable, kvTable, priceTable, eventPriceTable, salePriceTable, priceSummary, priceNote, modelCard, offerTags, priceLines, steps, processSteps,
   faqBlock, faqItem, reviewCard, reviewsBlock, ctaBlock, calc, checkList, dev, devTag, rub, tailText, lead, NB,
-  countVal, liveWidget, deliveryMap, workGallery, photoPair, contactPanel, contactBtns, compareTable, picker, stepsRow, modelPager, modelSummary, shareActions, cabinHelper } from './lib.mjs';
+  countVal, liveWidget, deliveryMap, contactPanel, contactBtns, compareTable, picker, stepsRow, modelPager, modelSummary, shareActions, cabinHelper } from './lib.mjs';
 
 const S = () => ctx.S;
 
@@ -23,9 +23,9 @@ const reqBtn = (t = 'Позвонить') => `<a class="btn btn--primary" href="
 const msgBtn = (t = 'Написать в мессенджер') => btn('#kontakt', t, 'outline');
 const calcBtn = (t, href = '#calc') => btn(href, t, 'outline');
 
-const AUD_PHOTO = { 'chastnym-licam': 'ulica-kontejner', organizaciyam: 'stroyka-sinyaya', meropriyatiya: 'festival-ryad' };
+const AUD_PIC = { 'chastnym-licam': 'buy', organizaciyam: 'build', meropriyatiya: 'event' };
 function audCards() {
-  return `<div class="grid grid--3">${S().audiences.map((x) => `<article class="aud-card">${photo(AUD_PHOTO[x.slug], { cls: 'photo--card3', ar: '3/2', sizes: '(min-width:900px) 30vw, 100vw' })}<div class="aud-card__b"><h3>${a('/' + x.slug + '/', x.title, 'stretched')}</h3><p>${x.text}</p><p class="aud-card__cta">${x.cta}</p></div></article>`).join('')}</div>`;
+  return `<div class="grid grid--3">${S().audiences.map((x) => `<article class="aud-card">${pic(AUD_PIC[x.slug], '3/2')}<div class="aud-card__b"><h3>${a('/' + x.slug + '/', x.title, 'stretched')}</h3><p>${x.text}</p><p class="aud-card__cta">${x.cta}</p></div></article>`).join('')}</div>`;
 }
 function zonesTable() {
   const Z = S().zones, D = S().rates.delivery;
@@ -57,7 +57,7 @@ const truckNote = () => { const s = S(), n = s.rates.delivery.cabinsPerTrip, g =
 // условия аренды на мероприятие (ЗАГЛУШКА): цена за кабину за сутки, доставка и визит обслуживания считаются отдельно
 const eventScheme = () => `Цена за кабину за одни сутки (до 24${NB}часов), каждые следующие сутки по той же ставке. Доставка и вывоз, а также визит обслуживания в цену не входят и считаются отдельно.${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}`;
 
-/* ---------- варианты первого экрана главной: A «Фото», B «Линейка моделей», C «Какая задача?» ---------- */
+/* ---------- варианты первого экрана главной: B «Линейка моделей», C «Какая задача?», D «3D-модель» ---------- */
 function variantBar(cur) {
   if (ctx.production) return '';
   return `<nav class="vbar" aria-label="Варианты первого экрана"><span class="vbar__t">Вариант первого экрана (для выбора):</span>${S().heroVariants.map((v) => `<a href="${esc(u('/' + v.file))}"${v.id === cur ? ' aria-current="page"' : ''}>${esc(v.name)}</a>`).join('')}</nav>`;
@@ -66,13 +66,6 @@ const homeActions = (lg = true) => `<p class="hero__actions">${btn('#podbor', '�
 const homeH1 = (page) => `<h1 class="display">${tailText(esc(page.h1), 'в Новосибирске и области')}</h1>`;
 const HOME_SUB = 'Аренда МТК для строек и мероприятий, продажа кабин. Доставляем, устанавливаем, обслуживаем по графику и забираем.';
 const statStrip = () => `<dl class="hero-meta hero-meta--row hero-meta--4">${S().stats.map((x) => `<div><dt>${esc(x.label)}</dt><dd>${countVal(x.value)}</dd></div>`).join('')}</dl>`;
-
-function heroA(page) {
-  return `<header class="hero hero--home hero--a" data-hero><div class="container">${variantBar('a')}
-<div class="hero-a">${photo('festival-ryad', { cls: 'photo--heroa', ar: '16/9', eager: true, sizes: '(min-width:1200px) 1216px, 100vw' })}
-<div class="hero-a__card"><p class="label">Новосибирск и область</p>${homeH1(page)}<p class="sub">${HOME_SUB}</p>${homeActions(false)}</div></div>
-${statStrip()}</div><div class="hero-end"></div></header>`;
-}
 
 function heroB(page) {
   const s = S(), order = ['ekonom', 'standart', 'komfort', 'vip'].map(M);
@@ -88,13 +81,13 @@ ${statStrip()}</div><div class="hero-end"></div></header>`;
 function heroC(page) {
   const s = S(), std = M('standart');
   const cards = [
-    { t: 'Стройка и объекты', href: '/organizaciyam/', ph: 'stroyka-sinyaya', line: `МТК Стандарт в аренду, ${fromDay(std)}`, text: 'Длительный срок, обслуживание по графику, договор и документы.' },
-    { t: 'Мероприятие', href: '/meropriyatiya/', ph: 'meropriyatie-pole', line: `МТК Комфорт и VIP, от${NB}${rub(M('komfort').rent.perDay)}/сутки`, text: 'Фестивали, забеги, свадьбы: доставим и установим к началу.' },
-    { t: 'Купить кабину', href: '/prodazha/', ph: 'ulica-kontejner', line: `МТК Стандарт и Эконом, от${NB}${rub(s.minSaleFrom())}`, text: 'Для дачи и участка: с доставкой и консультацией.' }
+    { t: 'Стройка и объекты', href: '/organizaciyam/', ph: 'build', line: `МТК Стандарт в аренду, ${fromDay(std)}`, text: 'Длительный срок, обслуживание по графику, договор и документы.' },
+    { t: 'Мероприятие', href: '/meropriyatiya/', ph: 'event', line: `МТК Комфорт и VIP, от${NB}${rub(M('komfort').rent.perDay)}/сутки`, text: 'Фестивали, забеги, свадьбы: доставим и установим к началу.' },
+    { t: 'Купить кабину', href: '/prodazha/', ph: 'buy', line: `МТК Стандарт и Эконом, от${NB}${rub(s.minSaleFrom())}`, text: 'Для дачи и участка: с доставкой и консультацией.' }
   ];
   return `<header class="hero hero--home hero--c" data-hero><div class="container">${variantBar('c')}
 <div class="hero-c__head"><div>${homeH1(page)}<p class="sub">Выберите свою задачу: подберём кабину, назовём цену и сроки.</p></div></div>
-<div class="task-grid">${cards.map((c) => `<article class="task-card">${photo(c.ph, { cls: 'photo--card3', ar: '4/3', sizes: '(min-width:900px) 380px, 100vw' })}<div class="task-card__b"><h2 class="task-card__t">${a(c.href, c.t, 'stretched')}</h2><p class="task-card__l">${c.line}</p><p class="task-card__d">${c.text}</p><span class="task-card__go" aria-hidden="true">${ic('arrow')}</span></div></article>`).join('')}</div>
+<div class="task-grid">${cards.map((c) => `<article class="task-card">${pic(c.ph, '4/3')}<div class="task-card__b"><h2 class="task-card__t">${a(c.href, c.t, 'stretched')}</h2><p class="task-card__l">${c.line}</p><p class="task-card__d">${c.text}</p><span class="task-card__go" aria-hidden="true">${ic('arrow')}</span></div></article>`).join('')}</div>
 ${statStrip()}</div><div class="hero-end"></div></header>`;
 }
 
@@ -116,14 +109,14 @@ function whatWeDo() {
     const bento = `<div class="bento">
 <article class="card"><div class="scene"><svg viewBox="0 0 300 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${sc('<polygon points="0,150 90,60 160,60 40,230 0,230" fill="var(--sc-lt)"/><g transform="translate(6 104) scale(.5)"><use href="#mS"/></g><g transform="translate(98 84) scale(.58)"><use href="#mK"/></g><g transform="translate(196 104) scale(.46)"><use href="#mV"/></g>')}</svg></div>
 <div class="cap"><h3>${a('/katalog/', 'Четыре модели МТК', 'stretched')}</h3><p>Стандарт и Эконом на продажу, Стандарт для строек, Комфорт и VIP для мероприятий.</p></div></article>
-<article class="card">${photo('stroyka-oranzhevaya', { cls: 'photo--card', sizes: '(min-width:1000px) 25vw, (min-width:640px) 50vw, 100vw' })}
+<article class="card"><div class="scene"><svg viewBox="0 0 300 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${sc('<polygon points="300,60 220,60 120,236 300,236" fill="var(--sc-lt)"/><g transform="translate(22 108) scale(.5)"><use href="#mS"/></g><g transform="translate(112 100) scale(.54)"><use href="#mK"/></g><rect x="14" y="228" width="214" height="14" rx="3" fill="var(--sc-lt)"/><rect x="236" y="190" width="54" height="52" rx="6" fill="var(--sc-lt)"/><rect x="262" y="200" width="20" height="18" fill="var(--sc-bg)"/><circle cx="52" cy="248" r="14" fill="var(--sc-floor)" stroke="var(--sc-lt)" stroke-width="4"/><circle cx="104" cy="248" r="14" fill="var(--sc-floor)" stroke="var(--sc-lt)" stroke-width="4"/><circle cx="258" cy="248" r="14" fill="var(--sc-floor)" stroke="var(--sc-lt)" stroke-width="4"/>')}</svg></div>
 <div class="cap"><h3>${a('/dostavka/', 'Доставка и установка', 'stretched')}</h3><p>По Новосибирску и области. В одну машину помещается до ${D.cabinsPerTrip} кабин.</p></div></article>
 <article class="card"><div class="visits"><h4>Что входит в визит</h4>${visit.map(([i, b, t]) => `<div class="visit"><i>${ic(i)}</i><div><b>${b}</b><span>${t}</span></div></div>`).join('')}</div>
 <div class="cap"><h3>${a('/obsluzhivanie/', 'Обслуживание по графику', 'stretched')}</h3><p>${rub(s.rates.service.visit)} за кабину за визит: откачка, мойка, расходники.</p></div></article>
-<article class="card">${photo('ulica-kontejner', { cls: 'photo--card', sizes: '(min-width:1000px) 25vw, (min-width:640px) 50vw, 100vw' })}
+<article class="card"><div class="scene"><svg viewBox="0 0 300 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${sc('<g transform="translate(26 92) scale(.58)"><use href="#mE"/></g><g fill="none" stroke="var(--d-accent)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M190 190h78"/><path d="m250 172 18 18-18 18"/></g>')}</svg></div>
 <div class="cap"><h3>${a('/dostavka/#kak', 'Вывоз', 'stretched')}</h3><p>Забираем в срок и закрываем документы. По городу рейс ${rub(D.cityPerTrip)}.</p></div></article>
 <article class="card card-wide"><div class="wide-in"><div class="wide-text"><h3>Для мероприятий</h3><p>Ориентир: 1 кабина на ${E.guestsPerCabin.to8h}–${E.guestsPerCabin.to4h} гостей при программе 4–8 часов, с алкоголем нужно больше. Каждая четвёртая: МТК VIP с рукомойником. ${truckNote()}</p>${btn('/meropriyatiya/', 'Туалеты для мероприятий', 'primary')}</div>
-${photo('festival-ryad', { cls: 'photo--card', sizes: '(min-width:800px) 55vw, 100vw' })}</div></article></div>`;
+<div class="scene scene--wide"><svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><rect width="600" height="300" fill="var(--sc-bg)"/><polygon points="0,214 600,214 600,300 0,300" fill="var(--sc-floor)"/><polygon points="120,0 190,0 90,214 20,214" fill="var(--sc-lt)"/><polygon points="420,0 490,0 390,214 320,214" fill="var(--sc-lt)"/><g transform="translate(16 88) scale(.5)"><use href="#mK"/></g><g transform="translate(158 84) scale(.52)"><use href="#mV"/></g><g transform="translate(300 88) scale(.5)"><use href="#mK"/></g><g transform="translate(442 84) scale(.52)"><use href="#mV"/></g></svg></div></div></article></div>`;
     const who = `<div class="who">${s.audiences.map((x, i) => {
       const li = [['МТК Комфорт или VIP на праздник', fromDay(kom).replace('от' + NB, 'от' + NB) + ''], ['Купить МТК Эконом', fromSale(eco)]];
       const li2 = [['МТК Стандарт от ' + s.rates.rentPerDay[s.rates.rentPerDay.length - 1].from + ' суток', fromDay(std)], ['От ' + s.rates.qtyDiscount[0].from + ' кабин', 'скидка ' + s.rates.qtyDiscount[0].pct + '%']];
@@ -152,17 +145,16 @@ function examplesCards() {
 /* =============== ШАБЛОНЫ =============== */
 export const templates = {
 
-  home(page, variant = 'a') {
-    // Главная: 8 блоков: герой, подбор, модели + сравнение, как работаем, доставка + виджет, «Кабины в работе», FAQ, связь (ctaBlock из layout)
+  home(page, variant = 'd') {
+    // Главная: 7 блоков: герой, подбор, модели + сравнение, как работаем, доставка + виджет, FAQ, связь (ctaBlock из layout)
     const s = S(), D = s.rates.delivery;
-    const hero = { a: heroA, b: heroB, c: heroC, d: heroD }[variant](page);
+    const hero = { b: heroB, c: heroC, d: heroD }[variant](page);
     const m = [];
     m.push(picker());
     m.push(section({ id: 'modeli', title: 'Четыре модели под вашу задачу', tag: 'Кабины и цены', center: true },
       `<p class="mod-btns">${btn('#podbor', 'Подобрать кабину', 'primary')}${btn('/katalog/#sravnenie', 'Каталог и полное сравнение', 'outline')}</p><div class="tiles">${s.models.map((x) => modelCard(x)).join('')}</div><h3 class="h2 sub-h">Сравнение моделей</h3>${compareTable({ compact: true, id: 'cmp-home' })}${priceNote()}`));
     m.push(`<section class="section section--flush" id="poryadok" aria-labelledby="poryadok-h"><div class="container"><header class="sec-head"><p class="label">Простой процесс</p><h2 id="poryadok-h">Как мы работаем</h2><p class="lead">${lead('Четыре шага от звонка до вывоза. Вы называете адрес и даты, остальное берём на себя.')}</p></header>${stepsRow(s.steps)}</div></section>`);
     m.push(`<section class="section section--paper" id="zony" aria-labelledby="zony-h"><div class="container"><p class="label">Доставка и вывоз</p><div class="dl-g"><div><h2 class="lead" id="zony-h">${lead(`Три зоны, цена за рейс заранее. В одну машину помещается до ${D.cabinsPerTrip} кабин.`)}</h2>${liveWidget()}<div class="zmap-wrap">${deliveryMap()}</div></div><div>${zonesList()}<p class="zone-note">${truckNote()} Пример: 100 км от города = ${rub(D.nearPerTrip)} + ${100 - D.nearKm} км × ${rub(D.perKmOver)} = ${rub(D.nearPerTrip + (100 - D.nearKm) * D.perKmOver)} за рейс. Вывоз считаем по тем же зонам. ${a('/dostavka/', 'Подробнее о зонах и сроках')}</p></div></div></div></section>`);
-    m.push(workGallery());
     m.push(faqBlock(homeFaqIds(), {}));
     return hero + '<div class="body">' + m.join('') + '</div>';
   },
@@ -202,7 +194,7 @@ export const templates = {
 
   chastnym(page) {
     const s = S(), std = M('standart'), eco = M('ekonom'), kom = M('komfort'), vip = M('vip');
-    const hero = heroInner(page, { eyebrow: 'Аренда и покупка · Частным лицам', tail: 'для дачи, стройки дома и праздника', factsRow: stdFacts(), side: photo('ulica-kontejner', { cls: 'photo--hero', ar: '4/3', eager: true, sizes: '(min-width:900px) 45vw, 100vw' }),
+    const hero = heroInner(page, { eyebrow: 'Аренда и покупка · Частным лицам', tail: 'для дачи, стройки дома и праздника', factsRow: stdFacts(),
       lead: 'Аренда от 1 суток или покупка кабины. Привозим, ставим на указанное место, при необходимости обслуживаем и забираем. Оплата картой или переводом.',
       actions: reqBtn() + btn('#calc', 'Рассчитать самостоятельно', 'outline') });
     const m = [];
@@ -212,7 +204,6 @@ export const templates = {
 <article class="svc-card"><h3 class="h4">Дача</h3><p>На сезон или период ремонта: аренда МТК Стандарт. Для постоянного использования купите кабину.</p><p class="small">${a('/katalog/' + eco.slug + '/', 'МТК Эконом')}, ${fromSale(eco)}; ${a('/katalog/' + std.slug + '/', 'МТК Стандарт')}, ${fromSale(std)}.</p></article></div>`));
     m.push(section({ id: 'vhodit', title: 'Что вы получаете', tag: 'Состав', paper: true },
       checkList(['Чистую кабину: мойка и дезинфекция перед выдачей', 'Доставку и установку на указанное место', 'Обслуживание по выбранной частоте (по желанию)', 'Вывоз после окончания срока', 'Понятный расчёт: аренда, обслуживание и доставка указаны отдельными строками'])));
-    m.push(`<div class="section section--tight">${photoPair('stroyka-sinyaya', 'meropriyatie-pole')}</div>`);
     m.push(section({ id: 'calc', title: 'Рассчитайте стоимость', tag: 'Калькулятор' }, calc('compact', { n: 1, d: 3, u: 'none', z: 'city', km: 0 })));
     m.push(section({ id: 'oformlenie', title: 'Порядок оформления', tag: 'Порядок', paper: true, bleed: true },
       steps([{ t: 'Звонок или сообщение', text: 'Звоните или пишете в мессенджер.' }, { t: 'Стоимость и место', text: 'Называем стоимость и согласуем дату, время и место установки.' }, { t: 'Предоплата', text: `Вносите предоплату (${s.terms.prepayPct}%).` }, { t: 'Доставка', text: 'Привозим кабину. Остаток оплачивается по факту доставки.' }], { media: ['ill:chat', 'ill:doc', 'ill:doc', 'ill:cab'] })
@@ -226,7 +217,7 @@ export const templates = {
 
   organizaciyam(page) {
     const s = S(), std = M('standart');
-    const hero = heroInner(page, { eyebrow: 'Аренда · Организациям', tail: 'для стройплощадок и организаций', factsRow: stdFacts(), side: photo('stroyka-sinyaya', { cls: 'photo--hero', ar: '4/3', eager: true, sizes: '(min-width:900px) 45vw, 100vw' }),
+    const hero = heroInner(page, { eyebrow: 'Аренда · Организациям', tail: 'для стройплощадок и организаций', factsRow: stdFacts(),
       lead: 'Длительная аренда МТК Стандарт: договор, обслуживание по графику, закрывающие документы по итогам периода.',
       actions: reqBtn() + msgBtn() + btn('#calc', 'Рассчитать стоимость', 'outline'),
       note: `Коммерческое предложение направляем ${s.terms.kpTerm} после звонка или сообщения в мессенджер.` });
@@ -240,8 +231,7 @@ export const templates = {
         ['До начала работ', `Договор аренды или оказания услуг. Подготовка: ${s.terms.contractPrep}`], ['Оплата', 'Счёт на оплату'], ['После периода обслуживания', 'Акт выполненных работ, закрывающие документы'], ['По запросу', 'Электронный документооборот (ЭДО)']] })}</div>
 <div class="lg-5"><h3 class="h4">Образец договора</h3><p class="small">Образец договора по запросу.</p>${docsList()}${contactPanel({ title: 'Коммерческое предложение', line: `Позвоните или напишите в мессенджер: назовите объект, срок и количество кабин, пришлём предложение ${s.terms.kpTerm}.` })}</div></div>`));
     m.push(section({ id: 'grafik', title: 'Обслуживание по графику', tag: 'График' },
-      `<div class="grid grid--split"><div><p>Периодичность зависит от числа пользователей. Для стройки обычно 1–2 визита в неделю. График фиксируется в договоре. После визита отправляем отчёт в мессенджер или на почту.</p><p class="more">${btn('/obsluzhivanie/', 'Что входит в визит', 'link')}</p></div>${photo('stroyka-oranzhevaya', { cls: 'photo--card3', ar: '3/2', sizes: '(min-width:900px) 40vw, 100vw' })}</div>`));
-    m.push(`<div class="section section--tight">${photoPair('ulica-kontejner', 'ochered')}</div>`);
+      `<p>Периодичность зависит от числа пользователей. Для стройки обычно 1–2 визита в неделю. График фиксируется в договоре. После визита отправляем отчёт в мессенджер или на почту.</p><p class="more">${btn('/obsluzhivanie/', 'Что входит в визит', 'link')}</p>`));
     m.push(section({ id: 'raschety', title: 'Порядок расчётов', tag: 'Оплата', paper: true }, checkList(['Предоплата или постоплата по договору', 'Оплата по счёту', 'Для постоянных клиентов условия обсуждаются индивидуально'])));
     m.push(section({ id: 'calc', title: 'Предварительный расчёт', tag: 'Калькулятор' }, calc('compact', { n: 2, d: 30, u: 'weekly', z: 'city', km: 0 })));
     m.push(reviewsBlock(['stroygrad', 'beg', 'ip-andrey'], { paper: true, id: 'otzyvy-blok', title: 'Отзывы организаций' }));
@@ -251,14 +241,14 @@ export const templates = {
 
   meropriyatiya(page) {
     const s = S(), E = s.eventRules, G = E.guestsPerCabin, kom = M('komfort'), vip = M('vip');
-    const hero = heroInner(page, { eyebrow: 'Аренда · Для мероприятий', tail: 'в Новосибирске и области', side: photo('festival-ryad', { cls: 'photo--hero', ar: '4/3', eager: true, sizes: '(min-width:900px) 45vw, 100vw' }), lead: 'МТК Комфорт и МТК VIP на сутки. Рассчитаем, сколько кабин нужно, доставим и установим к началу. После мероприятия заберём.',
+    const hero = heroInner(page, { eyebrow: 'Аренда · Для мероприятий', tail: 'в Новосибирске и области', lead: 'МТК Комфорт и МТК VIP на сутки. Рассчитаем, сколько кабин нужно, доставим и установим к началу. После мероприятия заберём.',
       actions: reqBtn() + btn('#raschet', 'Рассчитать количество кабин', 'outline') });
     const m = [];
     m.push(section({ id: 'modeli', title: 'Какие кабины для мероприятия', tag: 'Модели' },
       `<div class="grid grid--2"><article class="svc-card"><div class="evmodel">${illus('komfort', kom.name + ': плоская иллюстрация', 'illus evmodel__i')}<div><h3 class="h4">${a('/katalog/' + kom.slug + '/', 'МТК Комфорт')}</h3><p>${esc(kom.purpose)}</p><p class="price"><small>от${NB}</small>${rub(kom.rent.perDay)}<small>/сутки</small></p></div></div></article>
 <article class="svc-card"><div class="evmodel">${illus('vip', vip.name + ': плоская иллюстрация', 'illus evmodel__i')}<div><h3 class="h4">${a('/katalog/' + vip.slug + '/', 'МТК VIP')}</h3><p>${esc(vip.purpose)}</p><p class="price"><small>от${NB}</small>${rub(vip.rent.perDay)}<small>/сутки</small></p></div></div></article></div>
 <p class="small note">${eventScheme()}</p>`));
-    m.push(section({ id: 'tipy', title: 'Какие мероприятия обслуживаем', tag: 'Типы', paper: true }, `<ul class="event-types">${s.eventTypes.map((t) => `<li><b>${t.title}</b><span>${t.hint}</span></li>`).join('')}</ul>${ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Ориентиры подтвердить с клиентом.</p>'}<div class="photo-row">${['festival-lyudi', 'meropriyatie-pole', 'ochered'].map((id) => photo(id, { cls: 'photo--card3', ar: '3/2', sizes: '(min-width:900px) 30vw, 100vw' })).join('')}</div>`));
+    m.push(section({ id: 'tipy', title: 'Какие мероприятия обслуживаем', tag: 'Типы', paper: true }, `<ul class="event-types">${s.eventTypes.map((t) => `<li><b>${t.title}</b><span>${t.hint}</span></li>`).join('')}</ul>${ctx.production ? '' : '<p class="small note"><span class="tag dev-flag">Заглушка</span> Ориентиры подтвердить с клиентом.</p>'}`));
     const dur = E.durations.map((d, i) => `<input type="radio" name="evdur" id="evdur-${i}" value="${d.id}"${d.id === 'to8h' ? ' checked' : ''}><label for="evdur-${i}">${d.label}</label>`).join('');
     const defEv = ctx.CALC.events(s, { guests: 100, dur: 'to8h', alcohol: false });
     m.push(section({ id: 'raschet', title: 'Сколько кабин нужно', tag: 'Расчёт' },
@@ -429,15 +419,11 @@ ${shareActions({ attr: 'data-share="event"' })}
     m.push(section({ id: 'printsipy', title: 'Принципы работы', tag: 'Принципы' },
       checkList(['Стоимость называем до оплаты и фиксируем в договоре или счёте.', 'Кабины моем и дезинфицируем перед каждой выдачей.', 'Обслуживание ведём по графику, график согласуем заранее.', 'Условия ответственности прописаны в договоре.', 'Для организаций оформляем договор и закрывающие документы.'])));
     m.push(section({ id: 'park', title: 'Парк и оборудование', tag: 'Парк' },
-      `<div class="grid grid--split"><div><p>Кабины МТК Стандарт, Эконом, Комфорт и VIP, спецтехника для откачки, площадка для мойки и дезинфекции.</p>${dev('Количество кабин по моделям, спецтехника и фото парка: данные укажет клиент. Фото ниже иллюстративные, стоковые.')}</div></div>
+      `<div class="grid grid--split"><div><p>Кабины МТК Стандарт, Эконом, Комфорт и VIP, спецтехника для откачки, площадка для мойки и дезинфекции.</p>${dev('Количество кабин по моделям, спецтехника: данные укажет клиент.')}</div></div>
 `));
-    m.push(workGallery());
     m.push(reviewsBlock(['anna', 'sergey', 'stroygrad', 'beg', 'olga', 'ip-andrey'], { id: 'otzyvy', devNote: 'Отзывы вымышлены. Заменить реальными с согласия авторов.' }));
     m.push(section({ id: 'rekvizity', title: 'Реквизиты', tag: 'Реквизиты', paper: true },
       kvTable('Реквизиты компании', ['Параметр', 'Значение'], [['Полное наименование', esc(K.legalName)], ['ИНН', K.inn], ['ОГРН', K.ogrn], ['Юридический адрес', esc(K.legalAddress)], ['Банковские реквизиты', esc(K.bank)]]) + dev('Реквизиты заполнит клиент.')));
-    const CR = s.photos;
-    m.push(section({ id: 'istochniki-foto', title: 'Источники фото', tag: 'Авторы фото', lead: 'Все фотографии на сайте иллюстративные: стоковые снимки с Wikimedia Commons на условиях Creative Commons. Они будут заменены фотографиями компании.' },
-      `<ol class="credits">${Object.entries(CR).map(([id, p]) => `<li class="credits__i"><img class="credits__th" src="${u('/photos/' + id + '-640.jpg')}" width="96" height="64" alt="" loading="lazy" decoding="async"><div><p class="credits__t">${esc(p.alt)}</p><p class="small">Автор: ${esc(p.author)}. Условия использования: <a href="${s.licenseUrls[p.license] || p.source}" target="_blank" rel="noopener">${esc(p.license)}</a>. Файл: <a href="${esc(p.source)}" target="_blank" rel="noopener">${esc(p.title)}</a>, Wikimedia Commons.</p></div></li>`).join('')}</ol>`));
     return hero + '<div class="body">' + m.join('') + '</div>';
   },
 

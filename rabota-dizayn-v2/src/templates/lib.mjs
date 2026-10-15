@@ -5,7 +5,7 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 export const NB = ' ';
 
 // Контекст сборки: заполняется build.mjs. prefix: относительный путь до корня сайта ('./', '../', '../../').
-export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, uidN: 0, faqUsed: [], photosUsed: new Set(), theme: 'e' };
+export const ctx = { S: null, CALC: null, prefix: './', production: false, page: null, secN: 0, formN: 0, calcN: 0, uidN: 0, faqUsed: [], theme: 'e' };
 
 // Ссылки page-relative и с явным index.html, чтобы сайт открывался двойным кликом (file://) без сервера.
 export const u = (path) => {
@@ -43,15 +43,17 @@ export function illScene(kind) {
   return `<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">${bg}${body}</svg>`;
 }
 
-/* ---------- фото: srcset 640/1280, lazy, width/height, подпись с автором и лицензией ---------- */
-export function photo(id, o = {}) {
-  const p = ctx.S.photos[id];
-  if (!p || !p.author) throw new Error('нет данных о фото ' + id);
-  ctx.photosUsed.add(id);
-  const small = u('/photos/' + id + '-640.jpg'), big = u('/photos/' + id + '.jpg');
-  const cap = `<figcaption class="photo__cap">Фото: ${esc(p.author)}, <a href="${esc(p.source)}" target="_blank" rel="noopener">${esc(p.license)}<span class="visually-hidden"> (источник, откроется в новой вкладке)</span></a></figcaption>`;
-  const ar = o.ar ? ` style="--ar:${o.ar}"` : '';
-  return `<figure class="photo${o.cls ? ' ' + o.cls : ''}"><div class="photo__frame"${ar}><img src="${small}" srcset="${small} 640w, ${big} 1280w" sizes="${o.sizes || '(min-width:900px) 40vw, 100vw'}" width="${p.w}" height="${p.h}" alt="${esc(o.alt || p.alt)}" loading="${o.eager ? 'eager' : 'lazy'}" decoding="async"></div>${cap}</figure>`;
+/* ---------- плоские сцены для карточек вместо фото: кабины из спрайта на светлом фоне (цвета из токенов --ph-*) ---------- */
+// kind: 'build' (стройка), 'event' (мероприятие), 'buy' (покупка), 'park' (ряд моделей); ar: соотношение сторон блока
+export function pic(kind, ar = '3/2', cls = '') {
+  const cab = (sym, x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})"><use href="#${sym}"/></g>`;
+  const body = {
+    build: `<rect x="176" y="22" width="104" height="128" fill="var(--ph-lt)"/><g fill="var(--ph-soft)"><rect x="190" y="38" width="22" height="16"/><rect x="224" y="38" width="22" height="16"/><rect x="190" y="68" width="22" height="16"/><rect x="224" y="68" width="22" height="16"/><rect x="190" y="98" width="22" height="16"/><rect x="224" y="98" width="22" height="16"/></g><rect x="20" y="146" width="150" height="4" fill="var(--ph-ink)" opacity=".35"/>${cab('mS', 10, 30, .5)}${cab('mS', 84, 30, .5)}`,
+    event: `<polygon points="0,40 70,40 20,150 0,150" fill="var(--ph-lt)"/>${cab('mK', 6, 52, .38)}${cab('mV', 100, 48, .4)}${cab('mK', 194, 52, .38)}`,
+    buy: `<polygon points="190,0 240,0 150,150 100,150" fill="var(--ph-lt)"/>${cab('mE', 30, 40, .46)}${cab('mS', 150, 36, .48)}`,
+    park: `${cab('mE', -4, 36, .4)}${cab('mS', 66, 36, .4)}${cab('mK', 140, 30, .42)}${cab('mV', 212, 36, .4)}`
+  }[kind];
+  return `<div class="pic${cls ? ' ' + cls : ''}" style="--ar:${ar}"><svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><rect width="300" height="200" fill="var(--ph-bg)"/><polygon points="0,150 300,150 300,200 0,200" fill="var(--ph-floor)"/>${body}</svg></div>`;
 }
 
 /* ---------- v2: счётчик: число в тексте анимируется скриптом, без JS остаётся итоговое значение ---------- */
@@ -92,19 +94,6 @@ ${z(0, cityPaths, chip(0, 214, 168) + `<text class="zmap__t zmap__t--city" x="23
 ${office()}<rect class="zmap__base" x="243" y="243" width="14" height="14" rx="3"/><text class="zmap__bt" x="262" y="262">${esc(S.copy.mapBase)}</text>
 <g class="zmap__truck" style="offset-path:path('${ROUTE}')" aria-hidden="true"><g transform="scale(1.3)"><rect x="-16" y="-9" width="20" height="13" rx="2"/><path d="M4 -5h6l4 5v4H4z"/><circle cx="-8" cy="5" r="3.4"/><circle cx="8.5" cy="5" r="3.4"/></g></g>
 </svg><figcaption class="zmap__cap">${esc(S.copy.mapCaption)} Основа схемы: © участники <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>.${ctx.production ? '' : ' <span class="tag dev-flag">Заглушка</span>'}</figcaption></figure>`;
-}
-
-/* ---------- v2: галерея «Кабины в работе»: все фото, scroll-snap, стрелки, drag ---------- */
-export function workGallery({ id = 'rabota', title = 'Кабины в работе', tag = 'Фотографии' } = {}) {
-  const ids = Object.keys(ctx.S.photos).filter((id) => ctx.S.photos[id].gallery !== false);
-  ctx.secN += 1;
-  return `<section class="section section--paper gal" id="${id}" aria-labelledby="${id}-h" data-carousel><div class="container gal__h"><header class="sec-head"><p class="label">${tag}</p><h2 id="${id}-h">${title}</h2></header>
-<div class="arrows js-only"><button class="arr" type="button" data-prev aria-label="Предыдущее фото">${chev('M10 3 5 8l5 5')}</button><button class="arr" type="button" data-next aria-label="Следующее фото">${chev('m6 3 5 5-5 5')}</button></div></div>
-<div class="track track--gal" data-track data-drag tabindex="0" role="group" aria-label="Фотографии кабин, листайте вбок или стрелками клавиатуры">${ids.map((p) => photo(p, { cls: 'photo--gal', ar: '4/3', sizes: '(min-width:900px) 520px, 70vw' })).join('')}</div>
-<div class="container gal__f">${ctx.production ? '' : dev('Фотографии иллюстративные, стоковые. Заменить снимками компании.')}</div></section>`;
-}
-export function photoPair(a1, a2, alts = []) {
-  return `<div class="container photo-pair">${[a1, a2].map((id, i) => photo(id, { cls: 'photo--card3', ar: '3/2', sizes: '(min-width:900px) 45vw, 100vw', alt: alts[i] })).join('')}</div>`;
 }
 
 export function a(href, text, cls = '', extra = '') {
@@ -221,19 +210,19 @@ export function modelCard(m, { headingLevel = 3, cta = false } = {}) {
 ${cabinHelper(m)}${cta ? `<a class="btn btn--outline btn--sm model-card__req" href="${u('/katalog/' + m.slug + (m.rent ? '/#raschet' : '/#kupit'))}">${m.rent ? 'Рассчитать стоимость' : 'Как купить'}</a>` : ''}</div></article>`;
 }
 
-/* ---------- процесс: строки с кружком-номером и медиа (фото или плоская иллюстрация) ---------- */
-// media[i]: 'ill:chat|doc|cab|service|load' или id фото
+/* ---------- процесс: строки с кружком-номером и медиа (плоская иллюстрация) ---------- */
+// media[i]: 'ill:chat|doc|cab|service|load'
 const DEF_MEDIA = ['ill:chat', 'ill:doc', 'ill:cab', 'ill:load'];
 export function steps(items, o = {}) {
   const media = o.media || DEF_MEDIA;
   const m = (x) => {
     if (!x) return '';
     if (x.startsWith('ill:')) return `<div class="ph">${illScene(x.slice(4))}</div>`;
-    return photo(x, { cls: 'photo--sq', ar: '1/1', sizes: '(min-width:900px) 190px, 160px' });
+    return '';
   };
   return `<ol class="rows" data-timeline>${items.map((s, i) => `<li class="row"><div class="container row__in"><div class="row__l"><span class="num" aria-hidden="true">${i + 1}</span><h3>${s.t}</h3></div><div class="row__m">${m(media[i])}</div><p class="row__p">${s.text}</p></div></li>`).join('')}</ol>`;
 }
-export const processSteps = () => steps(ctx.S.steps, { media: ['ill:chat', 'ill:doc', 'stroyka-sinyaya', 'meropriyatie-pole'] });
+export const processSteps = () => steps(ctx.S.steps, { media: ['ill:chat', 'ill:doc', 'ill:cab', 'ill:load'] });
 
 /* ---------- FAQ ---------- */
 export function faqItem(f, idp = 'q-') {
@@ -251,8 +240,7 @@ export function faqBlock(ids, { more = true, title = 'Частые вопрос�
 /* ---------- отзывы: карусель со scroll-snap ---------- */
 const chev = (d) => `<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 export function reviewCard(r) {
-  const media = r.photo ? photo(r.photo, { cls: 'photo--slide', ar: '4/3', sizes: '(min-width:900px) 45vw, 90vw' }) : `<div class="ph ph--slide"><svg viewBox="0 0 280 260" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false"><use href="#mE"/></svg></div>`;
-  return `<article class="slide"><div class="tx"><div><h3>${esc(r.author)}</h3><p class="who-s">${esc(r.place)} · ${esc(r.task)} · ${r.date}</p><p class="who-t"><span class="tag">${esc(r.typeLabel)}</span></p></div><blockquote><p>«${esc(r.text)}»</p></blockquote></div>${media}</article>`;
+  return `<article class="slide"><div class="tx"><div><h3>${esc(r.author)}</h3><p class="who-s">${esc(r.place)} · ${esc(r.task)} · ${r.date}</p><p class="who-t"><span class="tag">${esc(r.typeLabel)}</span></p></div><blockquote><p>«${esc(r.text)}»</p></blockquote></div></article>`;
 }
 export function reviewsBlock(ids, o = {}) {
   const items = ids.map((id) => ctx.S.reviews.find((r) => r.id === id));
